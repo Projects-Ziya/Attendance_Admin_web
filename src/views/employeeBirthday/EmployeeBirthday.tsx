@@ -1,19 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "../../components/employeeBirthday/AppIcon";
 import Button from "../../components/common/ui/Button";
 import EmployeeCard from "../../components/employeeBirthday/EmployeeCard";
-import { EmployeeViewModel } from "../../viewmodels/employeeBirthday/EmployeeViewModel";
 import MainLayout from "../../components/layout/MainLayout";
+import api from "../../Api/api";
 
 const EmployeeBirthday: React.FC = () => {
-  const vm = new EmployeeViewModel();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
+  const [todayBirthdays, setTodayBirthdays] = useState<any[]>([]);
+  const [tomorrowBirthdays, setTomorrowBirthdays] = useState<any[]>([]);
+  const [upcomingBirthdays, setUpcomingBirthdays] = useState<any[]>([]);
+
+  const BASE_URL = api.defaults.baseURL || " ";
+
+  useEffect(() => {
+    const fetchBirthdays = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get("/api/birthday-list-all/");
+
+        if (response?.data?.success) {
+          setTodayBirthdays(response.data.today_birthdays || []);
+          setTomorrowBirthdays(response.data.tomorrow_birthdays || []);
+          setUpcomingBirthdays(response.data.upcoming_birthdays || []);
+        } else {
+          throw new Error("Invalid API response");
+        }
+      } catch (err: any) {
+        console.error("Error fetching birthdays:", err);
+        setError(err.message || "Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBirthdays();
+  }, []);
+
+// 🔹 Send group birthday wishes (POST)
+  const handleSendGroupWishes = async () => {
+    if (todayBirthdays.length === 0) {
+      alert("No birthdays today to send wishes.");
+      return;
+    }
+
+    try {
+      setSending(true);
+      const response = await api.post("/api/birthdaystodaywish/");
+
+      if (response?.data?.success) {
+        alert("🎉 Group birthday wishes sent successfully!");
+      } else {
+        alert("⚠️ Failed to send wishes. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Error sending wishes:", error);
+      alert("❌ Something went wrong while sending wishes.");
+    } finally {
+      setSending(false);
+    }
+  };
+
+
+  if (loading)
+    return (
+      <div className="bg-white rounded-[10px] shadow p-6 text-center text-gray-500">
+        Loading birthdays...
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="bg-white rounded-[10px] shadow p-6 text-center text-red-500">
+        {error}
+      </div>
+    );
 
   return (
     <MainLayout>
-
       <div className="flex min-h-screen bg-gray-100">
         <div className="flex-1 flex flex-col">
-          <div className="flex items-center space-x-3  ml-6 mt-9">
+          <div className="flex items-center space-x-3 ml-6 mt-9">
             <Icon name="Cake" responsive className="text-blue-500" />
             <h1 className="text-base font-semibold text-[#909090]">
               Employee Birthday
@@ -21,7 +89,7 @@ const EmployeeBirthday: React.FC = () => {
           </div>
 
           <main className="bg-gray-50 overflow-y-auto shadow rounded sm:rounded-[10px] mt-5 sm:mt-[40px] px-4 sm:px-[30px] mr-3 sm:mr-[50px] ml-6 sm:ml-[73px] py-4 sm:py-[30px]">
-
+            {/* 🎂 TODAY */}
             <section className="mb-12">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
                 <div>
@@ -35,61 +103,112 @@ const EmployeeBirthday: React.FC = () => {
 
                 <Button
                   variant="default"
-                  className="shadow text-[#4D4D4D] w-full gap-3 sm:w-fit"
-                  onClick={() => vm.sendGroupWishes()}
+                  disabled={sending}
+                  className={`shadow text-[#4D4D4D] w-full gap-3 sm:w-fit ${
+                    sending ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                  onClick={handleSendGroupWishes}
                 >
                   <Icon name="Cake" responsive className="text-[#4D4D4D]" />
-                  Send Group Wishes
+                  {sending ? "Sending..." : "Send Group Wishes"}
                 </Button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {vm.todayBirthdays.map((employee) => (
-                  <EmployeeCard
-                    key={employee.id}
-                    employee={employee}
-                    onSendWish={vm.sendWish}
-                    isHighlighted={true}
-                  />
-                ))}
+                {todayBirthdays.length > 0 ? (
+                  todayBirthdays.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employee={{
+                        id: employee.id,
+                        name: `${employee.first_name} ${employee.last_name}`,
+                        profileImage:  employee.profile_pic
+                ? `${BASE_URL}${employee.profile_pic}`
+                : null,
+                        department: employee.department,
+                        position: employee.designation,
+                        birthday: employee.dob,
+                      }}
+                      onSendWish={() =>
+                        alert(`Wished ${employee.first_name}`)
+                      }
+                      isHighlighted={true}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 col-span-full">
+                    No birthdays today.
+                  </div>
+                )}
               </div>
             </section>
 
-
+            {/* 🌅 TOMORROW */}
             <section className="mb-12">
               <h2 className="text-xl font-semibold text-gray-900 mb-6">
                 Birthday Tomorrow
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {vm.tomorrowBirthdays.map((employee) => (
-                  <EmployeeCard
-                    key={employee.id}
-                    employee={employee}
-                    onSendWish={vm.sendWish}
-                    isHighlighted={false}
-                  />
-                ))}
+                {tomorrowBirthdays.length > 0 ? (
+                  tomorrowBirthdays.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employee={{
+                        id: employee.id,
+                        name: `${employee.first_name} ${employee.last_name}`,
+                        profileImage: employee.profile_pic
+                ? `${BASE_URL}${employee.profile_pic}`
+                : null,
+                        department: employee.department,
+                        position: employee.designation,
+                        birthday: employee.dob,
+                      }}
+                      onSendWish={() =>
+                        alert(`Wished ${employee.first_name}`)
+                      }
+                      isHighlighted={false}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 col-span-full">
+                    No birthdays tomorrow.
+                  </div>
+                )}
               </div>
             </section>
 
-
+            {/* 🎁 UPCOMING */}
             <section>
               <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  Upcoming Birthday
+                  Upcoming Birthdays
                 </h2>
                 <h2 className="text-gray-600">Next 7-day birthdays</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-                {vm.upcomingBirthdays.map((employee) => (
-                  <EmployeeCard
-                    key={employee.id}
-                    employee={employee}
-                    onSendWish={vm.sendWish}
-                    isHighlighted={false}
-                    showSendWishButton={false}
-                  />
-                ))}
+                {upcomingBirthdays.length > 0 ? (
+                  upcomingBirthdays.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employee={{
+                        id: employee.id,
+                        name: `${employee.first_name} ${employee.last_name}`,
+                         profileImage: employee.profile_pic
+                ? `${BASE_URL}${employee.profile_pic}`
+                : null,
+                        department: employee.department,
+                        position: employee.designation,
+                        birthday: employee.dob,
+                      }}
+                      isHighlighted={false}
+                      showSendWishButton={false}
+                    />
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500 col-span-full">
+                    No upcoming birthdays.
+                  </div>
+                )}
               </div>
             </section>
           </main>

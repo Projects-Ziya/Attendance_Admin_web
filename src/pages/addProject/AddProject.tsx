@@ -75,51 +75,74 @@ const AddProject = () => {
   };
 
   // ✅ Final submit
-  const handleSubmit = async (e?: React.FormEvent) => {
-    e?.preventDefault(); // only if event exists
-    if (!validateSection("tasks")) return;
+const handleSubmit = async (e?: React.FormEvent) => {
+  e?.preventDefault();
+  if (!validateSection("tasks")) return;
 
-    setLoading(true);
-    try {
-      
-const membersPayload = {
-  teamLeaders: formData.teamLeaders.map((m: any) => m.id),
-  projectManagers: formData.projectManagers.map((m: any) => m.id),
-  tags: formData.tags.map((m: any) => m.id),
+  setLoading(true);
+  try {
+    const payload = new FormData();
+
+    // ✅ Append files
+    if (formData.project_logo) payload.append("project_logo", formData.project_logo);
+    if (formData.attachment) payload.append("attachment", formData.attachment);
+
+    // ✅ Append basic fields
+    const basicFields = [
+      "project_name",
+      "client",
+      "start_date",
+      "end_date",
+      "priority",
+      "project_value",
+      "total_working_hours",
+      "extra_time",
+      "description",
+    ];
+    basicFields.forEach((field) => {
+      if (formData[field]) payload.append(field, formData[field]);
+    });
+
+    // ✅ Members field
+    const membersPayload = {
+      team_leader: formData.teamLeaders?.[0] || null,
+      project_manager: formData.projectManagers?.[0] || null,
+      tags: formData.tags?.map((t: any) => t.name || t) || [],
+    };
+    payload.append("members", JSON.stringify(membersPayload));
+
+    // ✅ FIXED TASKS SECTION
+    const formattedTasks = formData.tasks.map((task: any) => ({
+      title: task.title,
+      description: task.description,
+      assigned_to: Array.isArray(task.assigned_to)
+        ? task.assigned_to.map((id: any) => Number(id))
+        : [Number(task.assigned_to)], // ensure list of numbers
+      due_date: task.due_date,
+      priority: task.priority,
+      status: task.status || "Pending",
+      total_working_hours: task.total_working_hours,
+    }));
+
+    // Django expects tasks to be a single JSON string (not inside another array)
+    payload.append("tasks", JSON.stringify(formattedTasks));
+
+    // ✅ API call
+    const res = await api.post("/api/add-project/", payload, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    alert("✅ Project created successfully!");
+    console.log("🎯 Final payload:", Object.fromEntries(payload.entries()));
+    console.log("Response:", res.data);
+  } catch (err) {
+    console.error("❌ Error creating project:", err);
+    alert("Failed to create project");
+  } finally {
+    setLoading(false);
+  }
 };
-      const payload = new FormData();
-      if (formData.project_logo) payload.append("project_logo", formData.project_logo as File);
-      if (formData.attachment) payload.append("attachment", formData.attachment as File);
 
-      payload.append("project_name", formData.project_name);
-      payload.append("client", formData.client);
-      payload.append("start_date", formData.start_date);
-      payload.append("end_date", formData.end_date);
-      payload.append("priority", formData.priority);
-      payload.append("project_value", formData.project_value);
-      payload.append("total_working_hours", formData.total_working_hours);
-      payload.append("extra_time", formData.extra_time);
-      payload.append("description", formData.description);
-
-      // ✅ Correctly include members
-      payload.append("members", JSON.stringify(membersPayload));
-
-      // ✅ Include tasks
-      payload.append("tasks", JSON.stringify(formData.tasks));
-
-      const res = await api.post("/api/add-project/", payload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      alert("✅ Project created successfully!");
-      console.log("Project created:", res.data);
-    } catch (err) {
-      console.error("❌ Error creating project:", err);
-      alert("Failed to create project");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="mx-auto bg-white shadow rounded-lg p-6 w-[76.51vw] h-[125.37vh] pt-[27px]">

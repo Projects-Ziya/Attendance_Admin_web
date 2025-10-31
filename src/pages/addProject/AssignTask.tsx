@@ -27,7 +27,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
 }) => {
   const [showForm, setShowForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
   const [taskData, setTaskData] = useState<TaskForm>({
     assignedTo: [],
     title: "",
@@ -48,7 +48,8 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
 
       try {
         const res = await api.get(`/api/search-employee/?letter=${searchTerm}`);
-        setSuggestions(res.data?.employees?.map((emp: any) => emp.full_name) || []);
+        // ✅ store employee id + full_name (for backend mapping)
+        setSuggestions(res.data?.employees || []);
       } catch (err) {
         console.error("❌ Error fetching employee suggestions:", err);
         setSuggestions([]);
@@ -70,11 +71,11 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
   };
 
   // ➕ Add member
-  const handleSelectSuggestion = (name: string) => {
-    if (!taskData.assignedTo.includes(name)) {
+  const handleSelectSuggestion = (emp: any) => {
+    if (!taskData.assignedTo.includes(emp.full_name)) {
       setTaskData((prev) => ({
         ...prev,
-        assignedTo: [...prev.assignedTo, name],
+        assignedTo: [...prev.assignedTo, emp.full_name],
       }));
     }
     setSearchTerm("");
@@ -96,7 +97,22 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
       return alert("Please assign at least one member");
     if (!taskData.dueDate.trim()) return alert("Please select a due date");
 
-    const updatedTasks = [...(formData.tasks || []), taskData];
+    // ✅ convert frontend structure → backend format
+    const formattedTask = {
+      title: taskData.title,
+      description: taskData.description,
+      due_date: taskData.dueDate,
+      priority: taskData.priority,
+      status: taskData.status,
+      total_working_hours: taskData.totalWorkingHours,
+      assigned_to: taskData.assignedTo.map((name) => {
+        // find the ID of employee by name
+        const emp = suggestions.find((e) => e.full_name === name);
+        return emp ? emp.id : null;
+      }).filter((id) => id !== null),
+    };
+
+    const updatedTasks = [...(formData.tasks || []), formattedTask];
     setFormData((prev: any) => ({ ...prev, tasks: updatedTasks }));
 
     // Reset form
@@ -117,9 +133,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
     if (!formData.tasks || formData.tasks.length === 0) {
       return alert("Please add at least one task before submitting.");
     }
-
-    // ✅ Trigger parent submission (API call or parent-level save)
-    onSubmit();
+    onSubmit(); // ✅ Trigger parent submission (no logic change)
   };
 
   return (
@@ -170,13 +184,13 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
             {/* Suggestion Dropdown */}
             {suggestions.length > 0 && (
               <ul className="absolute z-10 bg-white border rounded shadow-md mt-1 w-full max-h-40 overflow-y-auto">
-                {suggestions.map((s, idx) => (
+                {suggestions.map((emp: any, idx) => (
                   <li
-                    key={idx}
-                    onClick={() => handleSelectSuggestion(s)}
+                    key={emp.id || idx}
+                    onClick={() => handleSelectSuggestion(emp)}
                     className="px-3 py-2 text-sm hover:bg-blue-100 cursor-pointer"
                   >
-                    {s}
+                    {emp.full_name}
                   </li>
                 ))}
               </ul>
@@ -267,36 +281,13 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
               key={idx}
               className="flex items-center justify-between bg-white p-3 rounded-lg border hover:shadow-md transition"
             >
-              {/* Task Info */}
               <div className="flex flex-col min-w-[160px]">
                 <span className="font-semibold text-gray-800">{task.title}</span>
-                <span className="text-gray-500 text-sm">{task.dueDate || "—"}</span>
+                <span className="text-gray-500 text-sm">{task.due_date || "—"}</span>
               </div>
-
-              {/* Members */}
-              <div className="flex -space-x-2 min-w-[120px]">
-                {task.assignedTo.slice(0, 3).map((m: string, i: number) => (
-                  <img
-                    key={i}
-                    src="https://via.placeholder.com/40"
-                    alt={m}
-                    className="w-8 h-8 rounded-full border-2 border-white"
-                    title={m}
-                  />
-                ))}
-                {task.assignedTo.length > 3 && (
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-200 text-xs text-gray-600 font-medium border-2 border-white">
-                    +{task.assignedTo.length - 3}
-                  </span>
-                )}
-              </div>
-
-              {/* Hours */}
               <div className="min-w-[100px] text-gray-600 text-sm text-center">
-                {task.totalWorkingHours || "—"} hrs
+                {task.total_working_hours || "—"} hrs
               </div>
-
-              {/* Status */}
               <div
                 className={`px-3 py-1 rounded-md text-sm font-medium ${
                   task.status === "Pending"

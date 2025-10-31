@@ -37,6 +37,9 @@ interface Project {
 }
 
 const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+  console.log(project);
+
+  
   // ✅ Extract coordinator data
   const coordinator = project.coordinator;
 
