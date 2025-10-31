@@ -1,0 +1,121 @@
+Folder PATH listing for volume soso
+Volume serial number is 241B-155C
+E:.
+|   App.css
+|   App.tsx
+|   index.css
+|   main.tsx
+|   structure_clean.txt
+|   vite-env.d.ts
+|   
++---Api
+|       api.ts
+|       
++---assets
+|   \---images
+|       |   Createacc.jpg
+|       |   forgot.jpg
+|       |   login.jpg
+|       |   login.png
+|       |   logo.png
+|       |   logo.svg
+|       |   passwordReset.jpg
+|       |   Vector.png
+|       |   
+|       \---icons
+|               add.svg
+|               addblue.svg
+|               attendancesammery.svg
+|               bell.svg
+|               dashicon.svg
+|               leaverequest.svg
+|               overview.svg
+|               prodectivityandstatus.svg
+|               quickactionpanal.svg
+|               search.svg
+|               tasktracker.svg
+|               
++---components
+|   +---common
+|   |   |   Card.tsx
+|   |   |   index.ts
+|   |   |   Input.tsx
+|   |   |   LazyImage.tsx
+|   |   |   LoadingSkeleton.tsx
+|   |   |   Modal.tsxModal.tsx
+|   |   |   Table.tsx
+|   |   |   
+|   |   \---ui
+|   |           Button.tsx
+|   |           
+|   +---layout
+|   |       Footer.tsx
+|   |       Header.tsx
+|   |       MainLayout.tsx
+|   |       Sidebar.tsx
+|   |       
+|   \---OtpInput
+|           OutInput.tsx
+|           VerifyOTP.jsx
+|           
++---models
+|       DashboardStats.ts
+|       index.ts
+|       
++---services
+|       ApiService.ts
+|       AuthService.ts
+|       index.ts
+|       
++---stores
+|       RootStore.ts
+|       UIStore.ts
+|       
++---utils
+|       apiClient.ts
+|       auth.ts
+|       debounce.ts
+|       format.ts
+|       index.ts
+|       
++---viewmodels
+|       DashboardViewModel.ts
+|       index.ts
+|       UsersViewModel.ts
+|       
+\---views
+    +---createNewPassword
+    |       CreateAcnt.jsx
+    |       
+    +---Dashboard
+    |   |   Dashboard.tsx
+    |   |   DashboardComponent.tsx
+    |   |   index.tsx
+    |   |   
+    |   +---AddEmployee
+    |   |       AddEmployee.tsx
+    |   |       
+    |   \---DashComponents
+    |           ProfileCard.tsx
+    |           TotalActivities.tsx
+    |           TotalEmployee.tsx
+    |           
+    +---Error
+    |       index.tsx
+    |       
+    +---ForgotPassword
+    |       ForgotPassword.tsx
+    |       
+    +---Login
+    |       index.tsx
+    |       Login.tsx
+    |       
+    +---passwordReset
+    |       passwordReset.tsx
+    |       
+    +---Settings
+    |       index.tsx
+    |       
+    \---Users
+            index.tsx
+            

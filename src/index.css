@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Add this to your global CSS (e.g., index.css or App.css) */
+.filter-blue {
+  filter: brightness(0) saturate(100%) invert(41%) sepia(99%) saturate(2313%) hue-rotate(185deg) brightness(94%) contrast(101%);
+}
+
+
+
+body {
+  @apply font-poppins;
+}

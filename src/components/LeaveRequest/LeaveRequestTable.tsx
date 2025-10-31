@@ -1,0 +1,206 @@
+import React, { useEffect, useState } from "react";
+import tickIcon from "../../assets/leaveRequestAssets/tick.png";
+import crossIcon from "../../assets/leaveRequestAssets/cross.png";
+import attachIcon from "../../assets/leaveRequestAssets/attach.png";
+import Tabs from "./Tabs";
+import BlackModal from "./BlackModal";
+import api from "../../Api/api";
+
+interface LeaveRequestTableProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequestTableProps) {
+  const [requests, setRequests] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState("");
+
+  // ✅ Fetch All Leaves
+  const fetchRequests = () => {
+    api
+      .get("/api/list-all-leaves/")
+      .then((res) => {
+        if (res.data && res.data.success) {
+          const transformed = res.data.data.map((item: any) => ({
+            id: item.id,
+            date: item.requested_date,
+            days: item.leave_days,
+            employeeName: item.employee_name,
+            leaveType: item.leave_type,
+            reason: item.reason || "—",
+            attachment: item.attachments ? item.attachments.split("/").pop() : "No File",
+            attachmentUrl: item.attachments,
+            avatar: item.employee_profile_pic,
+            designation: item.employee_designation,
+            workMode: item.employee_job_type,
+            workModeColor: item.employee_job_type === "WFO" ? "#03C96F" : "#4D4D4D",
+          }));
+          setRequests(transformed);
+        } else {
+          setRequests([]);
+        }
+      })
+      .catch((err) => {
+        console.error("API Error:", err);
+        setRequests([]);
+      });
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  // ✅ Approve Handler
+  const handleApprove = async (id: string) => {
+    try {
+      const res = await api.post(`/api/leave-accept/`, { leave_id: id });
+      if (res.data.success) {
+        alert("✅ Leave approved successfully");
+        fetchRequests(); // Refresh the list
+      } else {
+        alert("⚠️ Failed to approve leave");
+      }
+    } catch (err) {
+      console.error("Approve Error:", err);
+      alert("❌ Something went wrong while approving");
+    }
+  };
+
+  // ❌ Reject Handler
+  const handleReject = async (id: string) => {
+    try {
+      const res = await api.post(`/api/leave-reject/`, { leave_id: id });
+      if (res.data.success) {
+        alert("❌ Leave rejected successfully");
+        fetchRequests(); // Refresh the list
+      } else {
+        alert("⚠️ Failed to reject leave");
+      }
+    } catch (err) {
+      console.error("Reject Error:", err);
+      alert("❌ Something went wrong while rejecting");
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-lg shadow overflow-x-auto p-4 mb-6 ms-4">
+      <Tabs activeTab={activeTab} onChange={setActiveTab} />
+
+      <table className="w-full min-w-[800px] text-left border-collapse mb-6 tracking-[1.28px]">
+        <thead className="bg-myGray">
+          <tr className="border-b border-[#D9D9D9]">
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray whitespace-nowrap">Requested Date</th>
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray whitespace-nowrap">Leave Days</th>
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray w-[300px]">Employee Name</th>
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray whitespace-nowrap">Leave Type</th>
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray w-[140px]">Reason</th>
+            <th className="py-3 px-4 text-[17px] font-[600] text-midGray">Attachment</th>
+          </tr>
+        </thead>
+
+        <tbody className="text-[14px] font-[500] text-midGray tracking-[1.28px]">
+          {requests.length === 0 ? (
+            <tr>
+              <td colSpan={6} className="text-center py-10 text-gray-500 text-[16px]">
+                No Data Found
+              </td>
+            </tr>
+          ) : (
+            requests.map((req, index) => (
+              <tr
+                key={req.id}
+                className={`border-b border-[#D9D9D9] ${index === requests.length - 1 ? "mb-6" : ""}`}
+              >
+                <td className="py-4 px-4">{req.date}</td>
+                <td className="py-4 px-4">{req.days}</td>
+
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={req.avatar || "https://via.placeholder.com/40"}
+                      alt={req.employeeName}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <div className="font-[600] text-[16px] text-midGray">{req.employeeName}</div>
+                      <div className="flex items-center gap-2">
+                        {req.designation && (
+                          <span className="font-[400] text-[13px] text-gray-500 whitespace-nowrap">
+                            {req.designation}
+                          </span>
+                        )}
+                        {req.workMode && (
+                          <span className="flex items-center gap-1">
+                            <span
+                              className="w-1 h-1 rounded-full"
+                              style={{ backgroundColor: req.workModeColor }}
+                            ></span>
+                            <span
+                              className="text-[12px] font-[500]"
+                              style={{ color: req.workModeColor }}
+                            >
+                              {req.workMode}
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </td>
+
+                <td className="py-4 px-4">{req.leaveType}</td>
+                <td className="py-4 px-4">{req.reason}</td>
+
+                <td className="py-4 px-4">
+                  <div className="flex items-center gap-3">
+                    {/* 📎 Attachment Button */}
+                    <button
+                      onClick={() => {
+                        if (req.attachmentUrl) {
+                          setSelectedFile(req.attachmentUrl);
+                          setShowModal(true);
+                        }
+                      }}
+                      className={`inline-flex items-center gap-2 ${
+                        req.attachmentUrl ? "bg-[#4D4D4D]" : "bg-gray-400 cursor-not-allowed"
+                      } text-white h-[35px] px-3 rounded-md text-[15px] font-[500] w-[120px] truncate hover:brightness-110 transition`}
+                      disabled={!req.attachmentUrl}
+                    >
+                      <img src={attachIcon} alt="Attach" className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{req.attachment}</span>
+                    </button>
+
+                    {/* ✅ Approve Button */}
+                    <button
+                      onClick={() => handleApprove(req.id)}
+                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition"
+                      style={{ backgroundColor: "#03C96F" }}
+                    >
+                      <img src={tickIcon} alt="Approve" className="w-4 h-4" />
+                      Approve
+                    </button>
+
+                    {/* ❌ Reject Button */}
+                    <button
+                      onClick={() => handleReject(req.id)}
+                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition"
+                      style={{ backgroundColor: "#F11515" }}
+                    >
+                      <img src={crossIcon} alt="Reject" className="w-4 h-4" />
+                      Reject
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {showModal && (
+        <BlackModal fileName={selectedFile} onClose={() => setShowModal(false)} />
+      )}
+    </div>
+  );
+}

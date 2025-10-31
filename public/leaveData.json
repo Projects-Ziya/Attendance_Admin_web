@@ -1,0 +1,14 @@
+{
+  "2024": [
+    { "name": "Late Attendance", "value": 10, "color": "#FFA500" },
+    { "name": "On time", "value": 200, "color": "#28A745" },
+    { "name": "Sick Leave", "value": 20, "color": "#4DB6AC" }
+  ],
+  "2025": [
+    { "name": "Late Attendance", "value": 20, "color": "#FFA500" },
+    { "name": "On time", "value": 256, "color": "#28A745" },
+    { "name": "Sick Leave", "value": 22, "color": "#4DB6AC" },
+    { "name": "WFH", "value": 33, "color": "#607D8B" },
+    { "name": "Absent", "value": 12, "color": "#E53935" }
+  ]
+}
