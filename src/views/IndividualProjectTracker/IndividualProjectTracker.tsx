@@ -4,7 +4,8 @@ import { AppViewModel } from "../../viewmodels/AppViewModel";
 import Sidebar from "../../components/singleProjectAndTaskComponent/Sidebar";
 import TaskList from "../../components/singleProjectAndTaskComponent/TaskList";
 
-const IndividualProjectTracker = () => {
+const IndividualProjectTracker = ({ID1}) => {
+  console.log(ID1)
   const viewModel = new AppViewModel();
   const projectData = viewModel.getProjectData();
 
@@ -24,7 +25,7 @@ const IndividualProjectTracker = () => {
         <TaskList />
       </div>
 
-      <ImageAndFiles />
+      <ImageAndFiles id={ID1} />
     </div>
   )
 }

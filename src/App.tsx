@@ -78,7 +78,7 @@ function App() {
           <Route path="/AddProject" element={<AddProjectLayout />} />
           <Route path="/Employee-Dashboard" element={<EmployeeDashboardHomeLayout />} />
           <Route path="/Employee-Profilecard" element={<IndividualEmpAttandanceLayout />} />
-          <Route path="/singleProjectTracker" element={<IndividualProjectTrackerLayout />} />
+          <Route path="/singleProjectTracker/:id" element={<IndividualProjectTrackerLayout />} />
           <Route path="/ProjectTaskTracker" element={<ProjectTrackerLayout />} />
           <Route path="/allLeaveRequests" element={<LeaveRequestLayout />} />
           <Route path="/ProductivityAndStatus" element={<ProductivityStats />} />
