@@ -12,6 +12,7 @@ import { useProjectsVM } from "../../viewmodels/EmployeeDashboard/useProjects";
 import { useTasksVM } from "../../viewmodels/EmployeeDashboard/useTasks";
 import ProjectsPanel from "../../components/employeeDashboard/ProjectsPanel";
 import TasksPanel from "../../components/employeeDashboard/TasksPanel";
+import { LeaveStatusPage } from "../../components/employeeDashboard/LeaveStatusPage";
 
 interface EmployeeDashboardProps {
     employeeId: string;
@@ -87,7 +88,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ employeeId }) => 
                 <ProjectsPanel projects={projects} />
                 <TasksPanel tasks={tasks} />
             </div>
-
+            <LeaveStatusPage/>
         </div>
     );
 };
