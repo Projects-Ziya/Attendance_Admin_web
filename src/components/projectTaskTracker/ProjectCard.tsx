@@ -37,6 +37,7 @@ interface Project {
 }
 
 const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
+  
   // ✅ Extract coordinator data
   const coordinator = project.coordinator;
 
@@ -59,7 +60,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
       <div className="grid grid-cols-[165px_1.5fr_1.0fr_0.9fr_140px_160px_100px] items-center pl-11 py-4 px-7 text-sm">
 
         {/* ✅ Project Name + Start Date */}
-        <Link to="/singleProjectTracker">
+        <Link to={`/singleProjectTracker/${project.id}`}>
           <div>
             <p className="font-medium hover:text-blue-700 text-ziyablack">
               {project.project_name}
