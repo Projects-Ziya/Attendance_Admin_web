@@ -1,15 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskCard from "./TaskCard";
 import Button from "./Button";
 import { TaskViewModel2 } from "../../viewmodels/TaskViewModel2";
+import api from "../../Api/api";
 
-export default function TaskList() {
+export default function TaskList({ ApiProject }) {
   const [vm] = useState(new TaskViewModel2());
   const [tasks, setTasks] = useState(vm.getTasks());
 
+  const [data, setData] = useState(ApiProject);
+
+  useEffect(() => {
+    setData(ApiProject);
+  }, [ApiProject]);
+
+  
   const handleDelete = (id) => {
-    vm.deleteTask(id);
-    setTasks([...vm.getTasks()]);
+    console.log(id)
+    const response = api.delete(`/api/delete-task/${id}/`);
+    console.log(response)
+    if(response.data.success===true){
+      alert(response.data.message);
+      window.location.reload()
+    }
   };
 
   const handleEdit = (id) => {
@@ -28,7 +41,7 @@ export default function TaskList() {
       </div>
 
       {/* Task Cards */}
-      {tasks.map((task) => (
+      {data?.data.tasks.map((task) => (
         <TaskCard
           key={task.id}
           task={task}
