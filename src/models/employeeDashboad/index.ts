@@ -10,10 +10,10 @@ export type ApprovalStage = {
 };
 
 export type TeamMember = {
-    id: string;
-    name: string;
-    role: string;
-    avatarUrl?: string;
-    phone?: string;
-    email?: string;
+  id: number;
+  name: string;
+  email?: string;
+  designation?: string;
+  phone_number?: string;
+  profile_pic?: string | null;
 };
