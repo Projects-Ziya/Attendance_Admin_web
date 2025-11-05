@@ -32,7 +32,7 @@ const ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
         const res = await api.get(endpoint);
         const data = res.data;
 
-        console.log(`[${type}] API response:`, data);
+      
 
         if (!data || data.success === false) {
           throw new Error("API returned error or invalid data");

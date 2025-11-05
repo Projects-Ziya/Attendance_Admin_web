@@ -60,7 +60,7 @@ const Header: React.FC = () => {
         refresh: refreshToken, 
       });
 
-      console.log("Logout successful:", response.data);
+    
 
       
       Cookies.remove("access");

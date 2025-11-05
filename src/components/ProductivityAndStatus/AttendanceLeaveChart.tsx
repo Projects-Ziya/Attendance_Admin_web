@@ -137,8 +137,7 @@ const AttendanceLeaveChart: React.FC = () => {
           api.get("/api/leavesyearly/"),
         ]);
 
-        console.log("Attendance API:", attendanceRes.data);
-        console.log("Leave API:", leaveRes.data);
+        
 
         const attendance = attendanceRes.data;
         const leave = leaveRes.data;
