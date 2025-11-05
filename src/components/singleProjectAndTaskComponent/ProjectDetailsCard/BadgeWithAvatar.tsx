@@ -15,6 +15,7 @@ const BadgeWithAvatar: React.FC<BadgeWithAvatarProps> = ({
   textClassName = "text-xs text-[#4D4D4D]",
   className = "",
 }) => {
+  console.log(member)
   return (
     <div
       className={`flex h-[38px]  items-center w-fit gap-2 bg-[#F3F4F6] rounded-md ${className}`}

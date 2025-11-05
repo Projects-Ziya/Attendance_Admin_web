@@ -25,13 +25,13 @@ export default function TaskCard({ task, onDelete, onEdit }) {
           {/* Created Date */}
           <div className="leading-relaxed flex flex-col justify-start ">
             <p className="font-medium whitespace-nowrap">Task Created on :</p>
-            <p className="text-[#a5a5a5] mt-2">{task.createdAt}</p>
+            <p className="text-[#a5a5a5] mt-2">{task.created_at}</p>
           </div>
 
           {/* Due Date */}
           <div className="leading-relaxed flex flex-col justify-start">
             <p className="font-medium whitespace-nowrap">Task Due Date :</p>
-            <p className="mt-2 text-[#a5a5a5]">{task.dueDate}</p>
+            <p className="mt-2 text-[#a5a5a5]">{task.due_date}</p>
           </div>
 
 
@@ -39,7 +39,7 @@ export default function TaskCard({ task, onDelete, onEdit }) {
           <div className="leading-relaxed flex flex-col justify-start">
             <p className="font-medium whitespace-nowrap">Assignee :</p>
             <div className="flex -space-x-3 mt-2">
-              {task.assignees.map((a, idx) => (
+              {task.assigned_to_name.map((a, idx) => (
                 <img
                   key={idx}
                   src={a}

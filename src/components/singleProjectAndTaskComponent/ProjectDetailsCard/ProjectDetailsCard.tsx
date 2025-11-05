@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { ProjectDetails } from "../../../models/ProjectModel";
 import { ProjectViewModel } from "../../../viewmodels/ProjectViewModel";
 import CircleImage from "../CircleImage";
@@ -7,20 +7,28 @@ import BadgeWithAvatar from "./BadgeWithAvatar";
 import MemberSection from "./MemberSection";
 import AddNewButton from "./AddNewButton";
 import UserBadge from "../UserBadge"
+import { BASE_URL } from "../../../constants/urls";
 
 interface ProjectDetailsCardProps {
   projectDetails: ProjectDetails;
 }
 
-const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails }) => {
+const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails,ApiProject }) => {
   const viewModel = new ProjectViewModel(projectDetails);
+  
+  
+ const [data, setData] = useState(ApiProject);
+
+useEffect(() => {
+  setData(ApiProject);
+}, [ApiProject]);
 
   return (
     <div className="w-auto h-auto bg-white pr-[39px]">
       {/* Header */}
       
       <h2 className=" text-2xl font-poppins font-semibold leading-[16px] 
-             tracking-[1.92px] text-[#4D4D4D] pt-[52px]">TaskSphere</h2>
+             tracking-[1.92px] text-[#4D4D4D] pt-[52px]">{data?.data.project_name}</h2>
 
         
         {/* Row for Project ID */}
@@ -39,7 +47,7 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails 
           {/* Project ID Value */}
             <span className="h-[27px] text-[#4D4D4D] text-[18px] leading-[27px] 
               tracking-[0.08em] font-poppins font-medium whitespace-nowrap">
-              {viewModel.getProjectId()}</span>
+              {data?.data.id}</span>
           </div>
 
 
@@ -57,14 +65,13 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails 
 
 {/* Left Side */}
 <div className="w-fit h-fit flex flex-col gap-[25px] bg-white">
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Client" value={viewModel.getClient()} />
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Pro.Value" value={viewModel.getProValue()} />
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Wrk Hrs" value={viewModel.getWorkHours()} />
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Created on" value={viewModel.getCreatedOn()} />
-
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Client" value={data?.data.client} />
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Pro.Value" value={`₹${data?.data.project_value}`} />
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Wrk Hrs" value={data?.data.total_working_hours} />
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Created on" value={data?.data.created_at} />
   <DetailRow className="grid-cols-[128px_29px_auto]"
     label="Created by"
-    value={<UserBadge avatar={viewModel.getCreatedBy().avatar} name={viewModel.getCreatedBy().name} />}
+    value={<UserBadge avatar={`${BASE_URL}${data?.data.assigned_by_pic}`} name={data?.data.assigned_by} />}
   />
 
   {/* Tags */}
@@ -72,29 +79,32 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails 
     label="Tags"
     value={
       <div className="grid grid-cols-2 gap-1 items-center w-fit">
-        {viewModel.getTags().map((tag) => (
-          <BadgeWithAvatar
-            key={tag.id}
-            member={tag}
-            avatarSize={20}
-            textClassName="text-xs text-gray-800"
-            className="w-fit py-[8px] px-[12px]"
-          />
-        ))}
+       {data?.data.members?.flatMap((member) =>
+  member.tags?.map((tag, index) => (
+    <BadgeWithAvatar
+      key={`${member.id}-${index}`}
+      member={{ name: tag }}
+      avatarSize={20}
+      textClassName="text-xs text-gray-800"
+      className="w-fit py-[8px] px-[12px]"
+    />
+  ))
+)}
+
         <AddNewButton />
       </div>
     }
   />
 
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Start on" value={viewModel.getStartOn()} />
-  <DetailRow className="grid-cols-[128px_29px_auto]" label="Due Date" value={viewModel.getDueDate()} />
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Start on" value={data?.data.start_date} />
+  <DetailRow className="grid-cols-[128px_29px_auto]" label="Due Date" value={data?.data.end_date} />
 
   <DetailRow className="grid-cols-[128px_29px_auto]"
     label="Priority"
     value={
       <span className={`w-fit px-4 py-1 rounded-md text-sm flex items-center gap-2 ${viewModel.getPriorityClass()}`}>
-        <span className={`w-2 h-2 rounded-full ${viewModel.getPriorityDotClass()}`}></span>
-        {viewModel.getPriority()}
+        <span className={`w-2 h-2 rounded-full ${data?.data.priority}`}></span>
+        {data?.data.priority}
       </span>
     }
   />
@@ -107,7 +117,7 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails 
     value={
       <span className={`flex items-center gap-1 ${viewModel.getStatusClass()} w-fit py-2 px-3 rounded-md text-xs`}>
         <span className={`w-2 h-2 rounded-full ${viewModel.getStatusDotClass()}`}></span>
-        {viewModel.getStatus()}
+        {data?.data.status}
       </span>
     }
   />
@@ -150,7 +160,7 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails 
       </h3>
 
         <p className="font-poppins font-normal text-[16px] leading-[130%] tracking-[0.08em] text-[#4D4D4D]">
-          {viewModel.getDescription()}
+          {data?.data.description}
         </p>
 
       </div>
