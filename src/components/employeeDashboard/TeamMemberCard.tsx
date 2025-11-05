@@ -18,12 +18,12 @@ export const TeamMemberCard: React.FC<Props> = ({ member, onCall, onMessage }) =
       <div className="flex items-center space-x-3">
         <img
           className="h-12 w-12 rounded-full object-cover"
-          src={member.imageUrl || 'https://randomuser.me/api/portraits/lego/1.jpg'}
+          src={member.profile_pic || 'https://randomuser.me/api/portraits/lego/1.jpg'}
           alt={member.name}
         />
         <div>
           <div className="text-sm font-medium text-gray-900">{member.name}</div>
-          <div className="text-xs text-gray-500">{member.role}</div>
+          <div className="text-xs text-gray-500">{member.designation || 'Team Member'}</div>
         </div>
       </div>
 
@@ -40,7 +40,7 @@ export const TeamMemberCard: React.FC<Props> = ({ member, onCall, onMessage }) =
         <button
           type="button"
           onClick={() => onCall?.(member)}
-          aria-label={`Call ${member.name}`} 
+          aria-label={`Call ${member.name}`}
           className="p-2 rounded-full bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-200"
         >
           <img src={PhoneIcon} alt="call" className="h-[18px] w-[18px]" />

@@ -2,14 +2,14 @@ import React from "react";
 import Files from "./Files";
 import Images from "./Images";
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = ({id}) => {
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6  mx-auto">
       <div className="flex-1">
-        <Files />
+        <Files id={id} />
       </div>
       <div className="flex-1">
-        <Images />
+        <Images id={id} />
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ const EmployeeDashboard: React.FC<EmployeeDashboardProps> = ({ employeeId }) => 
                 <ProjectsPanel projects={projects} />
                 <TasksPanel tasks={tasks} />
             </div>
-            <LeaveStatusPage/>
+            <LeaveStatusPage />
         </div>
     );
 };
