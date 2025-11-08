@@ -25,7 +25,7 @@ const StatCard: React.FC<{
 
 const StatsCards: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-  console.log(id)
+    
   const [stats, setStats] = useState<{
     today: { value: number; total: number };
     week: { value: number; total: number };

@@ -16,6 +16,7 @@
     "i": "^0.3.7",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.525.0",
+    "mobx-persist-store": "^1.0.9",
     "npm": "^11.6.0",
     "react": "^19.1.0",
     "react-circular-progressbar": "^2.2.0",

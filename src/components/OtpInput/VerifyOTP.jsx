@@ -5,7 +5,7 @@ export default function VerifyOTP() {
   const [otp, setOtp] = useState("");
 
   const handleVerify = () => {
-    console.log("Entered OTP:", otp);
+  
     // 🚀 Verify OTP here
   };
 

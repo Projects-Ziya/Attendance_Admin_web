@@ -16,9 +16,8 @@ export default function TaskList({ ApiProject }) {
 
   
   const handleDelete = (id) => {
-    console.log(id)
     const response = api.delete(`/api/delete-task/${id}/`);
-    console.log(response)
+    
     if(response.data.success===true){
       alert(response.data.message);
       window.location.reload()

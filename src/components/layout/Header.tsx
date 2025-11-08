@@ -4,7 +4,8 @@ import dashicon from "../../assets/images/icons/dashicon.svg";
 import Search from "../../assets/images/icons/search.svg";
 import bell from "../../assets/images/icons/bell.svg";
 import ProfilePopOver from "../header/ProfilePopOver";
-
+import api from "../../Api/api";
+import Cookies from "js-cookie";
 const Header: React.FC = () => {
   const [profileImg, setProfileImg] = useState<string>("");
   const [hasNotification, setHasNotification] = useState<boolean>(true);
@@ -50,14 +51,39 @@ const Header: React.FC = () => {
     isOnline: true,
   };
 
+  const handleLogout = async () => {
+  const refreshToken = Cookies.get("refresh");
+
+  if (refreshToken) {
+    try {
+      const response = await api.post("/api/logout/", {
+        refresh: refreshToken, 
+      });
+
+    
+
+      
+      Cookies.remove("access");
+      Cookies.remove("refresh");
+      
+     
+      window.location.href = "/"; 
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  } else {
+    console.warn("No refresh token found");
+  }
+};
+
   return (
     <header className="w-full bg-header-1  bg-white shadow-[0px_1px_1px_#0000003f]">
       <div className="w-full max-w-[1600px] mx-auto bg-global-25 pl-0 pr-4 sm:pr-6 lg:pl-[36px] py-4 sm:py-5 lg:py-[22px]"> <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-4">
 
-        {/* Left Section */}
+        
         <div className="flex flex-row gap-6 items-center w-full lg:w-auto">
 
-          {/* Dashboard Title with Icon and Padding Right 37px */}
+          
           <div className="flex flex-row gap-[4px] justify-start items-center pr-[37px]">
             <img src={dashicon} className="w-[24px] h-[24px]" alt="Dashboard" />
             <span className="text-[14px] text-ziyablack sm:text-[16px] lg:text-[16px] font-normal text-global-2 ml-2 font-['Poppins']">
@@ -65,7 +91,7 @@ const Header: React.FC = () => {
             </span>
           </div>
 
-          {/* Search Bar */}
+         
           <div className="flex flex-row items-center w-[290px] h-[34px] shadow-[0px_0px_1px_#0000003f] rounded-[5px] bg-global-25 pl-2 pr-[2px] border border-[#b6b5b5]">
             <div className="flex flex-row gap-2 items-center w-full">
               <img src={Search} className="w-[18px] h-[18px]" alt="Search Icon" />
@@ -88,9 +114,9 @@ const Header: React.FC = () => {
 
 
           <div className="flex flex-row cursor-pointer justify-end items-center gap-3 sm:gap-10">
-            {/* Profile */}
+            
         <ProfilePopOver profile={profileData}
-      onLogout={() => alert("Logged out")} content={<div></div>}>
+      onLogout={() => handleLogout()} content={<div></div>}>
             <div className="relative w-fit h-fit">
               <img
                 src={profileImg}
@@ -104,7 +130,7 @@ const Header: React.FC = () => {
             </div>
         </ProfilePopOver>
 
-        {/* Bell */}
+        
         <div className="relative w-fit cursor-pointer h-fit">
           <img
             src={bell}

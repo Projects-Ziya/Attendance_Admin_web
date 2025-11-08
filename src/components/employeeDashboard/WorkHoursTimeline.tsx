@@ -18,7 +18,7 @@ const formatDuration = (minutes: number) => {
 
 const WorkHoursTimeline: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  console.log(id)
+
   const [data, setData] = useState<WorkhoursData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

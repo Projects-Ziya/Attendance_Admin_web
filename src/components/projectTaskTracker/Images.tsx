@@ -23,7 +23,7 @@ const Images = ({ ApiProject }) => {
   };
 
   const handleDelete = (img) => {
-    console.log("Delete clicked:", img);
+  
     // TODO: API call to delete the image
   };
 

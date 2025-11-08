@@ -18,7 +18,6 @@ const { id } = useParams<{ id: string }>();
   const fetchMembers = async () => {
     try {
       const response = await api.get(`/api/projectmemberslist/${projectId}/`);
-      console.log("Team members response:", response.data);
 
       const data = response.data?.data?.[0]?.members || [];
 
