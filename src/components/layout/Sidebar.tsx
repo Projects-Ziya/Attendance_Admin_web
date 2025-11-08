@@ -25,6 +25,7 @@ const Sidebar: React.FC = () => {
     { id: 'task', label: 'Project/Task Tracker', icon: task, path: '/ProjectTaskTracker' },
     { id: 'productivity', label: 'Productivity & Stats', icon: productivity, path: '/ProductivityAndStatus' },
     { id: 'quick', label: 'Quick Action Panel', icon: quick, path: '/QuickAction' },
+    { id: 'Payroll', label: 'Payroll Management System ', icon: quick, path: '/payroll' },
   ];
 
   const navigate = useNavigate();

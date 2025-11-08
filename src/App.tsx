@@ -26,6 +26,7 @@ import PrivacyPolicy from "./views/profileSettings/PrivacyPolicy";
 import NotificationLayout from "./views/notifications/NotificationLayout";
 import ProfilePage from "./views/myProfile/ProfilePage";
 import EmployeeBirthday from "./views/employeeBirthday/EmployeeBirthday";
+import PayrollManagementSystem from "./views/PayrollManagementSystem/PayrollManagementSystem";
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
           <Route path="/Terms&Conditions" element={<TermsAndConditions />} />
           <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
           <Route path="/notifications" element={<NotificationLayout />} />
+          <Route path="/Payroll" element={<PayrollManagementSystem />} />
       </Routes>
     </Router>
   );
