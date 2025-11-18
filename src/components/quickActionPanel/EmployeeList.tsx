@@ -101,7 +101,7 @@ const EmployeeList = ({}: EmployeeListProps) => {
   };
 
   return (
-    <div className="bg-[#FCFCFC] rounded-[10px] w-[1469px] shadow-metrics pl-[40px] pr-[37px]">
+    <div className="bg-[#FCFCFC] rounded-[10px] w-[1469px] shadow-[0px_0px_2px_0px_#00000040]  pl-[40px] pr-[37px]">
       <h2 className="font-semibold text-[#4D4D4D] pt-[40px] text-[22px]">
         Past Employee List
       </h2>

@@ -32,6 +32,15 @@ const UploadSalaryReport: React.FC = () => {
     }
   };
 
+  const handleSubmit = () => {
+if(!selectedFile){
+  alert ("Please select a file before submitting.")
+}else{
+  alert (`File ${selectedFile.name} submitted successfully!`)
+}
+
+  }
+
   return (
     <div className="bg-white rounded-md p-12 border border-gray-200">
       {/* Title */}
@@ -54,6 +63,7 @@ const UploadSalaryReport: React.FC = () => {
   <ChevronDown
     className="text-gray-500 flex-shrink-0 ml-2 pointer-events-none"
     size={18}
+    
   />
 </div>
 
@@ -105,7 +115,7 @@ const UploadSalaryReport: React.FC = () => {
       {/* Submit Button */}
 
       <div className="pt-[61px]">
-      <button className="w-full bg-[#00A0E3] text-white h-11  rounded text-sm hover:bg-blue-600 transition">
+      <button className="w-full bg-[#00A0E3] text-white h-11  rounded text-sm hover:bg-blue-600 transition"  onClick={handleSubmit}>
         Submit
       </button>
       </div>

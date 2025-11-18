@@ -105,7 +105,7 @@ const DeleteEmployee = ({ onSearch }: DeleteEmployeeProps) => {
   };
 
   return (
-    <div className="bg-[#FCFCFC] shadow-metrics w-[1469px] rounded-[10px] pt-[40px] pr-[37px] pl-[41px]">
+    <div className="bg-[#FCFCFC] shadow-[0px_0px_2px_0px_#00000040]  w-[1469px] rounded-[10px] pt-[40px] pr-[37px] pl-[41px]">
       <h2 className="font-semibold text-[22px] leading-[180%] text-[#4D4D4D]">
         Delete Employee
       </h2>

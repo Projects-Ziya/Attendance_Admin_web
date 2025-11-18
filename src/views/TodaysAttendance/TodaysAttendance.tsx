@@ -123,17 +123,21 @@ const TodaysAttendance = () => {
 
   return (
 
-    <div className="p-6 bg-[#F6F5FA] min-h-screen">
-
+      <div className="bg-[#F6F5FA]  w-[1579px]  sm:px-6   ">
       {/* Heading with Icon */}
 
-      <div className="flex items-center mb-7">
-
-        <img src={AttendanceIcon} alt="Attendance Icon" className="w-8 h-8 mr-3" />
-
-        <h2 className="text-md font-semibold text-[#909090]">Today's Attendance</h2>
-
-      </div>
+        <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 ">
+          <h1 className=" flex items-center gap-2 text-[#4D4D4D] text-[16px]  leading-[16px] font-[500] ">
+            <span className="bg-[#DAF1FB] rounded-full w-[40px] h-[40px] flex items-center justify-center">
+              <img
+                src={AttendanceIcon}
+                alt="Section icon"
+                className="w-5.5 h-5.5 object-contain"
+              />
+            </span>
+            Today's Attendance
+          </h1>
+        </div>
 
 
 

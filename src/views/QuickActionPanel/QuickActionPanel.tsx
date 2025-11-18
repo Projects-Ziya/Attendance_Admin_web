@@ -9,7 +9,7 @@ import MainLayout from "../../components/layout/MainLayout";
 function QuickActionPanel() {
   return (
     <MainLayout>
-      <div className="bg-[#F6F5FA]   px-4 sm:px-6 lg:pl-[37px] pr-[37px] ">
+      <div className="bg-[#F6F5FA]  w-[1579px]  sm:px-6   ">
 
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 ">
           <h1 className=" flex items-center gap-2 text-midGray text-[16px]  leading-[16px] font-[500] ">

@@ -112,7 +112,7 @@ const Locate = ({ employee, onRemove }: LocateProps) => {
           />
         </div>
       ) : (
-        <div className="pt-[80px] pb-[80px] shadow-metrics">
+        <div className="pt-[80px] pb-[80px] shadow-[0px_0px_2px_0px_#00000040] ">
           <div className="flex flex-col items-center">
             <img src={plus} alt="add-icon" className="w-[100px] h-[100px]" />
             <p className="text-[18px] leading-[24px] tracking-[0.08em] pt-[35px] text-center text-[#DB5252]">

@@ -119,7 +119,7 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
   };
 
   return (
-    <div className="bg-[#FCFCFC] shadow-metrics w-[1469px]">
+    <div className="bg-[#FCFCFC] shadow-[0px_0px_2px_0px_#00000040]  w-[1469px]">
       <div className="overflow-x-auto w-full">
         <table className="min-w-[43.75rem] w-full border-collapse">
           <thead className="text-[#4D4D4D] bg-[#F4F4F4] h-[3.688rem] text-[1.125rem]">
