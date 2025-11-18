@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-import { Eye, ChevronDown, } from "lucide-react";
 
-=======
 import { Calendar } from "lucide-react";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import MyPayrollSlip from "./MyPayrollSlip";
 import UploadSalaryReport from "./UploadSalaryReport";
 import UploadBundleReport from "./UploadBundleReport";
->>>>>>> 656a622a75ab16a843611c64e3bca5414531765b
 
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
@@ -65,44 +61,7 @@ const Management: React.FC = () => {
           </button>
         ))}
       </div>
-<<<<<<< HEAD
 
-      {/* Content Section */}
-      <div className="bg-[#E8F5FF] rounded-md p-6 mb-10">
-        <h2 className="text-[#007BFF] font-medium text-base mb-4 leading-4 tracking-[0.08em]">
-          My Payroll Slip
-        </h2>
-
-        <div className="flex items-center gap-4">
-          {/* Select Month Dropdown with inline arrow */}
-          <div className="flex items-center bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-700">
-            <select
-              className="bg-transparent focus:outline-none cursor-pointer text-sm"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select Month
-              </option>
-              {months.map((month) => (
-                <option key={month} value={month.toLowerCase()}>
-                  {month}
-                </option>
-              ))}
-            </select>
-            <ChevronDown size={16} className="ml-2 text-gray-500" />
-          </div>
-
-          {/* View Payroll Slip Button */}
-          <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-5 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={handleslip}>
-            <Eye size={16} />
-            <span>View Payroll Slip</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Empty State */}
-      ~
-=======
       {/* Render Dynamic Content */}
       {renderContent()}
       {/* Empty Section */}
@@ -115,7 +74,6 @@ const Management: React.FC = () => {
       autoplay 
       
     />  
->>>>>>> 656a622a75ab16a843611c64e3bca5414531765b
     </div>
       <span className="mt-3 text-sm">Select Month</span>
   </div>
