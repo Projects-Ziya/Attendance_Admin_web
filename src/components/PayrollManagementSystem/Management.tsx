@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Eye, ChevronDown, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
+import MyPayrollSlip from "./MyPayrollSlip";
+import UploadSalaryReport from "./UploadSalaryReport";
+import UploadBundleReport from "./UploadBundleReport";
 
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
@@ -10,21 +15,18 @@ const Management: React.FC = () => {
     "Upload Bundle Report",
   ];
 
-   const months = [
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const renderContent = () => {
+    switch (activeTab) {
+      case "My Payroll Slip":
+        return <MyPayrollSlip />;
+      case "Upload Salary Report":
+        return <UploadSalaryReport />;
+      case "Upload Bundle Report":
+        return <UploadBundleReport />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white px-12 py-8">
@@ -46,7 +48,7 @@ const Management: React.FC = () => {
             onClick={() => setActiveTab(tab)}
             className={`flex-1 text-sm py-3 transition font-medium ${
               activeTab === tab
-                ? "bg-white text-gray-900 shadow-sm rounded-lg  mt-2 mb-2"
+                ? "bg-white text-gray-900 shadow-sm rounded-[50px] w-[100px] mt-2 mb-2"
                 : "text-gray-600 hover:text-gray-800"
             }`}
           >
@@ -54,47 +56,27 @@ const Management: React.FC = () => {
           </button>
         ))}
       </div>
-
-      {/* Content Section */}
-      <div className="bg-[#E8F5FF] rounded-md p-6 mb-10">
-        <h2 className="text-[#007BFF] font-medium text-base mb-4 leading-4 tracking-[0.08em]">
-          My Payroll Slip
-        </h2>
-
-        <div className="flex items-center gap-4">
-          {/* Select Month Dropdown with inline arrow */}
-          <div className="flex items-center bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-700">
-            <select
-              className="bg-transparent focus:outline-none cursor-pointer text-sm"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Select Month
-              </option>
-              {months.map((month) => (
-                <option key={month} value={month.toLowerCase()}>
-                  {month}
-                </option>
-              ))}
-            </select>
-            <ChevronDown size={16} className="ml-2 text-gray-500" />
-          </div>
-
-          {/* View Payroll Slip Button */}
-          <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-5 py-2 text-sm text-gray-700 hover:bg-gray-50">
-            <Eye size={16} />
-            <span>View Payroll Slip</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Empty State */}
-      <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-600">
-        <Calendar size={72} strokeWidth={1.5} />
-        <span className="mt-3 text-sm">Select Month</span>
-      </div>
+      {/* Render Dynamic Content */}
+      {renderContent()}
+      {/* Empty Section */}
+     {activeTab === "My Payroll Slip" && (
+  <div className="flex flex-col items-center justify-center mt-[200px] text-center text-gray-600">
+    <div className="">
+ <DotLottieReact
+      src="https://lottie.host/35807265-daaf-4811-af21-feff7c9dcd41/fWBisws4Js.lottie"
+      loop
+      autoplay 
+      
+    />  
     </div>
+      <span className="mt-3 text-sm">Select Month</span>
+  </div>
+)}
+
+
+    </div>
+
   );
 };
 
-export default Management;
+export default Management; 
