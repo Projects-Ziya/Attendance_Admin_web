@@ -43,7 +43,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
       toast.success("Branch created successfully!");
 
       // 👇 Pass new branch data back to parent
-      onBranchCreated(response.data);
+      onBranchCreated(response.data.data);
 
       onClose();
     } catch (error: any) {
