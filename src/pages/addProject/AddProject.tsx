@@ -3,6 +3,7 @@ import api from "../../Api/api";
 import BasicInformation from "./BasicInformation";
 import Members from "./Member";
 import AssignTasks from "./AssignTask";
+import toast from "react-hot-toast";
 
 const AddProject = () => {
   const [activeTab, setActiveTab] = useState<"basic" | "members" | "tasks">("basic");
@@ -41,7 +42,7 @@ const AddProject = () => {
         !formData.end_date ||
         !formData.priority
       ) {
-        alert("Please fill all required basic fields");
+        toast("Please fill all required basic fields");
         return false;
       }
     }
@@ -52,14 +53,14 @@ const AddProject = () => {
         (!formData.projectManagers || formData.projectManagers.length === 0) ||
         (!formData.tags || formData.tags.length === 0)
       ) {
-        alert("Please add at least one Team Leader, Project Manager, and Tag");
+        toast("Please add at least one Team Leader, Project Manager, and Tag");
         return false;
       }
     }
 
     if (section === "tasks") {
       if (!formData.tasks || formData.tasks.length === 0) {
-        alert("Please assign at least one task");
+        toast("Please assign at least one task");
         return false;
       }
     }
@@ -132,12 +133,12 @@ const handleSubmit = async (e?: React.FormEvent) => {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    alert("✅ Project created successfully!");
+    toast.success("✅ Project created successfully!");
     console.log("🎯 Final payload:", Object.fromEntries(payload.entries()));
     console.log("Response:", res.data);
   } catch (err) {
     console.error("❌ Error creating project:", err);
-    alert("Failed to create project");
+    toast.error("Failed to create project");
   } finally {
     setLoading(false);
   }

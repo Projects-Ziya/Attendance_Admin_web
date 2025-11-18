@@ -3,6 +3,8 @@ import TaskCard from "./TaskCard";
 import Button from "./Button";
 import { TaskViewModel2 } from "../../viewmodels/TaskViewModel2";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
+
 
 export default function TaskList({ ApiProject }) {
   const [vm] = useState(new TaskViewModel2());
@@ -19,17 +21,17 @@ export default function TaskList({ ApiProject }) {
     const response = api.delete(`/api/delete-task/${id}/`);
     
     if(response.data.success===true){
-      alert(response.data.message);
+      toast(response.data.message);
       window.location.reload()
     }
   };
 
   const handleEdit = (id) => {
-    alert(`Edit Task ID: ${id}`);
+    toast(`Edit Task ID: ${id}`);
   };
 
   const handleAdd = () => {
-    alert("Add New Task clicked");
+    toast("Add New Task clicked");
   };
 
   return (

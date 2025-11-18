@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import login from '../../assets/images/Createacc.jpg';
 import { useLocation, useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
 
 export default function ForgotPassword() {
   const [password, setPassword] = useState('');
@@ -37,7 +38,7 @@ const handleResetPassword = async () => {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      alert("✅ Password reset successful!");
+      toast.success("✅ Password reset successful!");
       navigate("/");
     } else {
       setError(data.error || "❌ Failed to reset password.");

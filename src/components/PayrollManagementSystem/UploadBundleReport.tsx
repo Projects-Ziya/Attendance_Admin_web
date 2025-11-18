@@ -42,7 +42,7 @@ const UploadBundleReport: React.FC = () => {
         Upload Bundle Report
       </h2>
 
-      <p className="text-[#585555] pt-11 pb-11 text-[22px] tracking-[0.08em] leading-4">Upload a bundle of salary slips. The system will generate individual slips based on the Excel format.</p>
+      <p className="text-[#585555] pt-11 pb-11 text-[22px] tracking-[0.08em] leading-4 whitespace-nowrap">Upload a bundle of salary slips. The system will generate individual slips based on the Excel format.</p>
 
       {/* Name of Teammates */}
       <div className="bg-[#E8F5FF] border border-[#00A0E3] rounded-md p-6 mb-10">

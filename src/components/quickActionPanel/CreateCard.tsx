@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import api from "../../Api/api";
 import search from "../../assets/search.svg";
+import toast from "react-hot-toast";
 
 type InputSpec = {
   label: string;
@@ -184,7 +185,7 @@ const CreateCard = ({
     try {
       if (title === "Create Departments") {
         if (!selectedEmp?.id) {
-          alert("Please select a department head.");
+          toast("Please select a department head.");
           return;
         }
 
@@ -197,13 +198,13 @@ const CreateCard = ({
           setNewDeptId(res.data.department_id); // ✅ store new dept ID for use in Designation
         }
 
-        alert("✅ Department created successfully!");
+        toast.success("✅ Department created successfully!");
       } else if (title === "Create Designation") {
         const selectedDept = options.find(
           (opt: any) => opt.name === values[1]
         );
         if (!selectedDept && !newDeptId) {
-          alert("Please select a valid department.");
+          toast("Please select a valid department.");
           return;
         }
 
@@ -211,7 +212,7 @@ const CreateCard = ({
           title: values[0],
           department_id: newDeptId || selectedDept.id, // ✅ use stored dept ID
         });
-        alert("✅ Designation created successfully!");
+        toast.success("✅ Designation created successfully!");
       }
 
       setValues(inputs.map(() => ""));
@@ -219,7 +220,7 @@ const CreateCard = ({
       setSelectedEmp(null);
     } catch (err) {
       console.error("API POST error:", err);
-      alert("❌ Failed to create item. Check console for details.");
+      toast.error("❌ Failed to create item. Check console for details.");
     }
   };
 

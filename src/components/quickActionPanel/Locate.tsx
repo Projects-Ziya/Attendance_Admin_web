@@ -5,6 +5,7 @@ import trash from "../../assets/trash.svg";
 import RemoveModal from "../../components/quickActionPanel/RemoveModal";
 import NotificationPopup from "../../components/quickActionPanel/NotificationPopup";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 type LocateProps = {
   employee: Employee | null;
@@ -20,7 +21,7 @@ const Locate = ({ employee, onRemove }: LocateProps) => {
     if (!employee) return;
 
     if (!status) {
-      alert("Please select a status before removing the employee.");
+      toast("Please select a status before removing the employee.");
       return;
     }
 

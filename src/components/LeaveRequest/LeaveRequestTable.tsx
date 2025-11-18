@@ -5,7 +5,7 @@ import attachIcon from "../../assets/leaveRequestAssets/attach.png";
 import Tabs from "./Tabs";
 import BlackModal from "./BlackModal";
 import api from "../../Api/api";
-
+import toast from "react-hot-toast";
 interface LeaveRequestTableProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -56,14 +56,14 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
     try {
       const res = await api.post(`/api/leave-accept/`, { leave_id: id });
       if (res.data.success) {
-        alert("✅ Leave approved successfully");
+        toast.success("✅ Leave approved successfully");
         fetchRequests(); // Refresh the list
       } else {
-        alert("⚠️ Failed to approve leave");
+        toast("⚠️ Failed to approve leave");
       }
     } catch (err) {
       console.error("Approve Error:", err);
-      alert("❌ Something went wrong while approving");
+      toast.error("❌ Something went wrong while approving");
     }
   };
 
@@ -72,14 +72,14 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
     try {
       const res = await api.post(`/api/leave-reject/`, { leave_id: id });
       if (res.data.success) {
-        alert("❌ Leave rejected successfully");
+        toast.success("❌ Leave rejected successfully");
         fetchRequests(); // Refresh the list
       } else {
-        alert("⚠️ Failed to reject leave");
+        toast("⚠️ Failed to reject leave");
       }
     } catch (err) {
       console.error("Reject Error:", err);
-      alert("❌ Something went wrong while rejecting");
+      toast.error("❌ Something went wrong while rejecting");
     }
   };
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaPaperclip } from 'react-icons/fa';
 import axios from 'axios';
+import toast from "react-hot-toast";
 
 interface LeaveRequestForm {
   employeeName: string;
@@ -104,7 +105,7 @@ const AddLeaveRequest: React.FC = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      alert('Leave request submitted successfully');
+      toast.success('Leave request submitted successfully');
       setFormData({
         employeeName: '',
         leaveType: '',
@@ -115,7 +116,7 @@ const AddLeaveRequest: React.FC = () => {
       });
     } catch (err) {
       console.error(err);
-      alert('Failed to submit leave request');
+      toast.error('Failed to submit leave request');
     } finally {
       setSubmitting(false);
     }

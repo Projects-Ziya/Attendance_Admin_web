@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle, X } from "lucide-react";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 interface Props {
   formData: any;
@@ -91,9 +92,9 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
 
   // ✅ Validate and go next
   const validateAndNext = () => {
-    if (!formData.teamLeaders.length) return alert("Please add at least one Team Leader");
-    if (!formData.projectManagers.length) return alert("Please add at least one Project Manager");
-    if (!formData.tags.length) return alert("Please add at least one Tag");
+    if (!formData.teamLeaders.length) return toast("Please add at least one Team Leader");
+    if (!formData.projectManagers.length) return toast("Please add at least one Project Manager");
+    if (!formData.tags.length) return toast("Please add at least one Tag");
     goNext();
   };
 

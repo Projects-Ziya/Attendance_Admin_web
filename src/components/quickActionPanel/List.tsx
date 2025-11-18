@@ -3,6 +3,7 @@ import RehireModal from "../../components/quickActionPanel/ReHireModal";
 import NotificationSuccess from "./NotificationSuccess";
 import type { Employee } from "../../models/quickActionPanel/Employee";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 type ListProps = {
   searchTerm: string;
@@ -90,7 +91,7 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
   // ✅ Rehire API call
   const handleConfirmRehire = async () => {
     if (!selectedEmployee?.id) {
-      alert("Employee ID not found.");
+      toast("Employee ID not found.");
       return;
     }
 
@@ -108,11 +109,11 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
         setTimeout(() => setShowNotification(false), 3000);
       } else {
         console.error("Rehire failed:", response.data);
-        alert("Failed to rehire employee. Please try again.");
+        toast.error("Failed to rehire employee. Please try again.");
       }
     } catch (error) {
       console.error("Error rehiring employee:", error);
-      alert("Error rehiring employee. Please try again.");
+      toast.error("Error rehiring employee. Please try again.");
     } finally {
       setIsRehireModalOpen(false);
     }

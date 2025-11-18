@@ -9,6 +9,7 @@ import UploadBundleReport from "./UploadBundleReport";
 
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
+  const [showSlip, setShowSlip] = useState(false);
 
   const tabs = [
     "My Payroll Slip",
@@ -16,21 +17,26 @@ const Management: React.FC = () => {
     "Upload Bundle Report",
   ];
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "My Payroll Slip":
-        return <MyPayrollSlip />;
-      case "Upload Salary Report":
-        return <UploadSalaryReport />;
-      case "Upload Bundle Report":
-        return <UploadBundleReport />;
-      default:
-        return null;
-    }
-  };
+const renderContent = () => {
+  switch (activeTab) {
+    case "My Payroll Slip":
+      return (
+        <MyPayrollSlip
+          showSlip={showSlip}
+          setShowSlip={setShowSlip}
+        />
+      );
+    case "Upload Salary Report":
+      return <UploadSalaryReport />;
+    case "Upload Bundle Report":
+      return <UploadBundleReport />;
+    default:
+      return null;
+  }
+};
 
   const handleslip = () => {
-    alert ("are you su")
+    alert ("are you ok")
   }
 
   return (
@@ -65,7 +71,7 @@ const Management: React.FC = () => {
       {/* Render Dynamic Content */}
       {renderContent()}
       {/* Empty Section */}
-     {activeTab === "My Payroll Slip" && (
+     {activeTab === "My Payroll Slip" && !showSlip &&  (
   <div className="flex flex-col items-center justify-center mt-[200px] text-center text-gray-600">
     <div className="">
  <DotLottieReact

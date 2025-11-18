@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PlusCircle, ChevronUp } from "lucide-react";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 interface TaskForm {
   assignedTo: string[];
@@ -92,10 +93,10 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
 
   // ✅ Validate & Add task
   const handleAddTask = () => {
-    if (!taskData.title.trim()) return alert("Task title is required");
+    if (!taskData.title.trim()) return toast("Task title is required");
     if (taskData.assignedTo.length === 0)
-      return alert("Please assign at least one member");
-    if (!taskData.dueDate.trim()) return alert("Please select a due date");
+      return toast("Please assign at least one member");
+    if (!taskData.dueDate.trim()) return toast("Please select a due date");
 
     // ✅ convert frontend structure → backend format
     const formattedTask = {
@@ -131,7 +132,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
   // ✅ Final Add Project
   const handleAddProject = () => {
     if (!formData.tasks || formData.tasks.length === 0) {
-      return alert("Please add at least one task before submitting.");
+      return toast("Please add at least one task before submitting.");
     }
     onSubmit(); // ✅ Trigger parent submission (no logic change)
   };

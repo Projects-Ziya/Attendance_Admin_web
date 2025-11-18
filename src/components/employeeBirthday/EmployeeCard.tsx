@@ -3,7 +3,7 @@ import Button from "../common/ui/Button";
 import Icon from "./AppIcon";
 import api from "../../Api/api"; // ✅ Make sure this is correctly imported
 import type { Employee } from "../../models/employeeBirthday/Employee";
-
+import toast from "react-hot-toast";
 interface EmployeeCardProps {
   employee: Employee;
   isHighlighted?: boolean;
@@ -24,9 +24,9 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
       const response = await api.post(`/api/birthdaystodaywishid/${employee.id}/`);
 
       if (response?.data?.success) {
-        alert(`🎉 Birthday wish sent to ${employee.name}!`);
+        toast.success(`🎉 Birthday wish sent to ${employee.name}!`);
       } else {
-        alert("⚠️ Failed to send wish. Please try again.");
+        toast.error("⚠️ Failed to send wish. Please try again.");
       }
     } catch (error: any) {
       console.error("Error sending wish:", error);
