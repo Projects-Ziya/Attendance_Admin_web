@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../Api/api"; // axios instance
+import { useNavigate } from "react-router-dom";
 
 // Custom icon
 const CustomActivityIcon = () => (
@@ -51,6 +52,8 @@ const RecentActivities: React.FC = () => {
     return "Earlier";
   };
 
+  const navigate = useNavigate()
+
   // 🔹 Format time nicely
   const formatTime = (timeStr: string) => {
     const [datePart, timePart] = timeStr.split(" ");
@@ -100,6 +103,7 @@ const RecentActivities: React.FC = () => {
           <button
             className="text-gray-500 font-medium hover:text-ziyablue"
             style={{ fontSize: "18px" }}
+            onClick={()=> navigate("/recentactivitylist")}
           >
             View All
           </button>

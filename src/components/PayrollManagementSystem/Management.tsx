@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Eye, ChevronDown, Calendar } from "lucide-react";
+import { Eye, ChevronDown, } from "lucide-react";
+
 
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
@@ -25,6 +26,10 @@ const Management: React.FC = () => {
     "November",
     "December",
   ];
+
+  const handleslip = () => {
+    alert ("are you su")
+  }
 
   return (
     <div className="min-h-screen bg-white px-12 py-8">
@@ -81,7 +86,7 @@ const Management: React.FC = () => {
           </div>
 
           {/* View Payroll Slip Button */}
-          <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-5 py-2 text-sm text-gray-700 hover:bg-gray-50">
+          <button className="flex items-center gap-2 bg-white border border-gray-200 rounded-full px-5 py-2 text-sm text-gray-700 hover:bg-gray-50" onClick={handleslip}>
             <Eye size={16} />
             <span>View Payroll Slip</span>
           </button>
@@ -89,10 +94,7 @@ const Management: React.FC = () => {
       </div>
 
       {/* Empty State */}
-      <div className="flex flex-col items-center justify-center mt-20 text-center text-gray-600">
-        <Calendar size={72} strokeWidth={1.5} />
-        <span className="mt-3 text-sm">Select Month</span>
-      </div>
+      ~
     </div>
   );
 };

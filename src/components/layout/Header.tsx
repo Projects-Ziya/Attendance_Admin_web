@@ -6,10 +6,12 @@ import bell from "../../assets/images/icons/bell.svg";
 import ProfilePopOver from "../header/ProfilePopOver";
 import api from "../../Api/api";
 import Cookies from "js-cookie";
+import NotificationModal from "../notifictions/NotificationModal";
 const Header: React.FC = () => {
   const [profileImg, setProfileImg] = useState<string>("");
   const [hasNotification, setHasNotification] = useState<boolean>(true);
   const [isOnline, setIsOnline] = useState<boolean>(false);
+  const [isopen , setIsOpen] = useState(false)
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -76,6 +78,14 @@ const Header: React.FC = () => {
   }
 };
 
+const handleOpen =() =>{
+setIsOpen(true);
+}
+
+const handleClose = () => {
+  setIsOpen(false);
+}
+
   return (
     <header className="w-full bg-header-1  bg-white shadow-[0px_1px_1px_#0000003f]">
       <div className="w-full max-w-[1600px] mx-auto bg-global-25 pl-0 pr-4 sm:pr-6 lg:pl-[36px] py-4 sm:py-5 lg:py-[22px]"> <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-4">
@@ -136,10 +146,13 @@ const Header: React.FC = () => {
             src={bell}
             className="w-[22px] sm:w-[22px] lg:w-[17px] h-[20px] sm:h-[20px] lg:h-[20px]"
             alt="Notifications"
+            onClick={handleOpen}
           />
           {hasNotification && (
             <span className="absolute top-[1px] right-0 w-[10px] h-[10px] bg-red-500 rounded-full border-[2px] border-white shadow-sm"></span>
           )}
+
+          {isopen && <NotificationModal onHide={handleClose}/>}
         </div>
       </div>
       </div>
