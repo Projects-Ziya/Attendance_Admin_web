@@ -27,9 +27,12 @@ import NotificationLayout from "./views/notifications/NotificationLayout";
 import ProfilePage from "./views/myProfile/ProfilePage";
 import EmployeeBirthday from "./views/employeeBirthday/EmployeeBirthday";
 import PayrollManagementSystem from "./views/PayrollManagementSystem/PayrollManagementSystem";
+import RecentActivityList from "./views/Dashboard/DashComponents/RecentActivityList";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
+    
     <Router>
       <Routes>
         <Route path="*" element={<div>404 - Page Not Found</div>} />
@@ -87,6 +90,7 @@ function App() {
           <Route path="/profileSettings" element={<ProfileSettings />} />
           <Route path="/myProfile" element={<ProfilePage />} />
           <Route path="/Birthdays" element={<EmployeeBirthday />} />
+          <Route path="/recentactivitylist" element={<RecentActivityList />} />
         </Route>
           <Route path="/AboutUs" element={<AboutPage />} />
           <Route path="/Terms&Conditions" element={<TermsAndConditions />} />
@@ -94,6 +98,7 @@ function App() {
           <Route path="/notifications" element={<NotificationLayout />} />
           <Route path="/Payroll" element={<PayrollManagementSystem />} />
       </Routes>
+       <Toaster position="top-center" />
     </Router>
   );
 }

@@ -4,6 +4,8 @@ import Button from "../../components/common/ui/Button";
 import EmployeeCard from "../../components/employeeBirthday/EmployeeCard";
 import MainLayout from "../../components/layout/MainLayout";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
+
 
 const EmployeeBirthday: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -41,7 +43,7 @@ const EmployeeBirthday: React.FC = () => {
 // 🔹 Send group birthday wishes (POST)
   const handleSendGroupWishes = async () => {
     if (todayBirthdays.length === 0) {
-      alert("No birthdays today to send wishes.");
+      toast("No birthdays today to send wishes.");
       return;
     }
 
@@ -50,13 +52,13 @@ const EmployeeBirthday: React.FC = () => {
       const response = await api.post("/api/birthdaystodaywish/");
 
       if (response?.data?.success) {
-        alert("🎉 Group birthday wishes sent successfully!");
+        toast.success("🎉 Group birthday wishes sent successfully!");
       } else {
-        alert("⚠️ Failed to send wishes. Please try again.");
+        toast("⚠️ Failed to send wishes. Please try again.");
       }
     } catch (error: any) {
       console.error("Error sending wishes:", error);
-      alert("❌ Something went wrong while sending wishes.");
+      toast.error("❌ Something went wrong while sending wishes.");
     } finally {
       setSending(false);
     }
@@ -130,7 +132,7 @@ const EmployeeBirthday: React.FC = () => {
                         birthday: employee.dob,
                       }}
                       onSendWish={() =>
-                        alert(`Wished ${employee.first_name}`)
+                        toast(`Wished ${employee.first_name}`)
                       }
                       isHighlighted={true}
                     />
@@ -164,7 +166,7 @@ const EmployeeBirthday: React.FC = () => {
                         birthday: employee.dob,
                       }}
                       onSendWish={() =>
-                        alert(`Wished ${employee.first_name}`)
+                        toast(`Wished ${employee.first_name}`)
                       }
                       isHighlighted={false}
                     />

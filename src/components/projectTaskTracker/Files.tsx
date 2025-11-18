@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 const Files = ({ id }) => {
   const [showModal, setShowModal] = useState(false);
@@ -24,7 +25,7 @@ const Files = ({ id }) => {
   // ✅ Upload file
   const handleUpload = async () => {
     if (!file) {
-      alert("Please select a file before uploading");
+      toast("Please select a file before uploading");
       return;
     }
 
@@ -36,13 +37,13 @@ const Files = ({ id }) => {
       await api.post("/api/projectfile/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      alert("File uploaded successfully!");
+      toast.success("File uploaded successfully!");
       setShowModal(false);
       setFile(null);
       fetchFiles();
     } catch (error) {
       console.error("Error uploading file:", error);
-      alert("Failed to upload file");
+      toast.error("Failed to upload file");
     }
   };
 
@@ -52,11 +53,11 @@ const Files = ({ id }) => {
 
     try {
       await api.delete(`/api/projectfiledelete/${fileId}/`);
-      alert("File deleted successfully!");
+      toast.success("File deleted successfully!");
       fetchFiles();
     } catch (error) {
       console.error("Error deleting file:", error);
-      alert("Failed to delete file");
+      toast.error("Failed to delete file");
     }
   };
 

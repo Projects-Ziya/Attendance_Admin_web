@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { Notification } from "../../models/employeeDashboad/Notification";
 import { fallbackNotifications } from "../../models/employeeDashboad/Notification";
 import { fetchNotifications } from "../../services/employeeDashboard/employeeDashboardServices";
+import toast from "react-hot-toast";
 
 export function useNotificationsVM() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -30,7 +31,7 @@ export function useNotificationsVM() {
   }, []);
 
   const handleActionClick = (id: string) => {
-    alert(`Action for notification ID: ${id}`);
+    toast(`Action for notification ID: ${id}`);
   };
 
   return { notifications, loading, error, handleActionClick };

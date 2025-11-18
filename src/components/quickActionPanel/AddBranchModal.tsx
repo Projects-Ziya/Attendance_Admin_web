@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 interface AddBranchModalProps {
   onClose: () => void;
@@ -39,7 +40,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      alert("Branch created successfully!");
+      toast.success("Branch created successfully!");
 
       // 👇 Pass new branch data back to parent
       onBranchCreated(response.data);
@@ -47,7 +48,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
       onClose();
     } catch (error: any) {
       console.error("Error creating branch:", error);
-      alert("Failed to create branch. Please check console for details.");
+      toast.error("Failed to create branch. Please check console for details.");
     }
   };
 

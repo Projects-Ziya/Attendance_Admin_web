@@ -1,3 +1,4 @@
+
 import React, { useState, DragEvent } from "react";
 import { ChevronDown, Upload } from "lucide-react";
 
@@ -94,6 +95,7 @@ const UploadSalaryReport: React.FC = () => {
               onChange={handleFileChange}
               className="hidden"
             />
+
           </>
         ) : (
           <p className="text-gray-700 text-sm font-medium">{selectedFile.name}</p>
@@ -101,6 +103,7 @@ const UploadSalaryReport: React.FC = () => {
       </div>
 
       {/* Submit Button */}
+
       <div className="pt-[61px]">
       <button className="w-full bg-[#00A0E3] text-white h-11  rounded text-sm hover:bg-blue-600 transition">
         Submit

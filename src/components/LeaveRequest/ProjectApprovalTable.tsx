@@ -4,6 +4,7 @@ import api from "../../Api/api";
 import tickIcon from "../../assets/leaveRequestAssets/tick.png";
 import crossIcon from "../../assets/leaveRequestAssets/cross.png";
 import editIcon from "../../assets/leaveRequestAssets/edit.png";
+import toast from "react-hot-toast";
 
 function InitialAvatar({ name }) {
   const initials = name
@@ -89,14 +90,14 @@ export default function ProjectApprovalTable({
     try {
       const res = await api.post("/api/projects-accept/", { project_id: id });
       if (res.data.success) {
-        alert("✅ Project approved successfully");
+        toast.success("✅ Project approved successfully");
         fetchRequests(); // Refresh the list
       } else {
-        alert("⚠️ Failed to approve project");
+        toast("⚠️ Failed to approve project");
       }
     } catch (err) {
       console.error("Approve Error:", err);
-      alert("❌ Something went wrong while approving");
+      toast.error("❌ Something went wrong while approving");
     }
   };
 
@@ -105,7 +106,7 @@ export default function ProjectApprovalTable({
     try {
       const reason = prompt("Please enter the reason for rejection:");
       if (!reason) {
-        alert("⚠️ Rejection reason is required!");
+        toast("⚠️ Rejection reason is required!");
         return;
       }
 
@@ -115,14 +116,14 @@ export default function ProjectApprovalTable({
       });
 
       if (res.data.success) {
-        alert("❌ Project was rejected successfully");
+        toast.success("❌ Project was rejected successfully");
         fetchRequests(); // Refresh the list
       } else {
-        alert("⚠️ Failed to reject project");
+        toast("⚠️ Failed to reject project");
       }
     } catch (err) {
       console.error("Reject Error:", err);
-      alert("❌ Something went wrong while rejecting");
+      toast.error("❌ Something went wrong while rejecting");
     }
   };
 
