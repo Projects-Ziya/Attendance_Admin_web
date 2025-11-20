@@ -1,7 +1,7 @@
 
 import React, { useState, DragEvent } from "react";
 import { ChevronDown, Upload } from "lucide-react";
-
+import toast from "react-hot-toast";
 const UploadSalaryReport: React.FC = () => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -34,9 +34,9 @@ const UploadSalaryReport: React.FC = () => {
 
   const handleSubmit = () => {
 if(!selectedFile){
-  alert ("Please select a file before submitting.")
+  toast("Please select a file before submitting.‼️",{id: "unique-toast-id",})
 }else{
-  alert (`File ${selectedFile.name} submitted successfully!`)
+  toast (`File ${selectedFile.name} submitted successfully!`,{id: "unique-toast-id",})
 }
 
   }

@@ -38,7 +38,7 @@ const handleResetPassword = async () => {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      toast.success("✅ Password reset successful!");
+      toast.success(" Password reset successful!",{id: "unique-toast-id",});
       navigate("/");
     } else {
       setError(data.error || "❌ Failed to reset password.");

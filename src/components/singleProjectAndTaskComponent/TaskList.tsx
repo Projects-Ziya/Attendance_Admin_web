@@ -31,7 +31,7 @@ export default function TaskList({ ApiProject }) {
   };
 
   const handleAdd = () => {
-    toast("Add New Task clicked");
+    toast("Add New Task clicked",{id: "unique-toast-id",});
   };
 
   return (

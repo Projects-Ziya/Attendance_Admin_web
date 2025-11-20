@@ -105,7 +105,7 @@ const AddLeaveRequest: React.FC = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      toast.success('Leave request submitted successfully');
+      toast.success('Leave request submitted successfully',{id: "unique-toast-id",});
       setFormData({
         employeeName: '',
         leaveType: '',
@@ -116,7 +116,7 @@ const AddLeaveRequest: React.FC = () => {
       });
     } catch (err) {
       console.error(err);
-      toast.error('Failed to submit leave request');
+      toast.error('Failed to submit leave request',{id: "unique-toast-id",});
     } finally {
       setSubmitting(false);
     }

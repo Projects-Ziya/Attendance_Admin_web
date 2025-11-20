@@ -63,10 +63,10 @@ const AddEmployee: React.FC = () => {
           onSubmit={async () => {
             try {
               await submitAll();
-              toast.success("Employee Added Successfully");
+              toast.success("Employee Added Successfully",{id: "unique-toast-id",});
             } catch (err) {
               console.error(err);
-              toast.error("Failed to add employee. Please try again.");
+              toast.error("Failed to add employee. Please try again.",{id: "unique-toast-id",});
             }
           }}
         />

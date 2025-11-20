@@ -56,14 +56,14 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
     try {
       const res = await api.post(`/api/leave-accept/`, { leave_id: id });
       if (res.data.success) {
-        toast.success("✅ Leave approved successfully");
+        toast.success(" Leave approved successfully",{id: "unique-toast-id",});
         fetchRequests(); // Refresh the list
       } else {
-        toast("⚠️ Failed to approve leave");
+        toast("⚠️ Failed to approve leave",{id: "unique-toast-id",});
       }
     } catch (err) {
       console.error("Approve Error:", err);
-      toast.error("❌ Something went wrong while approving");
+      toast.error(" Something went wrong while approving",{id: "unique-toast-id",});
     }
   };
 
@@ -72,14 +72,14 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
     try {
       const res = await api.post(`/api/leave-reject/`, { leave_id: id });
       if (res.data.success) {
-        toast.success("❌ Leave rejected successfully");
+        toast.success(" Leave rejected successfully",{id: "unique-toast-id",});
         fetchRequests(); // Refresh the list
       } else {
-        toast("⚠️ Failed to reject leave");
+        toast("⚠️ Failed to reject leave",{id: "unique-toast-id",});
       }
     } catch (err) {
       console.error("Reject Error:", err);
-      toast.error("❌ Something went wrong while rejecting");
+      toast.error(" Something went wrong while rejecting",{id: "unique-toast-id",});
     }
   };
 

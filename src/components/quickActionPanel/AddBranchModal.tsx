@@ -40,7 +40,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      toast.success("Branch created successfully!");
+      toast.success("Branch created successfully!",{id: "unique-toast-id",});
 
       // 👇 Pass new branch data back to parent
       onBranchCreated(response.data.data);
@@ -48,7 +48,7 @@ const AddBranchModal: React.FC<AddBranchModalProps> = ({
       onClose();
     } catch (error: any) {
       console.error("Error creating branch:", error);
-      toast.error("Failed to create branch. Please check console for details.");
+      toast.error("Failed to create branch. Please check console for details.",{id: "unique-toast-id",});
     }
   };
 

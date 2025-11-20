@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ChevronDown, Upload, Eye } from "lucide-react";
-
+import toast from "react-hot-toast"
 const UploadBundleReport: React.FC = () => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -31,6 +31,16 @@ const UploadBundleReport: React.FC = () => {
       setSelectedFile(e.target.files[0]);
     }
   };
+  
+  
+  const handleSubmit = () => {
+if(!selectedFile){
+  toast("Please select a file before submitting.‼️",{id: "unique-toast-id",})
+}else{
+  toast (`File ${selectedFile.name} submitted successfully!`,{id: "unique-toast-id",})
+}
+
+  }
 
   return (
     <div className="mt">
@@ -104,7 +114,7 @@ const UploadBundleReport: React.FC = () => {
 
       {/* Submit Button */}
       <div className="pt-[61px]">
-        <button className="w-full bg-[#00A0E3] text-white h-11 rounded text-sm hover:bg-blue-600 transition">
+        <button onClick={handleSubmit} className="w-full bg-[#00A0E3] text-white h-11 rounded text-sm hover:bg-blue-600 transition">
           Submit
         </button>
       </div>

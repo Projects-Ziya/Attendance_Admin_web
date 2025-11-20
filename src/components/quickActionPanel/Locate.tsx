@@ -21,7 +21,7 @@ const Locate = ({ employee, onRemove }: LocateProps) => {
     if (!employee) return;
 
     if (!status) {
-      toast("Please select a status before removing the employee.");
+      toast("Please select a status before removing the employee.",{id: "unique-toast-id",});
       return;
     }
 

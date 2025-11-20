@@ -38,11 +38,11 @@ const handleSubmit = async () => {
       console.log("Login successful:", data);
       navigate("/dashboard");
     } else {
-      toast.error(data.error || data.message || "Login failed.");
+      toast.error(data.error || data.message || "Login failed.",{id: "unique-toast-id",});
     }
   } catch (error) {
     console.error("Error during login:", error);
-    toast.error("Something went wrong. Please try again later.");
+    toast.error("Something went wrong. Please try again later.",{id: "unique-toast-id",});
   }
 };
   return (

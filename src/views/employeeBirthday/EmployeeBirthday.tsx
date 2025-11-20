@@ -43,7 +43,7 @@ const EmployeeBirthday: React.FC = () => {
 // 🔹 Send group birthday wishes (POST)
   const handleSendGroupWishes = async () => {
     if (todayBirthdays.length === 0) {
-      toast("No birthdays today to send wishes.");
+      toast("No birthdays today to send wishes.",{id: "unique-toast-id",});
       return;
     }
 
@@ -52,13 +52,13 @@ const EmployeeBirthday: React.FC = () => {
       const response = await api.post("/api/birthdaystodaywish/");
 
       if (response?.data?.success) {
-        toast.success("🎉 Group birthday wishes sent successfully!");
+        toast.success(" Group birthday wishes sent successfully!🎉",{id: "unique-toast-id",});
       } else {
-        toast("⚠️ Failed to send wishes. Please try again.");
+        toast("⚠️ Failed to send wishes. Please try again.",{id: "unique-toast-id",});
       }
     } catch (error: any) {
       console.error("Error sending wishes:", error);
-      toast.error("❌ Something went wrong while sending wishes.");
+      toast.error(" Something went wrong while sending wishes.",{id: "unique-toast-id",});
     } finally {
       setSending(false);
     }

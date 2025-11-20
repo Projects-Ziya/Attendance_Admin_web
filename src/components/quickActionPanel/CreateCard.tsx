@@ -198,13 +198,13 @@ const CreateCard = ({
           setNewDeptId(res.data.department_id); // ✅ store new dept ID for use in Designation
         }
 
-        toast.success("✅ Department created successfully!");
+        toast.success(" Department created successfully!",{id: "unique-toast-id",});
       } else if (title === "Create Designation") {
         const selectedDept = options.find(
           (opt: any) => opt.name === values[1]
         );
         if (!selectedDept && !newDeptId) {
-          toast("Please select a valid department.");
+          toast("Please select a valid department.",{id: "unique-toast-id",});
           return;
         }
 
@@ -212,7 +212,7 @@ const CreateCard = ({
           title: values[0],
           department_id: newDeptId || selectedDept.id, // ✅ use stored dept ID
         });
-        toast.success("✅ Designation created successfully!");
+        toast.success(" Designation created successfully!",{id: "unique-toast-id",});
       }
 
       setValues(inputs.map(() => ""));
@@ -220,7 +220,7 @@ const CreateCard = ({
       setSelectedEmp(null);
     } catch (err) {
       console.error("API POST error:", err);
-      toast.error("❌ Failed to create item. Check console for details.");
+      toast.error(" Failed to create item. Check console for details.",{id: "unique-toast-id",});
     }
   };
 

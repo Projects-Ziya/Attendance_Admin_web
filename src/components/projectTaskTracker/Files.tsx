@@ -25,7 +25,7 @@ const Files = ({ id }) => {
   // ✅ Upload file
   const handleUpload = async () => {
     if (!file) {
-      toast("Please select a file before uploading");
+      toast("Please select a file before uploading",{id: "unique-toast-id",});
       return;
     }
 
@@ -37,13 +37,13 @@ const Files = ({ id }) => {
       await api.post("/api/projectfile/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("File uploaded successfully!");
+      toast.success("File uploaded successfully!",{id: "unique-toast-id",});
       setShowModal(false);
       setFile(null);
       fetchFiles();
     } catch (error) {
       console.error("Error uploading file:", error);
-      toast.error("Failed to upload file");
+      toast.error("Failed to upload file",{id: "unique-toast-id",});
     }
   };
 
@@ -53,11 +53,11 @@ const Files = ({ id }) => {
 
     try {
       await api.delete(`/api/projectfiledelete/${fileId}/`);
-      toast.success("File deleted successfully!");
+      toast.success("File deleted successfully!",{id: "unique-toast-id",});
       fetchFiles();
     } catch (error) {
       console.error("Error deleting file:", error);
-      toast.error("Failed to delete file");
+      toast.error("Failed to delete file",{id: "unique-toast-id",});
     }
   };
 

@@ -91,7 +91,7 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
   // ✅ Rehire API call
   const handleConfirmRehire = async () => {
     if (!selectedEmployee?.id) {
-      toast("Employee ID not found.");
+      toast("Employee ID not found.",{id: "unique-toast-id",});
       return;
     }
 
@@ -109,11 +109,11 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
         setTimeout(() => setShowNotification(false), 3000);
       } else {
         console.error("Rehire failed:", response.data);
-        toast.error("Failed to rehire employee. Please try again.");
+        toast.error("Failed to rehire employee. Please try again.",{id: "unique-toast-id",});
       }
     } catch (error) {
       console.error("Error rehiring employee:", error);
-      toast.error("Error rehiring employee. Please try again.");
+      toast.error("Error rehiring employee. Please try again.",{id: "unique-toast-id",});
     } finally {
       setIsRehireModalOpen(false);
     }

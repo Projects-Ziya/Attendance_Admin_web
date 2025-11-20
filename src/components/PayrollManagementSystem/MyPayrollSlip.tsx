@@ -23,7 +23,8 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
 
  const handleViewSlip = () => {
   if (!selectedMonth) {
-    toast.error("Please select a month!");
+    toast.error("Please select a month!",{id: "unique-toast-id",});
+    
     return;               // ❗ Stop here — do NOT show the slip
   }
 

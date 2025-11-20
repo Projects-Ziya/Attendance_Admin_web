@@ -42,7 +42,7 @@ const AddProject = () => {
         !formData.end_date ||
         !formData.priority
       ) {
-        toast("Please fill all required basic fields");
+        toast("Please fill all required basic fields",{id: "unique-toast-id",});
         return false;
       }
     }
@@ -53,14 +53,14 @@ const AddProject = () => {
         (!formData.projectManagers || formData.projectManagers.length === 0) ||
         (!formData.tags || formData.tags.length === 0)
       ) {
-        toast("Please add at least one Team Leader, Project Manager, and Tag");
+        toast("Please add at least one Team Leader, Project Manager, and Tag",{id: "unique-toast-id",});
         return false;
       }
     }
 
     if (section === "tasks") {
       if (!formData.tasks || formData.tasks.length === 0) {
-        toast("Please assign at least one task");
+        toast("Please assign at least one task",{id: "unique-toast-id",});
         return false;
       }
     }
@@ -133,12 +133,12 @@ const handleSubmit = async (e?: React.FormEvent) => {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    toast.success("✅ Project created successfully!");
+    toast.success("✅ Project created successfully!",{id: "unique-toast-id",});
     console.log("🎯 Final payload:", Object.fromEntries(payload.entries()));
     console.log("Response:", res.data);
   } catch (err) {
     console.error("❌ Error creating project:", err);
-    toast.error("Failed to create project");
+    toast.error("Failed to create project",{id: "unique-toast-id",});
   } finally {
     setLoading(false);
   }

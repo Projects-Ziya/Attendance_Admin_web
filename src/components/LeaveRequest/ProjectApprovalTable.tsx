@@ -90,14 +90,14 @@ export default function ProjectApprovalTable({
     try {
       const res = await api.post("/api/projects-accept/", { project_id: id });
       if (res.data.success) {
-        toast.success("✅ Project approved successfully");
+        toast.success(" Project approved successfully",{id: "unique-toast-id",});
         fetchRequests(); // Refresh the list
       } else {
-        toast("⚠️ Failed to approve project");
+        toast("⚠️ Failed to approve project",{id: "unique-toast-id",});
       }
     } catch (err) {
       console.error("Approve Error:", err);
-      toast.error("❌ Something went wrong while approving");
+      toast.error(" Something went wrong while approving",{id: "unique-toast-id",});
     }
   };
 
@@ -106,7 +106,7 @@ export default function ProjectApprovalTable({
     try {
       const reason = prompt("Please enter the reason for rejection:");
       if (!reason) {
-        toast("⚠️ Rejection reason is required!");
+        toast("⚠️ Rejection reason is required!",{id: "unique-toast-id",});
         return;
       }
 
@@ -116,14 +116,14 @@ export default function ProjectApprovalTable({
       });
 
       if (res.data.success) {
-        toast.success("❌ Project was rejected successfully");
+        toast("❌ Project was rejected successfully",{id: "unique-toast-id",});
         fetchRequests(); // Refresh the list
       } else {
-        toast("⚠️ Failed to reject project");
+        toast("⚠️ Failed to reject project",{id: "unique-toast-id",});
       }
     } catch (err) {
       console.error("Reject Error:", err);
-      toast.error("❌ Something went wrong while rejecting");
+      toast.error(" Something went wrong while rejecting",{id: "unique-toast-id",});
     }
   };
 

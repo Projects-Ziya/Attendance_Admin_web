@@ -21,12 +21,12 @@ const EmployeeCard: React.FC<EmployeeCardProps> = ({
   const handleSendWishes = async () => {
     try {
       setSending(true);
-      const response = await api.post(`/api/birthdaystodaywishid/${employee.id}/`);
+      const response = await api.post(`/api/birthdaystodaywishid/${employee.id}/`,{id: "unique-toast-id",});
 
       if (response?.data?.success) {
-        toast.success(`🎉 Birthday wish sent to ${employee.name}!`);
+        toast.success(`🎉 Birthday wish sent to ${employee.name}!`,{id: "unique-toast-id",});
       } else {
-        toast.error("⚠️ Failed to send wish. Please try again.");
+        toast.error("⚠️ Failed to send wish. Please try again.",{id: "unique-toast-id",});
       }
     } catch (error: any) {
       console.error("Error sending wish:", error);
