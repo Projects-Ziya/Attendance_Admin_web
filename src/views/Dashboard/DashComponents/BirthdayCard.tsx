@@ -44,8 +44,8 @@ const BirthdayCard: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-[15px] w-[727px] h-[632px] border border-gray-100">
-      <div className="mb-5 border-b border-[#43C8FF] pb-4 flex items-center justify-between">
+    <div className="bg-white p-6 rounded-lg shadow-md mt-[15px] w-[727px] scrollable h-[632px] border border-gray-100">
+      <div className="mb-5 border-b border-[#43C8FF] pb-4 flex items-center  justify-between">
         <div className="flex flex-col items-start gap-1">
           <div className="bg-[#E6F7FF] p-2 rounded-full">
             <Cake className="w-7 h-7 text-[#00AEEF]" strokeWidth={2} />

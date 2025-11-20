@@ -1,17 +1,18 @@
 import React from "react";
 import MainLayout from "../../components/layout/MainLayout";
 import headimg from "../../assets/head.svg";
-import { mockMetrics } from "../../models/metrics.mock";
 import MetricsCard from "../../components/ProductivityAndStatus/MetricsCard";
 import ProjectTaskCard from "../../components/ProductivityAndStatus/ProjectTaskCards";
-import { mockProjectTask } from "../../models/projectTask.mock"
 import WorkHours from "../../components/ProductivityAndStatus/WorkHours";
 import AttendanceLeaveChart from "../../components/ProductivityAndStatus/AttendanceLeaveChart";
 
 function ProductivityStats() {
   return (
     <MainLayout>
-      <div className="bg-[#F6F5FA]  w-[1469px]  sm:px-6   ">
+
+
+      <div className="bg-[#F6F5FA]  w-[1469px]  sm:px-6  ">
+
         {/* Page Header */}
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8">
           <h1 className="flex items-center gap-2 text-gray-600 text-[15px] sm:text-[16px] font-[500] leading-[1.3] tracking-[1.28px]">
@@ -47,7 +48,7 @@ function ProductivityStats() {
           <ProjectTaskCard type="tasks" />
         </section>
 
-        <section className=" gap-[15px] mt-[60px] mb-[95px]">
+        <section className=" gap-[15px] mt-[60px] mb-[95px] w-[1469px]">
           <AttendanceLeaveChart />
         </section>
 

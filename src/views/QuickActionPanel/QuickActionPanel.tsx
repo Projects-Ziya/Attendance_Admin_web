@@ -9,7 +9,7 @@ import MainLayout from "../../components/layout/MainLayout";
 function QuickActionPanel() {
   return (
     <MainLayout>
-      <div className="bg-[#F6F5FA]  w-[1579px]  sm:px-6   ">
+      <div className="bg-[#F6F5FA]  w-[1469px]  sm:px-4  lg:px-6 ">
 
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 ">
           <h1 className=" flex items-center gap-2 text-midGray text-[16px]  leading-[16px] font-[500] ">
@@ -20,7 +20,7 @@ function QuickActionPanel() {
                 className="w-5.5 h-5.5 object-contain"
               />
             </span>
-            Productivity & Stats
+            Quick Action panel
           </h1>
         </div>
 
@@ -60,7 +60,7 @@ function QuickActionPanel() {
           />
         </div>
 
-        <section className="mt-[60px]  mb-[95px] ">
+        <section className="mt-[60px] mb-[95px] w-[1469px] ">
           <AddBranch />
         </section>
       </div>

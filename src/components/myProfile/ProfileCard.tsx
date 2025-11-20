@@ -3,12 +3,18 @@ import type { FC } from "react";
 import type { Profile } from "../../viewmodels/myProfile/useProfile";
 import banner from "../../assets/profile-banner.jpg";
 import p2 from "../../assets/icons/profile-button.png";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileCardProps {
   profile: Profile;
 }
 
 const ProfileCard: FC<ProfileCardProps> = ({ profile }) => {
+
+const navigate = useNavigate()
+
+
+
   return (
     <div className="bg-[#FCFCFC] border-[#D9D9D9] border-[0.5px] 
     rounded-[10px] overflow-hidden w-full xs:max-w-[320px] md:w-[450px] xl:w-[500px] xl:h-[270px] 
@@ -42,7 +48,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ profile }) => {
         <button className="mt-3 px-6 py-[6px] 2xl:mt-4 2xl:px-8 2xl:py-2 
         bg-[#00A0E3] text-[15px] 2xl:text-[16px]
         text-[#FCFCFC] rounded-[5px] hover:bg-sky-700 transition 
-        flex font-[400px] tracking-[1px]">
+        flex font-[400px] tracking-[1px]" onClick={() => navigate("/modifyprofile/Editprofile")}>
           <img src={p2} alt="Edit" className="w-4 h-4 2xl:h-5 2xl:w-5 me-2 mt-[2px]
           flex" />
           Modify Profile

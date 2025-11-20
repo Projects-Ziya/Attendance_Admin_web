@@ -77,7 +77,7 @@ const EmployeeDashboardHome = () => {
  
   
   return (
-    <div className="p-6 bg-[#F6F5FA] min-h-screen">
+    <div className="p-6 bg-[#F6F5FA]  min-h-screen">
 
      
       <div className="flex items-center mb-7">

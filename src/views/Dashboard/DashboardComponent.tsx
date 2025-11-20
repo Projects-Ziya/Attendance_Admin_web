@@ -15,7 +15,7 @@ const DashboardComponents: React.FC<DashboardComponentsProps> = ({
   selectedSidebarItem,
 }) => {
   return (
-    <div className="flex-1 overflow-hidden text-white pt-3">
+    <div className="flex-1 overflow-hidden mb-[47px] text-white pt-3">
       {/* ProfileCard */}
       <div className="mb-4">
         <ProfileCard />
