@@ -12,7 +12,7 @@ type ProjectTaskCardProps = {
   type: "projects" | "tasks";
 };
 
-const ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
+const   ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
   const [total, setTotal] = useState<number>(0);
   const [breakdown, setBreakdown] = useState<BreakdownItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ const ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
 
   if (loading) {
     return (
-      <div className="bg-white shadow rounded-[10px] w-[727px] h-[381px] flex items-center justify-center">
+      <div className="bg-white shadow-[0px_0px_2px_0px_#00000040]  rounded-[10px] w-[727px] h-[381px] flex items-center justify-center">
         <p className="text-gray-500">Loading {type}...</p>
       </div>
     );
@@ -79,7 +79,7 @@ const ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
 
   if (error) {
     return (
-      <div className="bg-white shadow rounded-[10px] w-[727px] h-[381px] flex items-center justify-center">
+      <div className="bg-white shadow-[0px_0px_2px_0px_#00000040]  rounded-[10px] w-[727px] h-[381px] flex items-center justify-center">
         <p className="text-red-500">{error}</p>
       </div>
     );

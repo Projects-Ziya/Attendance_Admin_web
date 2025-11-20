@@ -34,7 +34,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
   legendLabel,
 }) => {
   return (
-    <div className="bg-[#FCFCFC] rounded-xl shadow-metrics w-[727px] h-[573px]">
+    <div className="bg-[#FCFCFC] rounded-xl shadow-[0px_0px_2px_0px_#00000040]  w-[727px] h-[573px]">
       {/* Title */}
       <h2 className="font-semibold text-[22px] leading-[180%] tracking-[0.08em] text-[#4D4D4D] pl-10 pt-[45px]">
         {title}
@@ -191,7 +191,7 @@ const AttendanceLeaveChart: React.FC = () => {
   }
 
   return (
-    <div className="flex gap-[15px]">
+    <div className="flex  gap-[15px]">
       <ChartCard
         title="Attendance"
         value={attendanceTotal}

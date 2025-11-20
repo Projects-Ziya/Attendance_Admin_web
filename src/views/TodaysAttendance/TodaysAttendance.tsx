@@ -123,7 +123,7 @@ const TodaysAttendance = () => {
 
   return (
 
-      <div className="bg-[#F6F5FA]  w-[1579px]  sm:px-6   ">
+      <div className="bg-[#F6F5FA]  w-[1472px]  sm:px-6   ">
       {/* Heading with Icon */}
 
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 ">

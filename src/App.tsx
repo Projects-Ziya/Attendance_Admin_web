@@ -29,6 +29,7 @@ import EmployeeBirthday from "./views/employeeBirthday/EmployeeBirthday";
 import PayrollManagementSystem from "./views/PayrollManagementSystem/PayrollManagementSystem";
 import RecentActivityList from "./views/Dashboard/DashComponents/RecentActivityList";
 import { Toaster } from "react-hot-toast";
+import EditProfile from "./views/myProfile/modifyprofile/EditProfile";
 
 function App() {
   return (
@@ -91,6 +92,7 @@ function App() {
           <Route path="/myProfile" element={<ProfilePage />} />
           <Route path="/Birthdays" element={<EmployeeBirthday />} />
           <Route path="/recentactivitylist" element={<RecentActivityList />} />
+          <Route path="/modifyprofile/Editprofile" element={<EditProfile/>} />
         </Route>
           <Route path="/AboutUs" element={<AboutPage />} />
           <Route path="/Terms&Conditions" element={<TermsAndConditions />} />
