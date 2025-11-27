@@ -21,7 +21,7 @@ const BasicInformation: React.FC<Props> = ({ formData, handleChange, handleNext 
               className="w-full h-full object-cover"
             />
           ) : (
-            <img src="" alt="placeholder" className="w-full h-full object-cover" />
+            <img src={profileImage || null}alt="placeholder" className="w-full h-full object-cover" />
           )}
         </div>
         <div>

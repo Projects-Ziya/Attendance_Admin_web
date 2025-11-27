@@ -1,10 +1,13 @@
-// src/api/auth.ts
 import api from "../Api/api";
-import type { LoginResponse } from "../models/auth";
 import Cookies from "js-cookie";
+import type { LoginResponse } from "../models/auth";
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  const response = await api.post("/api/login/", { email, password });
+
+  // ❌ No manual encryption here.
+  const response = await api.post("/api/login/", { email: email.trim(),
+  password: password.trim(), });
+
   const data = response.data;
 
   if (data.success) {

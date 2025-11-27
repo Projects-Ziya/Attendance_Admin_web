@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/user/");
+        const response = await fetch("http://192.168.0.12:8000/api/user/");
         const data = await response.json();
         setProfileImg(data.profileImage);
         setIsOnline(data.is_online);
@@ -129,7 +129,7 @@ const handleClose = () => {
       onLogout={() => handleLogout()} content={<div></div>}>
             <div className="relative w-fit h-fit">
               <img
-                src={profileImg}
+                src={profileImg|| "https://via.placeholder.com/50"}
                 onError={() => setProfileImg("/images/img_profile.png")}
                 className="w-[28px] sm:w-[30px] lg:w-[32px] h-[30px] sm:h-[32px] lg:h-[34px] object-cover rounded-full"
                 alt="Profile"

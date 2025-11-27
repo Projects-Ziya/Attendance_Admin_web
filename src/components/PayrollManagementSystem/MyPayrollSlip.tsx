@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Eye, ChevronDown } from "lucide-react";
 import PayrollSlip from "../../components/PayrollManagementSystem/PayrollSlip";
 import toast from "react-hot-toast";
+import api from "../../Api/api";
+
 const months = [
   "All",
   "January",
@@ -20,17 +22,32 @@ const months = [
 
 const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [slipData, setSlipData] = useState(null);
 
- const handleViewSlip = () => {
-  if (!selectedMonth) {
-    toast.error("Please select a month!",{id: "unique-toast-id",});
-    
-    return;               // ❗ Stop here — do NOT show the slip
-  }
+  const employeeId = 5; // TODO: Replace with logged user id
 
-  setShowSlip(true);       // ✔ Show slip only if month selected
-};
+  const handleViewSlip = async () => {
+    if (!selectedMonth) {
+      toast.error("Please select a month!", { id: "unique-toast-id" });
+      return;
+    }
 
+    try {
+      toast.loading("Fetching salary slip...", { id: "slip" });
+
+      const response = await api.get(
+        `/api/list-salary-slip/${employeeId}/?month=${selectedMonth}`
+      );
+
+      setSlipData(response.data.data);
+      setShowSlip(true);
+
+      toast.success("Salary slip loaded!", { id: "slip" });
+    } catch (error) {
+      toast.error("No slip found for selected month.", { id: "slip" });
+      setShowSlip(false);
+    }
+  };
 
   return (
     <>
@@ -42,7 +59,7 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
         <div className="flex items-center gap-4">
           <div className="flex items-center bg-white border border-gray-200 rounded-full px-4 py-2 text-sm text-gray-700">
             <select
-              className="bg-transparent focus:outline-none cursor-pointer text-sm appearance-none [-moz-appearance:none] [-webkit-appearance:none]"
+              className="bg-transparent focus:outline-none cursor-pointer text-sm appearance-none"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
             >
@@ -70,10 +87,9 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
         </div>
       </div>
 
-      {/* Show slip only when parent showSlip = true */}
-      {showSlip && (
+      {showSlip && slipData && (
         <div className="mt-4">
-          <PayrollSlip month={selectedMonth} />
+          <PayrollSlip data={slipData} month={selectedMonth} />
         </div>
       )}
     </>
