@@ -5,6 +5,7 @@ import SortDropdown from "../../../components/recentactivities/SortDropdown";
 import top from "../../../assets/topicon.svg";
 import type { Activity } from "../../../models/recentactivity/Activity";
 import MainLayout from "../../../components/layout/MainLayout";
+import api from "../../../Api/api";
 
 // 🔹 Status color mapping
 const statusColors: Record<string, string> = {
@@ -68,9 +69,16 @@ const ActivityRow: React.FC<{ activity: Activity }> = ({ activity }) => (
 
 // 🔹 Main Component
 const RecentActivityList: React.FC = () => {
-  const { activities, loading, error } = useActivityViewModel();
+  const { activities } = useActivityViewModel();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState("Time");
+
+
+  // Api integration 
+  const [data , setData] = useState<Activity[]>([]);
+  const [loading , setloading] = useState(true);
+  const [error, setError] = useState<string|null>(null);
+
 
   // ✅ pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -126,8 +134,51 @@ const RecentActivityList: React.FC = () => {
   // Debug (optional)
   // console.log({ len: filteredActivities.length, itemsPerPage, totalPages, currentPage });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+ useEffect(() => {
+  const fetchActivities = async () => {
+    try {
+      const res = await api.get("/api/employeesactivity/");
+      // Map backend fields to Activity model
+      const mapped = res.data.activities.map((a: any) => ({
+        id: a.id,
+        personName: `${a.first_name} ${a.last_name}`,
+        role: a.employee_id,              // or map to actual role if available
+        team: a.type,                     // using "type" as team for now
+        status: a.activity_type,
+        description: a.activity_type,     // backend has no description, reuse status
+        time: a.activity_time,
+        profileImage: null                // backend has no image, fallback handled in ActivityRow
+      }));
+      setData(mapped);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch Recent Activities list");
+    } finally {
+      setloading(false);
+    }
+  };
+
+  fetchActivities();
+}, []);
+
+
+  if (loading) {
+ return  (
+ <div className="flex items-center justify-center w-full h-[573px]">
+
+ 
+ <p>Loading Recent Activity list...</p>;
+ </div>
+ ) };
+
+
+  if (error){
+   return(
+<div className="flex items-center justify-center w-full h-[573px]">
+<p className="text-gray-500 text-lg">Failed to load Recent Activity list</p>  
+</div>
+  )} 
+
 
   return (
     <MainLayout>

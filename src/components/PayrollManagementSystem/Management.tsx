@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-
-import { Calendar } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import api from "../../Api/api";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+
 
 import MyPayrollSlip from "./MyPayrollSlip";
 import UploadSalaryReport from "./UploadSalaryReport";
@@ -10,6 +10,9 @@ import UploadBundleReport from "./UploadBundleReport";
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
   const [showSlip, setShowSlip] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading , setLoading]= useState(true);
+  const [data,setData] = useState (null);
 
   const tabs = [
     "My Payroll Slip",
@@ -37,6 +40,44 @@ const renderContent = () => {
 
   const handleslip = () => {
     alert ("are you ok")
+  }
+
+
+
+  useEffect (() => {
+      const fetchdata = async () => {
+        try{
+    setLoading(false);
+    setError (null);
+    
+    
+        const res = await api.get ("/api/salary-pdf/")
+        setData (res.data);
+      }catch(err:any){
+        console.error("Fetch error :", err?.response|| err.message || err);
+        setError("Failed to fetch payroll slip data")
+
+      }finally{
+        setLoading (false);
+      }
+    };
+    fetchdata();
+  },[]);
+
+  if (loading) {
+    return(
+      <div className="flex items-center justify-center w-full h-[573px]">
+        <p className="text-[#4D4D4D] text-[18px]">Loading Salary Slip..</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return(
+<div className="flex items-center justify-center w-full h-[573px]">
+  <p className="text-red-500 text-lg">{error}</p>
+</div>
+    );
   }
 
   return (

@@ -4,7 +4,8 @@ import type { LoginResponse } from "../models/auth";
 import Cookies from "js-cookie";
 
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  const response = await api.post("/api/login/", { email, password });
+  const response = await api.post("/api/login/",  { email: email.trim(),
+  password: password.trim(), });
   const data = response.data;
 
   if (data.success) {

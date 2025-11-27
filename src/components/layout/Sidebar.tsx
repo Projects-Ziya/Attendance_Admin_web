@@ -7,7 +7,9 @@ import task from '../../assets/images/icons/tasktracker.svg';
 import productivity from '../../assets/images/icons/prodectivityandstatus.svg';
 import quick from '../../assets/images/icons/quickactionpanal.svg';
 import employee from '../../assets/images/icons/employee.svg';
+import Workicon from '../../assets/icons/Worksicon.svg';  
 import { useNavigate, useLocation } from 'react-router-dom';
+import payrollicon from '../../assets/icons/payroll.svg';
 
 interface SidebarItem {
   id: string;
@@ -25,7 +27,8 @@ const Sidebar: React.FC = () => {
     { id: 'task', label: 'Project/Task Tracker', icon: task, path: '/ProjectTaskTracker' },
     { id: 'productivity', label: 'Productivity & Stats', icon: productivity, path: '/ProductivityAndStatus' },
     { id: 'quick', label: 'Quick Action Panel', icon: quick, path: '/QuickAction' },
-    { id: 'Payroll', label: 'Payroll Management System ', icon: quick, path: '/payroll' },
+    { id: 'Payroll', label: 'Payroll Management System ', icon: payrollicon, path: '/payroll' },
+    { id: 'works', label: 'Worksheet ', icon: Workicon, path: '/worksheet' },
   ];
 
   const navigate = useNavigate();

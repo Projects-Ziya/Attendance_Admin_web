@@ -177,7 +177,7 @@ const AttendanceLeaveChart: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center w-full h-[573px]">
-        <p className="text-gray-500 text-lg">Loading charts...</p>
+        <p className="text-[#4D4D4D]  text-[18px]">Loading charts...</p>
       </div>
     );
   }

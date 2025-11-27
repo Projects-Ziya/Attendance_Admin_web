@@ -7,4 +7,5 @@ export interface Activity {
   status: string;
   description: string;
   time: string;
+  error : string | null;
 }
