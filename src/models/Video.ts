@@ -1,0 +1,9 @@
+export type Video = {
+  id: string;
+  title: string;
+  duration: string;
+  views: number;
+  description: string;
+  uploadedBy: string;
+  uploadDate: string;
+};

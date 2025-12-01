@@ -4,7 +4,6 @@ import login from '../../assets/images/login.png';
 import logo from '../../assets/images/logo.png';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
-import toast from "react-hot-toast";
 
 import { AuthVM } from "../../viewmodels/authViewModel";
 export default function ZiyaAttendLogin() {
@@ -38,11 +37,11 @@ const handleSubmit = async () => {
       console.log("Login successful:", data);
       navigate("/dashboard");
     } else {
-      toast.error(data.error || data.message || "Login failed.",{id: "unique-toast-id",});
+      alert(data.error || data.message || "Login failed.");
     }
   } catch (error) {
     console.error("Error during login:", error);
-    toast.error("Something went wrong. Please try again later.",{id: "unique-toast-id",});
+    alert("Something went wrong. Please try again later.");
   }
 };
   return (
