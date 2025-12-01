@@ -10,6 +10,9 @@ import employee from '../../assets/images/icons/employee.svg';
 import Workicon from '../../assets/icons/Worksicon.svg';  
 import { useNavigate, useLocation } from 'react-router-dom';
 import payrollicon from '../../assets/icons/payroll.svg';
+import noticeicon from '../../assets/icons/noticeicon.svg';
+import pollicon from '../../assets/icons/pollsfeedback/pollicon.svg';
+import videoicon from '../../assets/icons/videoicon.svg'
 
 interface SidebarItem {
   id: string;
@@ -29,13 +32,16 @@ const Sidebar: React.FC = () => {
     { id: 'quick', label: 'Quick Action Panel', icon: quick, path: '/QuickAction' },
     { id: 'Payroll', label: 'Payroll Management System ', icon: payrollicon, path: '/payroll' },
     { id: 'works', label: 'Worksheet ', icon: Workicon, path: '/worksheet' },
+    { id: 'announcement', label: 'Announcement/Notice Board ', icon: noticeicon, path: '/AnnouncementAndNoticeBoard' },
+    { id: 'feedback', label: 'Polls and Feedback ', icon: pollicon, path: '/PollsAndFeedback' },
+    { id: 'trainingvideos', label: 'Training Videos ', icon: videoicon, path: '/TrainingVideos' },
   ];
 
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
-    <div className="h-screen bg-white border-r border-gray-200 flex flex-col w-[19.6vw] max-w-[377px] min-w-[220px]">
+    <div className="h-screen bg-white border-r scrollable border-gray-200 flex flex-col w-[19.6vw] max-w-[377px] min-w-[220px]">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 pt-6 pb-5">
         <img src={logo} className="w-[34px] h-[34px]" alt="Ziya Logo" />
@@ -77,7 +83,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Extra static item with margin at the bottom */}
-      <div className="mt-auto mb-16 flex flex-col gap-2 px-3">
+      <div className="mt-[300px] mb-16 flex flex-col gap-2 px-3">
     {[
       { label: 'Profile Settings', icon: overview, path: '/profileSettings' },
       { label: 'Notifications', icon: overview, path: '/notifications' },

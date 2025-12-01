@@ -33,6 +33,9 @@ import RecentActivityList from "./views/Dashboard/DashComponents/RecentActivityL
 import { Toaster } from "react-hot-toast";
 import EditProfile from "./views/myProfile/modifyprofile/EditProfile";
 import Worksheet from "./views/Worksheet/Worksheet";
+import AnnouncementNoticeBoard from "./views/Anouncemenet&NoticeBoard/AnoucementNoticeBoard";
+import PollsFeedback from "./views/Polls&Feedback/PollsFeedback";
+import TrainingVideo from "./views/Trainingvideos/TrainingVideos";
 
 function App() {
 
@@ -73,6 +76,9 @@ function App() {
           <Route path="/recentactivitylist" element={<RecentActivityList />} />
           <Route path="/modifyprofile/Editprofile" element={<EditProfile/>} />
           <Route path="/worksheet" element={<Worksheet/>} />
+          <Route path="/AnnouncementAndNoticeBoard" element={<AnnouncementNoticeBoard/>} />
+          <Route path="/PollsAndFeedback" element={<PollsFeedback/>} />
+          <Route path="/TrainingVideos" element={<TrainingVideo/>} />
         </Route>
 
         <Route path="/AboutUs" element={<AboutPage />} />
