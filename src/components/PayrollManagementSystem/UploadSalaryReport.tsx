@@ -1,4 +1,6 @@
-import React, { useState, DragEvent } from "react";
+import React, { useState } from "react";
+import type { DragEvent } from "react";
+
 import { ChevronDown, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../../Api/api"; // <-- using your axios instance

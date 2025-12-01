@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("http://192.168.0.12:8000/api/user/");
+        const response = await fetch("/api/user/");
         const data = await response.json();
         setProfileImg(data.profileImage);
         setIsOnline(data.is_online);
@@ -112,7 +112,7 @@ const handleClose = () => {
               />
             </div>
             <Button
-              variant="subprimary"
+              variant="primary"
               size="small"
               className="!w-[66px] !h-[28px] !text-[11px] !leading-[14px] !p-0 !rounded-[5px] !min-w-[0] !min-h-[0]"
             >

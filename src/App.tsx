@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";   // ✅ MISSING IMPORT
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./views/Login/Login";
 import ForgotPassword from "./views/ForgotPassword/ForgotPassword";
@@ -33,52 +35,28 @@ import EditProfile from "./views/myProfile/modifyprofile/EditProfile";
 import Worksheet from "./views/Worksheet/Worksheet";
 
 function App() {
+
+  // 🔐 Make sure AES session key is generated & sent BEFORE any API call
+ 
+
   return (
-    
     <Router>
       <Routes>
         <Route path="*" element={<div>404 - Page Not Found</div>} />
         <Route path="/" element={<Login />} />
+
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<PasswordReset />} />
         <Route path="/createac" element={<Createacc />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dasboard />} />
-          <Route
-            path="/addEmployee"
-            element={
-              <MainLayout>
-                <AddEmployee />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/addLeaveRequest"
-            element={
-              <MainLayout>
-                <AddLeaveRequest />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/Attendancesummary"
-            element={
-              <MainLayout>
-                <TodaysAttendance />
-              </MainLayout>
-            }
-          />
 
-          <Route
-            path="/Em/:id"
-            element={
-              <MainLayout>
-                <EmployeeDashboard employeeId={"string"} />
-              </MainLayout>
-            }
-          />
+          <Route path="/addEmployee" element={<MainLayout><AddEmployee /></MainLayout>} />
+          <Route path="/addLeaveRequest" element={<MainLayout><AddLeaveRequest /></MainLayout>} />
+          <Route path="/Attendancesummary" element={<MainLayout><TodaysAttendance /></MainLayout>} />
 
+          <Route path="/Em/:id" element={<MainLayout><EmployeeDashboard employeeId={"string"} /></MainLayout>} />
 
           <Route path="/TotalActives" element={<TotalActives />} />
           <Route path="/AddProject" element={<AddProjectLayout />} />
@@ -96,13 +74,15 @@ function App() {
           <Route path="/modifyprofile/Editprofile" element={<EditProfile/>} />
           <Route path="/worksheet" element={<Worksheet/>} />
         </Route>
-          <Route path="/AboutUs" element={<AboutPage />} />
-          <Route path="/Terms&Conditions" element={<TermsAndConditions />} />
-          <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
-          <Route path="/notifications" element={<NotificationLayout />} />
-          <Route path="/Payroll" element={<PayrollManagementSystem />} />
+
+        <Route path="/AboutUs" element={<AboutPage />} />
+        <Route path="/Terms&Conditions" element={<TermsAndConditions />} />
+        <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
+        <Route path="/notifications" element={<NotificationLayout />} />
+        <Route path="/Payroll" element={<PayrollManagementSystem />} />
       </Routes>
-       <Toaster position="top-center" />
+
+      <Toaster position="top-center" />
     </Router>
   );
 }

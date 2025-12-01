@@ -36,7 +36,7 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
       toast.loading("Fetching salary slip...", { id: "slip" });
 
       const response = await api.get(
-        `/api/list-salary-slip/${employeeId}/?month=${selectedMonth}`
+        `/api/list-salary-slip/emp_id/`
       );
 
       setSlipData(response.data.data);
