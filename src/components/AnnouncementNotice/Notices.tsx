@@ -67,9 +67,10 @@ const Notices: React.FC = () => {
   };
 
   return (
-    <section className="w-[1469px] h-[1601px] pl-[40px] pt-[60px] shadow-[0px_0px_2px_0px_#00000040] bg-[#FCFCFC] mx-auto mt-[100px]">
-      <h1 className="text-xl font-semibold text-[#4D4D4D]">Announcement / Notice Board</h1>
-      <p className="text-[#4D4D4D] mb-[60px]">Share important updates with your team</p>
+   
+   <section className="w-[1469px] h-[1601px] pl-[40px] pt-[60px]  shadow-[0px_0px_2px_0px_#00000040] bg-[#FCFCFC] mx-auto mt-[100px]">
+  <h1 className="text-xl font-semibold text-[#4D4D4D] ">Announcement / Notice Board</h1>
+  <p className="text-[#4D4D4D] mb-[100px]">Share important updates with your team</p>
 
       <div className="flex gap-[40px]">
         {/* Create Notice Section */}

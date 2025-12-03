@@ -5,6 +5,10 @@ import download_icon from "../../assets/icons/download.svg";
 import edit_icon from "../../assets/icons/editboxicon.svg";
 import dlt_icon from "../../assets/icons/delete.svg";
 
+import api from "../../Api/api";
+import toast from "react-hot-toast";
+
+
 import EditModal from "../../components/worksheet/worksheetModal";
 import { useWorksheetVM } from "../../viewmodels/worksheet/useWorksheetVM";
 import MainLayout from "../../components/layout/MainLayout";
@@ -15,7 +19,9 @@ function Worksheet() {
   const {
     worksheets,
     onDownload,
+
     onDelete,
+
     editingWorksheet,
     onEditClick,
     onCloseModal,
@@ -23,6 +29,23 @@ function Worksheet() {
     onSaveEdit,
     isModalOpen, // for EditModal only
   } = useWorksheetVM();
+const handleDelete = async (id: string) => {
+  try {
+    const res = await api.delete(`/api/worksheetdelete/${id}/`, {
+      data: { leave_id: id }  // ✅ use 'data' for DELETE request body
+    });
+
+    if (res.data.success) {
+      toast.success("Worksheet deleted successfully", { id: "unique-toast-id" });
+    } else {
+      toast("⚠️ Failed to delete", { id: "unique-toast-id" });
+    }
+  } catch (err) {
+    console.error("Delete Error:", err);
+    toast.error("Something went wrong while deleting", { id: "unique-toast-id" });
+  }
+};
+
 
   // separate state for upload modal
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -43,7 +66,7 @@ function Worksheet() {
         }`}
       >
         {/* Top bar */}
-        <div className="flex items-center mb-[35px]">
+        <div className="flex items-center mb-[35px] pt-[46px]">
           <button className="text-[18px] font-[500] text-gray-500 border bg-[#FCFCFC] h-[40px] w-[130px] hover:text-gray-700">
             ← Back
           </button>
@@ -80,6 +103,15 @@ function Worksheet() {
 
             {/* list of cards */}
             <div className="mt-[70px] space-y-[40px] pl-[51px]">
+
+              {/* ---------------- NO WORKSHEET FOUND ---------------- */}
+              {worksheets.length === 0 && (
+                <p className="text-center text-[20px] font-[500] text-gray-500">
+                  No worksheets found
+                </p>
+              )}
+              {/* ------------------------------------------------------ */}
+
               {worksheets.map((w) => (
                 <div
                   key={w.id}
@@ -101,7 +133,6 @@ function Worksheet() {
 
                   {/* RIGHT: buttons */}
                   <div className="flex items-center gap-[16px]">
-                    {/* Download button */}
                     <button
                       onClick={() => onDownload(w.id)}
                       className="flex items-center justify-center gap-[10px] border border-[#C6C6C6] rounded-[12px] h-[50px] w-[173px] px-[20px] text-[16px] font-[500] text-[#282828] hover:bg-[#F4F4F4]"
@@ -110,7 +141,6 @@ function Worksheet() {
                       <span>Download</span>
                     </button>
 
-                    {/* Edit button */}
                     <button
                       onClick={() => onEditClick(w)}
                       className="flex items-center justify-center h-[50px] w-[40px] rounded-[12px] border border-[#C6C6C6] bg-white hover:bg-[#F4F4F4] transition"
@@ -118,9 +148,8 @@ function Worksheet() {
                       <img src={edit_icon} alt="Edit" className="w-[22px] h-[22px]" />
                     </button>
 
-                    {/* Delete button */}
                     <button
-                      onClick={() => onDelete(w.id)}
+                      onClick={() => handleDelete(w.id)}
                       className="flex items-center justify-center h-[50px] w-[40px] border border-[#FFD0D0] rounded-[12px] hover:bg-[#FFF1F1]"
                     >
                       <img src={dlt_icon} alt="Delete" className="w-[22px] h-[22px]" />

@@ -4,11 +4,13 @@ import type { Task } from "../../models/employeeDashboad/Task";
 
 export const fetchNotifications = async (): Promise<Notification[]> => {
   try {
-    const res = await fetch("/api/notifications");
-    return await res.json();
-  } catch {
-    const { fallbackNotifications } = await import("../../models/employeeDashboad/Notification");
-    return fallbackNotifications;
+    const res = await fetch("/api/notification-list-admin/");
+    if (!res.ok) throw new Error("Network response was not ok");
+    const data = await res.json();
+    return data.data; // assuming your backend wraps notifications inside `data`
+  } catch (err) {
+    console.error("Failed to fetch notifications:", err);
+    return []; // no fallback
   }
 };
 

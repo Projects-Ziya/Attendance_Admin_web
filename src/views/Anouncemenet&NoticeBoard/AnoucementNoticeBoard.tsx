@@ -10,7 +10,7 @@ const AnnouncementNoticeBoard: React.FC = () => {
      <MainLayout>
     <div className="w-[1469px] mx-auto p-6">
       {/* Your header and go-back button */}
-        <div className="flex items-center mb-[35px]">
+        <div className="flex items-center ">
           <button className="text-[18px] font-[500] text-gray-500 border bg-[#FCFCFC] h-[40px] w-[130px] hover:text-gray-700">
             ← Back
           </button>

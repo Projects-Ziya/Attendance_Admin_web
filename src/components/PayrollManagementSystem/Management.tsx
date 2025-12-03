@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import api from "../../Api/api";
+import React, {  useState } from "react";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-
 
 import MyPayrollSlip from "./MyPayrollSlip";
 import UploadSalaryReport from "./UploadSalaryReport";
@@ -10,9 +8,6 @@ import UploadBundleReport from "./UploadBundleReport";
 const Management: React.FC = () => {
   const [activeTab, setActiveTab] = useState("My Payroll Slip");
   const [showSlip, setShowSlip] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading , setLoading]= useState(true);
-  const [data,setData] = useState (null);
 
   const tabs = [
     "My Payroll Slip",
@@ -20,65 +15,25 @@ const Management: React.FC = () => {
     "Upload Bundle Report",
   ];
 
-const renderContent = () => {
-  switch (activeTab) {
-    case "My Payroll Slip":
-      return (
-        <MyPayrollSlip
-          showSlip={showSlip}
-          setShowSlip={setShowSlip}
-        />
-      );
-    case "Upload Salary Report":
-      return <UploadSalaryReport />;
-    case "Upload Bundle Report":
-      return <UploadBundleReport />;
-    default:
-      return null;
-  }
-};
-
-  const handleslip = () => {
-    alert ("are you ok")
-  }
+  const renderContent = () => {
+    switch (activeTab) {
+      case "My Payroll Slip":
+        return (
+          <MyPayrollSlip
+            showSlip={showSlip}
+            setShowSlip={setShowSlip}
+          />
+        );
+      case "Upload Salary Report":
+        return <UploadSalaryReport />;
+      case "Upload Bundle Report":
+        return <UploadBundleReport />;
+      default:
+        return null;
+    }
+  };
 
 
-
-  useEffect (() => {
-      const fetchdata = async () => {
-        try{
-    setLoading(false);
-    setError (null);
-    
-    
-        const res = await api.get ("/api/salary-pdf/")
-        setData (res.data);
-      }catch(err:any){
-        console.error("Fetch error :", err?.response|| err.message || err);
-        setError("Failed to fetch payroll slip data")
-
-      }finally{
-        setLoading (false);
-      }
-    };
-    fetchdata();
-  },[]);
-
-  if (loading) {
-    return(
-      <div className="flex items-center justify-center w-full h-[573px]">
-        <p className="text-[#4D4D4D] text-[18px]">Loading Salary Slip..</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return(
-<div className="flex items-center justify-center w-full h-[573px]">
-  <p className="text-red-500 text-lg">{error}</p>
-</div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white px-12 py-8">
@@ -111,25 +66,22 @@ const renderContent = () => {
 
       {/* Render Dynamic Content */}
       {renderContent()}
+
       {/* Empty Section */}
-     {activeTab === "My Payroll Slip" && !showSlip &&  (
-  <div className="flex flex-col items-center justify-center mt-[200px] text-center text-gray-600">
-    <div className="">
- <DotLottieReact
-      src="https://lottie.host/35807265-daaf-4811-af21-feff7c9dcd41/fWBisws4Js.lottie"
-      loop
-      autoplay 
-      
-    />  
+      {activeTab === "My Payroll Slip" && !showSlip && (
+        <div className="flex flex-col items-center justify-center mt-[200px] text-center text-gray-600">
+          <div>
+            <DotLottieReact
+              src="https://lottie.host/35807265-daaf-4811-af21-feff7c9dcd41/fWBisws4Js.lottie"
+              loop
+              autoplay
+            />
+          </div>
+          <span className="mt-3 text-sm">Select Month</span>
+        </div>
+      )}
     </div>
-      <span className="mt-3 text-sm">Select Month</span>
-  </div>
-)}
-
-
-    </div>
-
   );
 };
 
-export default Management; 
+export default Management;

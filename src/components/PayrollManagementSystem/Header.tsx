@@ -1,12 +1,11 @@
 import React from "react";
-import { ArrowLeft } from "lucide-react";
 import payroll from "../../assets/payroll.svg"
 
 type HeaderProps = {
   onBack?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({ onBack }) => {
+const Header: React.FC<HeaderProps> = () => {
   return (
     <div className=" flex items-center gap-3 pb-[50px]  pt-[46px] shadow-sm">
       {/* Back Button */}
