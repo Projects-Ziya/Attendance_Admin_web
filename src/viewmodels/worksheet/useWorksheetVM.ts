@@ -1,53 +1,87 @@
-import { useState } from "react";
-import type { WorksheetItem } from "../../models/worksheet/Worksheet"
-import { Mock_data } from "../../services/worksheetdata";
-
+import { useEffect, useState } from "react";
+import api from "../../Api/api";
 
 export function useWorksheetVM() {
-  const [worksheets, setWorksheets] = useState<WorksheetItem[]>(Mock_data);
+  const [worksheets, setWorksheets] = useState<any[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingWorksheet, setEditingWorksheet] = useState<any | null>(null);
 
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [editingWorksheet, setEditingWorksheet] = useState<WorksheetItem | null>(null);
+  // =====================
+  // 📌 FETCH WORKSHEETS API
+  // =====================
+  const fetchWorksheets = async () => {
+    try {
+      const res = await api.get("/api/worksheet_list/");
 
+      if (res.data.success) {
+        const formatted = res.data.data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          uploadedBy: item.uploaded_by,
+          date: new Date(item.uploaded_at).toLocaleDateString(),
+          sizeMB: item.file_size.replace(" MB", ""),
+          fileUrl: item.file_url,
+        }));
+
+        setWorksheets(formatted);
+      }
+    } catch (error) {
+      console.error("Error fetching worksheet list:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWorksheets();
+  }, []);
+
+  // =====================
+  // 📌 Upload Click
+  // =====================
   const onUploadClick = () => {
-    console.log("Upload Worksheet clicked");
+    console.log("Upload clicked");
   };
 
-  const onDownload = (id: string) => {
+  // =====================
+  // 📌 Download
+  // =====================
+  const onDownload = (id: number) => {
     const file = worksheets.find((w) => w.id === id);
-    console.log("Download:", file);
+    if (file) {
+      window.open(file.fileUrl, "_blank");
+    }
   };
 
-  const onDelete = (id: string) => {
+  // =====================
+  // 📌 Delete
+  // =====================
+  const onDelete = (id: number) => {
     setWorksheets((prev) => prev.filter((w) => w.id !== id));
   };
 
-  const onEditClick = (worksheet: WorksheetItem) => {
-    setEditingWorksheet(worksheet);
-    setModalOpen(true);
+  // =====================
+  // 📌 Edit
+  // =====================
+  const onEditClick = (worksheet: any) => {
+    setEditingWorksheet({ ...worksheet });
+    setIsModalOpen(true);
   };
 
-const onChangeEditingName = (newName: string) => {
-  setEditingWorksheet((prev) =>
-    prev ? { ...prev, title: newName } : prev
-  );
-};
-
-const onSaveEdit = () => {
-  if (!editingWorksheet) return;
-  setWorksheets((prev) =>
-    prev.map((w) =>
-      w.id === editingWorksheet.id ? editingWorksheet : w
-    )
-  );
-  setModalOpen(false);
-  setEditingWorksheet(null);
-};
-
-
   const onCloseModal = () => {
-    setModalOpen(false);
+    setIsModalOpen(false);
     setEditingWorksheet(null);
+  };
+
+  const onChangeEditingName = (newName: string) => {
+    if (!editingWorksheet) return;
+    setEditingWorksheet({ ...editingWorksheet, title: newName });
+  };
+
+  const onSaveEdit = () => {
+    if (!editingWorksheet) return;
+    setWorksheets((prev) =>
+      prev.map((w) => (w.id === editingWorksheet.id ? editingWorksheet : w))
+    );
+    setIsModalOpen(false);
   };
 
   return {
@@ -56,10 +90,10 @@ const onSaveEdit = () => {
     onDownload,
     onDelete,
     isModalOpen,
- editingWorksheet,
+    editingWorksheet,
     onEditClick,
+    onCloseModal,
     onChangeEditingName,
     onSaveEdit,
-    onCloseModal,
   };
 }

@@ -23,7 +23,7 @@ const statusColors: Record<string, string> = {
 
 // 🔹 Row Component
 const ActivityRow: React.FC<{ activity: Activity }> = ({ activity }) => (
-  <tr className="border-b bg-[#FCFCFC] leading-[180%] tracking-[0.08em] h-[80px] font-poppins">
+  <tr className=" border-b bg-[#FCFCFC] leading-[180%] tracking-[0.08em] h-[80px] font-poppins">
     <td className="px-6">
       <div className="flex items-center">
         <img

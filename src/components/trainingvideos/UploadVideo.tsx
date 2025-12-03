@@ -1,41 +1,58 @@
-import React from "react";
+import React, { useRef } from "react";
 import type { Video } from "../../models/Video";
 import clapboardicon from "../../assets/icons/clapboard.svg";
+import api from "../../Api/api";
 
 type Props = {
-  onUpload: (video: Video) => void; // ✅ single video object
+  onUpload: (video: Video) => void;
 };
 
 const UploadVideo: React.FC<Props> = ({ onUpload }) => {
-  const handleUpload = () => {
-    const newVideo: Video = {
-      id: Math.random().toString(36).slice(2, 10),
-      title: "Employee Onboarding Process",
-      duration: "13:00",
-      views: 46,
-      description: "Complete guide for new employee onboarding procedures",
-      uploadedBy: "HR Department",
-      uploadDate: "2023-11-20",
-    };
-    onUpload(newVideo); // ✅ call with single video
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleBrowse = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("video_file", file);
+    formData.append("title", file.name);
+
+    try {
+      const res = await api.post("/api/videos-upload/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      // Use REAL backend data
+      const newVideo: Video = res.data;
+      onUpload(newVideo);
+    } catch (err) {
+      console.error("Video Upload Error:", err);
+    }
   };
 
   return (
-    <div className="relative w-[1275px] h-[638px]">
-      {/* SVG dashed border */}
-      <svg
-        width="1275"
-        height="638"
-        className="absolute top-0 left-0"
-        style={{ opacity: 1 }}
-      >
+    <div className="relative w-[1275px] h-[400px]">
+
+      {/* Hidden Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="video/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
+      {/* SVG border */}
+      <svg width="1275" height="375" className="absolute top-0 left-0">
         <rect
-          x="0"
-          y="0"
           width="1275"
-          height="638"
+          height="370"
           rx="8"
-          ry="8"
           fill="white"
           stroke="#000000"
           strokeWidth="1"
@@ -43,19 +60,22 @@ const UploadVideo: React.FC<Props> = ({ onUpload }) => {
         />
       </svg>
 
-      {/* Content inside the box */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center gap-4 z-10">
+      {/* Content */}
+      <div className="absolute inset-0 flex flex-col items-center pt-5 text-center gap-4 z-10">
         <p className="text-[#4D4D4D] text-[22px] font-semibold">
           Upload your video you want to convert to AVI
         </p>
+
         <img src={clapboardicon} alt="Upload Icon" className="w-[145px] h-[143px]" />
+
         <p className="text-[#7D7D7D] text-[16px] font-normal">
           Drag and drop video file
         </p>
         <p className="text-[#7D7D7D] text-[16px] font-normal">or</p>
+
         <button
           className="bg-[#00A0E3] text-white px-6 py-2 rounded text-sm font-medium"
-          onClick={handleUpload}
+          onClick={handleBrowse}
         >
           Browse
         </button>

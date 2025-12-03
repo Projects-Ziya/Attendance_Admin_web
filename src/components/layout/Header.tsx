@@ -33,7 +33,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("https://api.example.com/notifications");
+        const response = await fetch("/api/notification-list-admin/");
         const data = await response.json();
         setHasNotification(data?.unreadCount > 0);
       } catch (error) {

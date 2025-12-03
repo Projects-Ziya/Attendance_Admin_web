@@ -90,7 +90,8 @@ const RecentActivities: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-[0px_0px_2px_0px_#00000040]  scrollable mt-[15px] w-[727px] h-[632px] border border-gray-100">
+    
+    <div className="  bg-white p-6 rounded-lg shadow-[0px_0px_2px_0px_#00000040]  scrollable mt-[15px] w-[727px] h-[632px] border border-gray-100">
       {/* Header */}
       <div className="mb-5 border-b border-[#43C8FF] pb-4">
         <div className="bg-[#E6F7FF] p-2 rounded-full w-fit mb-2">

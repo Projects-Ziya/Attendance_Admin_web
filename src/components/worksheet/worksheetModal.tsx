@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import api from "../../Api/api";
+import toast from "react-hot-toast";
 
 interface Worksheet {
   id: string;
+  leaid: string;
   name: string;
   [key: string]: any; // other possible worksheet properties
 }
@@ -16,7 +19,6 @@ interface EditModalProps {
 const EditModal: React.FC<EditModalProps> = ({
   onClose,
   editingWorksheet,
-  onChangeEditingName,
   onSaveEdit,
 }) => {
   const [isModalHovered, setIsModalHovered] = useState(false);
@@ -31,16 +33,35 @@ const EditModal: React.FC<EditModalProps> = ({
     setLocalName(editingWorksheet?.name || "");
   }, [editingWorksheet]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalName(e.target.value);
-    onChangeEditingName(e.target.value);
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setLocalName(e.target.value); 
+  };
+
+  const handleEdit = async () => {
+    try {
+      const res = await api.patch(`/api/worksheet-update/${editingWorksheet.id}/
+`, {
+        title: localName,
+      });
+
+      if (res.data.success) {
+        toast.success("Worksheet updated successfully");
+        onSaveEdit();   // Refresh list in parent
+        onClose();      // Close modal
+      } else {
+        toast.error("Failed to update");
+      }
+    } catch (err) {
+      console.error("Update Error:", err);
+      toast.error("Error updating worksheet");
+    }
   };
 
   const handleSave = () => {
-    onSaveEdit();
+    handleEdit(); // Only call handleEdit (ID already inside)
   };
 
-  if (!editingWorksheet) return null; // Don't render if no worksheet selected
+  if (!editingWorksheet) return null;
 
   return (
     <div

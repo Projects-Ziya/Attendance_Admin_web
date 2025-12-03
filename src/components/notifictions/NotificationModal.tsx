@@ -16,7 +16,7 @@ const NotificationModal: React.FC<Props> = ({ onHide }) => {
         <div className="flex flex-col pr-[48px] space-y-[10px]">
           {notifications.map((n) => (
             <div key={n.id} className="flex items-start gap-[32px]">
-              <img src={n.icon} className="w-[21px] h-[25px] mt-1" />
+              <img title="nn" src={n.icon} className="w-[21px] h-[25px] mt-1" />
               <div>
                 <h3
                   className="font-semibold text-[18px]"

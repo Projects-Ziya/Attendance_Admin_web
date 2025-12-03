@@ -6,4 +6,5 @@ export type Video = {
   description: string;
   uploadedBy: string;
   uploadDate: string;
+  video_file: string; // backend file path
 };
