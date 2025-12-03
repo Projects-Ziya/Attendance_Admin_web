@@ -1,34 +1,45 @@
 import worksheeticon from "../../assets/icons/Worksicon.svg";
 import uploadicon from "../../assets/icons/upload.svg";
 import doc_icon from "../../assets/icons/doc.svg";
-import download_icon from "../../assets/icons/download.svg"
+import download_icon from "../../assets/icons/download.svg";
 import edit_icon from "../../assets/icons/editboxicon.svg";
 import dlt_icon from "../../assets/icons/delete.svg";
-// import edit_pen from "../../assets/icons/edit1.svg";
 
-import EditModal from "../../components/worksheet/worksheetModal"; // adjust import path as needed
+import EditModal from "../../components/worksheet/worksheetModal";
 import { useWorksheetVM } from "../../viewmodels/worksheet/useWorksheetVM";
 import MainLayout from "../../components/layout/MainLayout";
+import { useState } from "react";
+import UploadNewWorksheet from "../../components/worksheet/UploadNewWorksheet";
 
 function Worksheet() {
   const {
     worksheets,
-    onUploadClick,
     onDownload,
     onDelete,
-    isModalOpen,
     editingWorksheet,
     onEditClick,
     onCloseModal,
     onChangeEditingName,
     onSaveEdit,
+    isModalOpen, // for EditModal only
   } = useWorksheetVM();
+
+  // separate state for upload modal
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  const onUploadClick = () => {
+    setIsUploadModalOpen(true);
+  };
+
+  const onCloseUploadModal = () => {
+    setIsUploadModalOpen(false);
+  };
 
   return (
     <MainLayout>
       <div
-        className={` w-[1579px]sm:px-4  lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
-          isModalOpen ? "blur-sm pointer-events-none" : ""
+        className={`w-[1579px] sm:px-4 lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
+          isUploadModalOpen ? "blur-sm pointer-events-none" : ""
         }`}
       >
         {/* Top bar */}
@@ -104,13 +115,7 @@ function Worksheet() {
                       onClick={() => onEditClick(w)}
                       className="flex items-center justify-center h-[50px] w-[40px] rounded-[12px] border border-[#C6C6C6] bg-white hover:bg-[#F4F4F4] transition"
                     >
-                     
-                        <img
-                          src={edit_icon}
-                          alt="Edit"
-                          className="w-[22px] h-[22px]"
-                        />
-                       
+                      <img src={edit_icon} alt="Edit" className="w-[22px] h-[22px]" />
                     </button>
 
                     {/* Delete button */}
@@ -129,7 +134,7 @@ function Worksheet() {
         </div>
       </div>
 
-      {/* Modal and overlay */}
+      {/* Edit Modal */}
       {isModalOpen && editingWorksheet && (
         <>
           <div
@@ -143,6 +148,22 @@ function Worksheet() {
               onChangeEditingName={onChangeEditingName}
               onSaveEdit={onSaveEdit}
             />
+          </div>
+        </>
+      )}
+
+      {/* Upload Modal */}
+      {isUploadModalOpen && (
+        <>
+          {/* Overlay with blur + dark background */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-30"
+            onClick={onCloseUploadModal}
+          ></div>
+
+          {/* Modal */}
+          <div className="fixed inset-0 flex items-center justify-center z-40">
+            <UploadNewWorksheet onClose={onCloseUploadModal} />
           </div>
         </>
       )}

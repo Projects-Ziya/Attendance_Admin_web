@@ -34,6 +34,8 @@ import Worksheet from "./views/Worksheet/Worksheet";
 import AnnouncementNoticeBoard from "./views/Anouncemenet&NoticeBoard/AnoucementNoticeBoard";
 import PollsFeedback from "./views/Polls&Feedback/PollsFeedback";
 import TrainingVideo from "./views/Trainingvideos/TrainingVideos";
+import ShiftSchedule from "./views/Shiftschedule/ShiftSchedule";
+import DeductionDetails from "./views/Deductiondetails/DeductionDetails";
 
 function App() {
   return (
@@ -101,6 +103,8 @@ function App() {
           <Route path="/AnnouncementAndNoticeBoard" element={<AnnouncementNoticeBoard/>} />
           <Route path="/PollsAndFeedback" element={<PollsFeedback/>} />
           <Route path="/TrainingVideos" element={<TrainingVideo/>} />
+          <Route path="/ShiftSchedule" element={<ShiftSchedule/>} />
+          <Route path="/DeuctionDetails" element={<DeductionDetails/>} />
         </Route>
           <Route path="/AboutUs" element={<AboutPage />} />
           <Route path="/Terms&Conditions" element={<TermsAndConditions />} />

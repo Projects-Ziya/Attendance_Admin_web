@@ -20,7 +20,9 @@ export default {
       'tertiaryradius': '10px',
     },
     },
+    
   },
+  
   plugins: [],
 }
 

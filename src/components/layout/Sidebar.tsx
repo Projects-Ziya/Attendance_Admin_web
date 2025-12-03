@@ -13,9 +13,11 @@ import payrollicon from '../../assets/icons/payroll.svg';
 import noticeicon from '../../assets/icons/noticeicon.svg';
 import pollicon from '../../assets/icons/pollsfeedback/pollicon.svg';
 import videoicon from '../../assets/icons/videoicon.svg'
+import clockicon from '../../assets/icons/shiftschedule/main.svg';
+import dollaricon from '../../assets/icons/dollaricon.svg'
 
 interface SidebarItem {
-  id: string;
+   id: string;
   label: string;
   icon: string;
   path: string;
@@ -35,13 +37,15 @@ const Sidebar: React.FC = () => {
     { id: 'announcement', label: 'Announcement/Notice Board ', icon: noticeicon, path: '/AnnouncementAndNoticeBoard' },
     { id: 'feedback', label: 'Polls and Feedback ', icon: pollicon, path: '/PollsAndFeedback' },
     { id: 'trainingvideos', label: 'Training Videos ', icon: videoicon, path: '/TrainingVideos' },
+    { id: 'shiftschedule', label: 'Shift Schedule ', icon: clockicon, path: '/ShiftSchedule' },
+    { id: 'deductiondetails', label: 'Deduction Details ', icon: dollaricon, path: '/DeuctionDetails' },
   ];
 
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
-    <div className="h-screen bg-white border-r scrollable border-gray-200 flex flex-col w-[19.6vw] max-w-[377px] min-w-[220px]">
+    <div className="h-screen bg-[#FCFCFC] border-r scrollable border-gray-200 flex flex-col w-[19.6vw] max-w-[377px] min-w-[220px]">
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 pt-6 pb-5">
         <img src={logo} className="w-[34px] h-[34px]" alt="Ziya Logo" />
