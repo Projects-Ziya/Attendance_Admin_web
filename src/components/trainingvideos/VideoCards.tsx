@@ -3,7 +3,6 @@ import type { Video } from "../../models/Video";
 import editicon from "../../assets/icons/editboxicon.svg";
 import deleteicon from "../../assets/icons/delete.svg";
 import videoicon from "../../assets/icons/videoicon.svg";
-import api from "../../Api/api";
 
 type Props = {
   videos: Video;
@@ -16,28 +15,30 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete, onEdit }) => {
   const [thumbnailUrl, setThumbnailUrl] = useState<string>("");
 
   useEffect(() => {
-    const fetchVideo = async () => {
-      try {
-        const res = await api.get(`/api/videos-view/${videos.id}/`);
-        const data = res.data.data;
+    if (videos.video_file) {
+      const fullVideoURL = videos.video_file.startsWith("http")
+        ? videos.video_file
+        : `http://192.168.1.12:8000${videos.video_file}`;
+      setVideoUrl(fullVideoURL);
+    }
 
-        if (data.video_file) {
-          setVideoUrl(data.video_file);
-        }
-      } catch (err) {
-        console.error("Video load error:", err);
-      }
-    };
-
-    fetchVideo();
-  }, [videos.id]);
+    if (videos.thumbnail) {
+      const fullThumbURL = videos.thumbnail.startsWith("http")
+        ? videos.thumbnail
+        : `http://192.168.1.12:8000${videos.thumbnail}`;
+      setThumbnailUrl(fullThumbURL);
+    }
+  }, [videos]);
 
   if (!videos) return null;
+
+  const formattedDate = videos.uploaded_at
+    ? new Date(videos.uploaded_at).toLocaleDateString()
+    : "";
 
   return (
     <div className="w-[536px] h-[629px] bg-white border border-[#C3C3C3] rounded-[15px] pr-[33px] pl-[33px] pt-[25px] opacity-100 shadow-sm flex flex-col justify-between">
 
-      {/* Top Video Preview */}
       <div className="flex justify-center items-center w-full h-[246px] rounded-[15px] bg-black overflow-hidden relative">
         {thumbnailUrl ? (
           <img
@@ -46,37 +47,28 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete, onEdit }) => {
             className="w-full h-full object-cover rounded-[15px]"
           />
         ) : videoUrl ? (
-          <video
-            src={videoUrl}
-            controls
-            className="w-full h-full rounded-[15px]"
-          />
+          <video src={videoUrl} controls className="w-full h-full rounded-[15px]" />
         ) : (
           <img src={videoicon} alt="Video Icon" className="w-[72px] h-[52px]" />
         )}
       </div>
 
-      {/* Title */}
       <p className="text-[#4D4D4D] text-[25px] font-medium leading-[16px] tracking-[0.08em] mt-4">
-        {videos.title}
+        {videos.title || "Untitled Video"}
       </p>
 
-      {/* Duration + Views */}
-      <p className="text-[#4D4D4D] text-[16px] font-medium">
-        ⏱ {videos.duration || "00:00"} | 👁 {videos.views} views
+      <p className="text-[#4D4D4D] text-[16px] font-medium pt-2">
+        ⏱ {videos.duration || "00:00"} | 👁 {videos.views || 0} views
       </p>
 
-      {/* Description */}
-      <p className="text-[#4D4D4D] text-[20px] font-medium leading-[25px] tracking-[0.08em]">
+      <p className="text-gray-600 scrollable text-[14px] font-medium leading-[25px] tracking-[0.08em] break-words">
         {videos.description || "No description"}
       </p>
 
-      {/* Upload Info */}
-      <p className="text-[#7D7D7D] text-[15px] font-medium leading-[25px] tracking-[0.08em]">
-        Uploaded by {videos.uploadedBy} • {videos.uploadDate}
+      <p className="text-[#7D7D7D] py-2 text-[15px] font-medium leading-[25px] tracking-[0.08em]">
+        Uploaded by {videos.uploaded_by || "Unknown"} • {formattedDate}
       </p>
 
-      {/* Action Buttons */}
       <div className="flex justify-center gap-6 pb-8">
         <button
           className="bg-[#00A0E3] text-white px-6 py-2 rounded text-[25px] font-medium w-[272px] h-[45px]"

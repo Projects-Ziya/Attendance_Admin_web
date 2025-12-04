@@ -1,41 +1,71 @@
-import { useState } from "react";
-import type { Notice } from "../../models/anouncementnoticeboard/Notice"; // ✅ make sure this matches your model file
+import { useState, useEffect } from "react";
+import type { Notice } from "../../models/anouncementnoticeboard/Notice";
+import api from "../../Api/api";
 
 export function useAnnouncementNoticeBoardViewModel() {
-  const [pinnedNotices, setPinnedNotices] = useState<Notice[]>([
-    {
-      title: "Team Operation",
-      date: "3-12-2025",
-      content:
-        "Lorem ipsum dolor sit amet consectetur. Odio semper mauris aliquet nec nibh mauris.",
-    },
-  ]);
+  const [pinnedNotices, setPinnedNotices] = useState<Notice[]>([]);
+  const [recentNotices, setRecentNotices] = useState<Notice[]>([]);
 
-  const [recentNotices, setRecentNotices] = useState<Notice[]>([
-    {
-      title: "Holiday Schedule",
-      date: "2-12-2025",
-      content: "Company will remain closed on 25th Dec for Christmas.",
-    },
-    {
-      title: "New Policy Update",
-      date: "1-12-2025",
-      content: "Updated leave policy is now available in the HR portal.",
-    },
-  ]);
+  // --------------------------------------------------
+  // ✅ FETCH NOTICES FROM BACKEND
+  // --------------------------------------------------
+  useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const response = await api.get("/api/create-view-notice/");
+        const result = response.data;
 
-  // ✅ Add new notice
+        if (result.success && Array.isArray(result.data)) {
+         const fetched = result.data.map((item: any) => ({
+  id: item.id,   // <-- ADD THIS
+  title: item.title,
+  date: item.date?.split("T")[0],
+  content: item.description,
+  department: item.department,
+  is_pinned: item.is_pinned,
+}));
+
+
+          // Separate pinned & non-pinned
+          setPinnedNotices(fetched.filter((n) => n.is_pinned === true));
+          setRecentNotices(fetched.filter((n) => n.is_pinned === false));
+        }
+      } catch (error) {
+        console.error("Error fetching notices:", error);
+      }
+    };
+
+    fetchNotices();
+  }, []);
+
+  // --------------------------------------------------
+  // 🔵 Add new notice (local)
+  // --------------------------------------------------
   const addNotice = (newNotice: Notice) => {
     setRecentNotices((prev) => [newNotice, ...prev]);
   };
 
-  // ✅ Delete notice
+  // --------------------------------------------------
+  // 🔵 Delete notice (local)
+  // --------------------------------------------------
   const deleteNotice = (title: string) => {
     setPinnedNotices((prev) => prev.filter((n) => n.title !== title));
     setRecentNotices((prev) => prev.filter((n) => n.title !== title));
   };
 
-  // ✅ Toggle pin/unpin
+
+  const setNoticesFromApi = (notices: Notice[]) => {
+  const pinned = notices.filter((n) => n.is_pinned);
+  const recent = notices.filter((n) => !n.is_pinned);
+
+  setPinnedNotices(pinned);
+  setRecentNotices(recent);
+};
+
+
+  // --------------------------------------------------
+  // 🔵 Toggle pin/unpin (local)
+  // --------------------------------------------------
   const togglePin = (title: string) => {
     const notice = recentNotices.find((n) => n.title === title);
     if (notice) {
@@ -56,5 +86,6 @@ export function useAnnouncementNoticeBoardViewModel() {
     addNotice,
     deleteNotice,
     togglePin,
+    setNoticesFromApi
   };
 }

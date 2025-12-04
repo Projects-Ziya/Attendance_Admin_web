@@ -1,44 +1,27 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import type { Video } from "../../models/Video";
 import clapboardicon from "../../assets/icons/clapboard.svg";
-import api from "../../Api/api";
 
 type Props = {
-  onUpload: (video: Video) => void;
+  onFileSelect: (file: File | null) => void;
 };
 
-const UploadVideo: React.FC<Props> = ({ onUpload }) => {
+const UploadVideo: React.FC<Props> = ({ onFileSelect }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const handleBrowse = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("video_file", file);
-    formData.append("title", file.name);
-
-    try {
-      const res = await api.post("/api/videos-upload/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      // Use REAL backend data
-      const newVideo: Video = res.data;
-      onUpload(newVideo);
-    } catch (err) {
-      console.error("Video Upload Error:", err);
-    }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    if (file) setSelectedFileName(file.name);
+    onFileSelect(file);
   };
 
   return (
     <div className="relative w-[1275px] h-[400px]">
-
-      {/* Hidden Input */}
       <input
         ref={fileInputRef}
         type="file"
@@ -47,7 +30,6 @@ const UploadVideo: React.FC<Props> = ({ onUpload }) => {
         onChange={handleFileChange}
       />
 
-      {/* SVG border */}
       <svg width="1275" height="375" className="absolute top-0 left-0">
         <rect
           width="1275"
@@ -60,7 +42,6 @@ const UploadVideo: React.FC<Props> = ({ onUpload }) => {
         />
       </svg>
 
-      {/* Content */}
       <div className="absolute inset-0 flex flex-col items-center pt-5 text-center gap-4 z-10">
         <p className="text-[#4D4D4D] text-[22px] font-semibold">
           Upload your video you want to convert to AVI
@@ -69,9 +50,8 @@ const UploadVideo: React.FC<Props> = ({ onUpload }) => {
         <img src={clapboardicon} alt="Upload Icon" className="w-[145px] h-[143px]" />
 
         <p className="text-[#7D7D7D] text-[16px] font-normal">
-          Drag and drop video file
+          {selectedFileName || "Drag and drop video file or click Browse"}
         </p>
-        <p className="text-[#7D7D7D] text-[16px] font-normal">or</p>
 
         <button
           className="bg-[#00A0E3] text-white px-6 py-2 rounded text-sm font-medium"

@@ -1,6 +1,8 @@
-export interface Notice {
+export type Notice = {
+  id: number;
   title: string;
   date: string;
   content: string;
-  isPinned?: boolean;
-}
+  department?: string;
+  is_pinned?: boolean;
+};
