@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaPaperclip } from 'react-icons/fa';
 import axios from 'axios';
 import toast from "react-hot-toast";
+import api from '../../../Api/api';
 
 interface LeaveRequestForm {
   employeeName: string;
@@ -101,7 +102,7 @@ const AddLeaveRequest: React.FC = () => {
         data.append('attachment', formData.attachment);
       }
 
-      await axios.post('/api/leave-request', data, {
+      await api.post('/api/leave-request/', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 

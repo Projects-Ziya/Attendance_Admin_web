@@ -48,7 +48,7 @@ const EmployeeListView = () => {
     <div className="p-6 bg-[#F6F5FA] min-h-screen">
 
       {/* Heading with Icon */}
-      <div className="flex items-center mb-7">
+      <div className="flex  items-center mb-7 ">
         <img src={HeadingIcon} alt="Total Active Members" className="w-6 h-6 mr-3" />
         <h2 className="text-lg font-semibold text-ziyablack">Total Active Members</h2>
       </div>
