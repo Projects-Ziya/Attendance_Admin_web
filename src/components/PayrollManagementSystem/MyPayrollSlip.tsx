@@ -35,11 +35,21 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
     try {
       toast.loading("Fetching salary slip...", { id: "slip" });
 
-      const response = await api.get(
-        `/api/list-salary-slip/emp_id/`
-      );
+      const response = await api.get(`/api/login-user-salary-slip/`);
 
-      setSlipData(response.data.data);
+      // response.data.data = array → pick first match
+      const slips = response.data?.data || [];
+
+      if (slips.length === 0) {
+        toast.error("No slip found.", { id: "slip" });
+        setShowSlip(false);
+        return;
+      }
+
+      // If you want filtering by month (optional)
+      const selectedSlip = slips[0]; // pick first for now
+
+      setSlipData(selectedSlip);
       setShowSlip(true);
 
       toast.success("Salary slip loaded!", { id: "slip" });

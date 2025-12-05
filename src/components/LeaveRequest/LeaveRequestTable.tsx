@@ -84,9 +84,10 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
   };
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-x-auto p-4 mb-6 ms-4">
+    <div className="bg-white rounded-lg fixed max-h-[860px] shadow overflow-x-auto p-4 mb-6 ms-4">
+      <div className="fixed top-0  w-full bg-white shadow z-50 p-6"></div>
       <Tabs activeTab={activeTab} onChange={setActiveTab} />
-
+        <div className="bg-white rounded-lg max-h-[860px] scrollable shadow overflow-x-auto p-4 mb-6 ms-4">
       <table className="w-full min-w-[800px] text-left border-collapse mb-6 tracking-[1.28px]">
         <thead className="bg-myGray">
           <tr className="border-b border-[#D9D9D9]">
@@ -201,6 +202,7 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
       {showModal && (
         <BlackModal fileName={selectedFile} onClose={() => setShowModal(false)} />
       )}
+      </div>
     </div>
   );
 }

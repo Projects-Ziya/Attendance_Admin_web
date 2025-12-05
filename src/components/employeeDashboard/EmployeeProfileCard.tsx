@@ -88,7 +88,7 @@ const EmployeeProfileCard: React.FC = () => {
           <div className="w-[170px] h-[170px] rounded-full overflow-hidden border">
             {data.profile_pic ? (
               <img
-                src={`http://192.168.1.14:8000${data.profile_pic}`}
+                src={`http://192.168.1.12:8000${data.profile_pic}`}
                 alt="avatar"
                 className="w-full h-full object-cover"
               />

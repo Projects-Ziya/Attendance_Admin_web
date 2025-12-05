@@ -7,22 +7,41 @@ import ProfilePopOver from "../header/ProfilePopOver";
 import api from "../../Api/api";
 import Cookies from "js-cookie";
 import NotificationModal from "../notifictions/NotificationModal";
+
 const Header: React.FC = () => {
   const [profileImg, setProfileImg] = useState<string>("");
-  const [hasNotification, setHasNotification] = useState<boolean>(true);
+  const [profileName, setProfileName] = useState<string>("");
+  const [profileEmail, setProfileEmail] = useState<string>(""); // optional: not in your sample response
+  const [profileRole, setProfileRole] = useState<string>("");
   const [isOnline, setIsOnline] = useState<boolean>(false);
-  const [isopen , setIsOpen] = useState(false)
 
+  const [hasNotification, setHasNotification] = useState<boolean>(true);
+  const [isopen, setIsOpen] = useState(false);
+
+  // ---------------------------------------
+  // FETCH PROFILE DATA FROM /api/adminprofile/
+  // ---------------------------------------
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("/api/user/");
-        const data = await response.json();
-        setProfileImg(data.profileImage);
-        setIsOnline(data.is_online);
+        const response = await api.get("/api/adminprofile/");
+        const profile = response.data.data;
+
+        setProfileImg(profile.profile_pic || "/images/img_profile.png");
+        setProfileName(
+          `${profile.first_name || ""} ${profile.last_name || ""}`.trim() ||
+            "Unknown User"
+        );
+        setProfileEmail(""); // If email is not returned, you can keep blank or fetch from `user` field
+        setProfileRole(profile.user_type || profile.designation || "User");
+        setIsOnline(true); // optional: set true by default if not provided
       } catch (error) {
-        console.error("Failed to load profile image:", error);
+        console.error("Failed to load profile:", error);
+
         setProfileImg("/images/img_profile.png");
+        setProfileName("Unknown User");
+        setProfileEmail("No Email");
+        setProfileRole("User");
         setIsOnline(false);
       }
     };
@@ -30,6 +49,9 @@ const Header: React.FC = () => {
     fetchProfileData();
   }, []);
 
+  // ---------------------------------------
+  // FETCH NOTIFICATION COUNT
+  // ---------------------------------------
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
@@ -45,119 +67,109 @@ const Header: React.FC = () => {
     fetchNotifications();
   }, []);
 
-   const profileData = {
-    name: "Mohan",
-    role: "Super admin",
-    email: "mohan@exp.com",
-    image: "https://via.placeholder.com/80",
-    isOnline: true,
+  // ---------------------------------------
+  // PROFILE DATA SENT TO POPOVER
+  // ---------------------------------------
+  const profileData = {
+    name: profileName,
+    role: profileRole,
+    email: profileEmail,
+    image: profileImg,
+    isOnline: isOnline,
   };
 
+  // ---------------------------------------
+  // LOGOUT HANDLER
+  // ---------------------------------------
   const handleLogout = async () => {
-  const refreshToken = Cookies.get("refresh");
+    const refreshToken = Cookies.get("refresh");
 
-  if (refreshToken) {
-    try {
-      const response = await api.post("/api/logout/", {
-        refresh: refreshToken, 
-      });
+    if (refreshToken) {
+      try {
+        await api.post("/api/logout/", { refresh: refreshToken });
 
-    
+        Cookies.remove("access");
+        Cookies.remove("refresh");
 
-      
-      Cookies.remove("access");
-      Cookies.remove("refresh");
-      
-     
-      window.location.href = "/"; 
-    } catch (error) {
-      console.error("Logout failed:", error);
+        window.location.href = "/";
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     }
-  } else {
-    console.warn("No refresh token found");
-  }
-};
+  };
 
-const handleOpen =() =>{
-setIsOpen(true);
-}
-
-const handleClose = () => {
-  setIsOpen(false);
-}
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
 
   return (
-    <header className="w-full bg-header-1  bg-white shadow-[0px_1px_1px_#0000003f]">
-      <div className="w-full max-w-[1600px] mx-auto bg-global-25 pl-0 pr-4 sm:pr-6 lg:pl-[36px] py-4 sm:py-5 lg:py-[22px]"> <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-4">
+    <header className="w-full bg-header-1 bg-white shadow-[0px_1px_1px_#0000003f]">
+      <div className="w-full max-w-[1600px] mx-auto bg-global-25 pl-0 pr-4 sm:pr-6 lg:pl-[36px] py-4 sm:py-5 lg:py-[22px]">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between w-full gap-4">
 
-        
-        <div className="flex flex-row gap-6 items-center w-full lg:w-auto">
-
-          
-          <div className="flex flex-row gap-[4px] justify-start items-center pr-[37px]">
-            <img src={dashicon} className="w-[24px] h-[24px]" alt="Dashboard" />
-            <span className="text-[14px] text-ziyablack sm:text-[16px] lg:text-[16px] font-normal text-global-2 ml-2 font-['Poppins']">
-              Dashboard
-            </span>
-          </div>
-
-         
-          <div className="flex flex-row items-center w-[290px] h-[34px] shadow-[0px_0px_1px_#0000003f] rounded-[5px] bg-global-25 pl-2 pr-[2px] border border-[#b6b5b5]">
-            <div className="flex flex-row gap-2 items-center w-full">
-              <img src={Search} className="w-[18px] h-[18px]" alt="Search Icon" />
-              <input
-                type="text"
-                placeholder="Search here"
-                className="w-full bg-transparent outline-none text-[12px] sm:text-[13px] lg:text-[14px] text-global-4 placeholder:text-global-4 font-['Poppins']"
-              />
+          <div className="flex flex-row gap-6 items-center w-full lg:w-auto">
+            <div className="flex flex-row gap-[4px] justify-start items-center pr-[37px]">
+              <img src={dashicon} className="w-[24px] h-[24px]" alt="Dashboard" />
+              <span className="text-[14px] sm:text-[16px] font-normal text-global-2 ml-2 font-['Poppins']">
+                Dashboard
+              </span>
             </div>
-            <Button
-              variant="primary"
-              size="small"
-              className="!w-[66px] !h-[28px] !text-[11px] !leading-[14px] !p-0 !rounded-[5px] !min-w-[0] !min-h-[0]"
-            >
-              Search
-            </Button>
 
+            <div className="flex flex-row items-center w-[290px] h-[34px] shadow-[0px_0px_1px_#0000003f] rounded-[5px] bg-global-25 pl-2 pr-[2px] border border-[#b6b5b5]">
+              <div className="flex flex-row gap-2 items-center w-full">
+                <img src={Search} className="w-[18px] h-[18px]" alt="Search Icon" />
+                <input
+                  type="text"
+                  placeholder="Search here"
+                  className="w-full bg-transparent outline-none text-[12px] sm:text-[13px] lg:text-[14px] text-global-4 placeholder:text-global-4 font-['Poppins']"
+                />
+              </div>
+              <Button
+                variant="primary"
+                size="small"
+                className="!w-[66px] !h-[28px] !text-[11px] !leading-[14px] !p-0 !rounded-[5px] !min-w-[0] !min-h-[0]"
+              >
+                Search
+              </Button>
+            </div>
           </div>
-        </div>
 
-
+          {/* Right Section */}
           <div className="flex flex-row cursor-pointer justify-end items-center gap-3 sm:gap-10">
-            
-        <ProfilePopOver profile={profileData}
-      onLogout={() => handleLogout()} content={<div></div>}>
-            <div className="relative w-fit h-fit">
+            <ProfilePopOver
+              profile={profileData}
+              onLogout={handleLogout}
+            >
+              <div className="relative w-fit h-fit">
+                <img
+                  src={profileImg || "https://via.placeholder.com/50"}
+                  onError={() => setProfileImg("/images/img_profile.png")}
+                  className="w-[28px] sm:w-[30px] lg:w-[32px] h-[30px] sm:h-[32px] lg:h-[34px] object-cover rounded-full"
+                  alt="Profile"
+                />
+
+                {isOnline && (
+                  <span className="absolute bottom-0 right-0 w-[12px] h-[12px] bg-green-500 rounded-full border-[2px] border-white shadow-sm"></span>
+                )}
+              </div>
+            </ProfilePopOver>
+
+            <div className="relative w-fit cursor-pointer h-fit">
               <img
-                src={profileImg|| "https://via.placeholder.com/50"}
-                onError={() => setProfileImg("/images/img_profile.png")}
-                className="w-[28px] sm:w-[30px] lg:w-[32px] h-[30px] sm:h-[32px] lg:h-[34px] object-cover rounded-full"
-                alt="Profile"
+                src={bell}
+                className="w-[22px] sm:w-[22px] lg:w-[17px] h-[20px] sm:h-[20px] lg:h-[20px]"
+                alt="Notifications"
+                onClick={handleOpen}
               />
-              {isOnline && (
-                <span className="absolute bottom-0 right-0 w-[12px] h-[12px] bg-green-500 rounded-full border-[2px] border-white shadow-sm"></span>
+              {hasNotification && (
+                <span className="absolute top-[1px] right-0 w-[10px] h-[10px] bg-red-500 rounded-full border-[2px] border-white shadow-sm"></span>
               )}
+              {isopen && <NotificationModal onHide={handleClose} />}
             </div>
-        </ProfilePopOver>
 
-        
-        <div className="relative w-fit cursor-pointer h-fit">
-          <img
-            src={bell}
-            className="w-[22px] sm:w-[22px] lg:w-[17px] h-[20px] sm:h-[20px] lg:h-[20px]"
-            alt="Notifications"
-            onClick={handleOpen}
-          />
-          {hasNotification && (
-            <span className="absolute top-[1px] right-0 w-[10px] h-[10px] bg-red-500 rounded-full border-[2px] border-white shadow-sm"></span>
-          )}
-
-          {isopen && <NotificationModal onHide={handleClose}/>}
+          </div>
         </div>
       </div>
-      </div>
-    </div>
-    </header >
+    </header>
   );
 };
 
