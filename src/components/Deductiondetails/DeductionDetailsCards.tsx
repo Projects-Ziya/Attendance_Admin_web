@@ -1,25 +1,62 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import type { DeductionCard } from "../../models/deduction";
 import pficon from "../../assets/icons/deductiondetails/pficon.svg";
 import { themeStyles } from "../../viewmodels/deductondetails/useDeductionDetailsVM";
+import api from "../../Api/api";
+import DeductionEditModal from "./DeductionEditModal";
 
-type Props = {
-  deductions: DeductionCard[];
-};
+const DeductionDetailsCards: React.FC = () => {
+  const [deductions, setDeductions] = useState<(DeductionCard & { id: number })[]>([]);
+  const [openModal, setOpenModal] = useState(false);
+  const [formData, setFormData] = useState<any>({}); // selected card for edit
 
-const DeductionDetailsCards: React.FC<Props> = ({ deductions }) => {
+  // ------------------------------
+  // FETCH ALL DEDUCTIONS
+  // ------------------------------
+  const fetchDeductions = async () => {
+    try {
+      const response = await api.get("/api/salary-component-list/");
+      const data = response.data.data; // all items
+
+      const mapped = data.map((item: any) => ({
+        id: item.id,
+        title: item.title,
+        rate: item.rate_type === "PERCENTAGE" ? `${item.rate_value}%` : `${item.rate_value}`,
+        amount: "",
+        description: item.description,
+        contribution: item.employee_contribution,
+        employerContribution: item.employer_contribution,
+        example: item.example_text,
+        colorTheme: "blue",
+      }));
+
+      setDeductions(mapped);
+    } catch (error) {
+      console.error("Failed to fetch deductions:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDeductions();
+  }, []);
+
+  const handleEdit = (deduction: any) => {
+    setFormData(deduction);
+    setOpenModal(true);
+  };
+
   return (
     <div className="grid grid-cols-2 gap-[40px] justify-center pb-[40px]">
       {deductions.map((deduction, index) => {
-        const theme = themeStyles[deduction.colorTheme]; // ✅ use camelCase
+        const theme = themeStyles[deduction.colorTheme];
 
         return (
           <div
-            key={index}
-            className="w-[700px] h-[607px] border  rounded-[10px] shadow-sm flex flex-col"
-            style={{borderColor:theme.borderColor}}
+            key={deduction.id} // use id instead of index
+            className="w-[700px] h-[607px] border rounded-[10px] shadow-sm flex flex-col"
+            style={{ borderColor: theme.borderColor }}
           >
-            {/* Header */}
+            {/* header */}
             <div
               className="px-[30px] py-[20px] rounded-t-[10px] flex items-center justify-between"
               style={{ backgroundColor: theme.headerBg }}
@@ -40,10 +77,16 @@ const DeductionDetailsCards: React.FC<Props> = ({ deductions }) => {
                   </p>
                 </div>
               </div>
-              <img src={theme.editIcon} alt="Edit" className="w-[32px] h-[32px] cursor-pointer" />
+
+              <img
+                src={theme.editIcon}
+                alt="Edit"
+                className="w-[32px] h-[32px] cursor-pointer"
+                onClick={() => handleEdit(deduction)}
+              />
             </div>
 
-            {/* Body */}
+            {/* body */}
             <div className="pt-[40px] px-[27px]">
               <h1 className="text-[23px] font-[400] text-[#000000] pb-[12px]">Description</h1>
               <p className="text-[20px] text-[#655D5D] pb-[18px]">{deduction.description}</p>
@@ -53,9 +96,7 @@ const DeductionDetailsCards: React.FC<Props> = ({ deductions }) => {
               <p className="text-[20px] text-[#5C5B5B] mb-[13px]">{deduction.contribution}</p>
 
               <h1 className="text-[20px] text-[#000000]">Employer Contribution</h1>
-              <p className="text-[20px] text-[#5C5B5B] mb-[30px]">
-                {deduction.employerContribution}
-              </p>
+              <p className="text-[20px] text-[#5C5B5B] mb-[30px]">{deduction.employerContribution}</p>
 
               <div
                 className="w-[655px] h-[90px] pl-[29px] pt-[10px] rounded-[20px] mt-[20px]"
@@ -74,6 +115,15 @@ const DeductionDetailsCards: React.FC<Props> = ({ deductions }) => {
           </div>
         );
       })}
+
+      {/* EDIT MODAL */}
+      <DeductionEditModal
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        formData={formData}
+        setFormData={setFormData}
+        onSave={fetchDeductions} // refresh all cards after editing
+      />
     </div>
   );
 };

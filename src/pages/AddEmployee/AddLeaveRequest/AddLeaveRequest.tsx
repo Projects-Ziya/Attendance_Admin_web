@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaPaperclip } from 'react-icons/fa';
-import axios from 'axios';
 import toast from "react-hot-toast";
 import api from '../../../Api/api';
 
@@ -141,7 +140,8 @@ const AddLeaveRequest: React.FC = () => {
             <label className="block font-medium mb-1 text-[1.0rem] mt-10 text-ziyablack">
               Employee Name
             </label>
-            <input
+            <input 
+            title='employee name'
               type="text"
               name="employeeName"
               value={formData.employeeName}
@@ -157,6 +157,7 @@ const AddLeaveRequest: React.FC = () => {
               Leave Type
             </label>
             <select
+            title='leave type'
               name="leaveType"
               value={formData.leaveType}
               onChange={handleChange}
@@ -177,6 +178,7 @@ const AddLeaveRequest: React.FC = () => {
                 From
               </label>
               <input
+              title='date'
                 type="date"
                 name="fromDate"
                 value={formData.fromDate}
@@ -191,6 +193,7 @@ const AddLeaveRequest: React.FC = () => {
                 To
               </label>
               <input
+              title='date'
                 type="date"
                 name="toDate"
                 value={formData.toDate}
@@ -207,6 +210,7 @@ const AddLeaveRequest: React.FC = () => {
               Reason
             </label>
             <textarea
+            title='reason'
               name="reason"
               value={formData.reason}
               onChange={handleChange}
