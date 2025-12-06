@@ -1,55 +1,53 @@
-// src/features/notifications/viewmodel/useNotificationViewModel.ts
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
+import api from "../Api/api";
+import img1 from "../assets/img1.svg";
 
-// ✅ Model defined here itself
-export interface Notification {
-  id: string;
+export interface NotificationItem {
+  id: number;
   title: string;
   message: string;
-  type: 'success' | 'info' | 'warning';
-  icon: string;
+  timestamp: string;
+  icon?: string;
 }
 
-// Mock data (replace with API later)
-import violeticon from '../assets/icons/violeticon.svg';
-import greenicon from '../assets/icons/greenicon.svg';
-import blueicon from '../assets/icons/blueicon.svg';
+export const useNotificationViewModel = () => {
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
-const mockNotifications: Notification[] = [
-  {
-    id: '1',
-    title: 'New Leave Request',
-    message: 'An employee has submitted a leave request. Review and approve to update the status.',
-    type: 'success',
-    icon: greenicon,
-  },
-  {
-    id: '2',
-    title: 'New Task Assigned',
-    message: 'Rohan Sharma Assigned A New Task To David Under Project Apollo.',
-    type: 'info',
-    icon: violeticon,
-  },
-  {
-    id: '3',
-    title: 'Document Uploaded',
-    message: 'Karan Malhotra Uploaded New Project Documents For HRMS System.',
-    type: 'info',
-    icon: blueicon,
-  },
-];
+  const fetchNotifications = async () => {
+    try {
+      const response = await api.get("/api/notification-list-admin/");
+      const apiData = response.data.data;
 
-export function useNotificationViewModel() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+      const formatted = apiData.map((n: any) => ({
+        id: n.id,
+        title: n.title || "Notification",
+        message: n.action,
+        timestamp: n.timestamp,
+        icon: img1,
+      }));
 
-  useEffect(() => {
-    // Simulate API call
-    setNotifications(mockNotifications);
-  }, []);
-
-  const hideNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+      setNotifications(formatted);
+    } catch (error) {
+      console.error("Notification fetch failed:", error);
+      setNotifications([]);
+    }
   };
 
-  return { notifications, hideNotification };
-}
+  const hideNotification = async (id: number) => {
+    try {
+      await api.delete(`/api/delete-notification-admin/${id}/`);
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  return {
+    notifications,
+    hideNotification,
+  };
+};

@@ -15,6 +15,7 @@
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.11.0",
     "crypto-js": "^4.2.0",
+    "framer-motion": "^12.23.25",
     "i": "^0.3.7",
     "js-cookie": "^3.0.5",
     "jsencrypt": "^3.5.4",

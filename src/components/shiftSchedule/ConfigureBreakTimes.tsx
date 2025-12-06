@@ -2,6 +2,7 @@ import React from "react";
 import clock_icon from "../../assets/icons/shiftschedule/clock.svg";
 import break_icon from "../../assets/icons/shiftschedule/break.svg";
 import lunch_icon from "../../assets/icons/shiftschedule/lunch.svg";
+import api from "../../Api/api";
 
 type Props = {
   relaxationStart: string;
@@ -21,8 +22,8 @@ type Props = {
   setEveningBreakStart: (val: string) => void;
   setEveningBreakEnd: (val: string) => void;
   handleSaveSchedule: () => void;
-  shiftType: string;                // ✅ new prop from VM
-  setShiftType: (val: string) => void; // ✅ new prop from VM
+  shiftType: string;
+  setShiftType: (val: string) => void;
 };
 
 const ConfigureBreakTimes: React.FC<Props> = ({
@@ -46,6 +47,39 @@ const ConfigureBreakTimes: React.FC<Props> = ({
   shiftType,
   setShiftType,
 }) => {
+
+  // ---------- FINAL SAVE → API CALL ----------
+  const saveToAPI = async () => {
+    try {
+      const payload = {
+  shifts_name: `${shiftType} Shift`,   // Morning → "Morning Shift"
+
+  start_time: "09:00",   // You must add actual shift start time input
+  end_time: "18:00",     // You must add actual shift end time input
+
+  relaxation_start: relaxationStart,
+  relaxation_end: relaxationEnd,
+
+  break_start: breakStart,
+  break_end: breakEnd,
+
+  lunch_start: lunchStart,
+  lunch_end: lunchEnd,
+
+  evening_break_start: eveningBreakStart,
+  evening_break_end: eveningBreakEnd,
+};
+
+
+      await api.post("/api/create-shift/", payload);
+
+      handleSaveSchedule();
+    } catch (error) {
+      console.error("Shift creation failed", error);
+    }
+  };
+  // ------------------------------------------
+
   const shiftOptions = ["Morning", "Afternoon", "Evening", "Night"];
 
   return (
@@ -54,7 +88,9 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
       {/* Shift Type Selector */}
       <div className="ml-[66px] mr-[44px] mt-[20px] mb-[10px]">
-        <label className="block mb-2 text-[18px] font-[500] text-[#4D4D4D]">Shift Type</label>
+        <label className="block mb-2 text-[18px] font-[500] text-[#4D4D4D]">
+          Shift Type
+        </label>
         <select
           value={shiftType}
           onChange={(e) => setShiftType(e.target.value)}
@@ -110,7 +146,7 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
       {/* Save Button */}
       <button
-        onClick={handleSaveSchedule}
+        onClick={saveToAPI}
         className="hover:bg-[#008dc7] transition duration-200 cursor-pointer h-[53px] w-[1364px] bg-[#00A0E3] text-white text-[22px] font-[500] rounded-[10px] ml-[66px] mt-[40px]"
       >
         Save Schedule
@@ -138,7 +174,11 @@ const BreakCard: React.FC<BreakCardProps> = ({
 }) => (
   <div className="h-[160px] w-[1364px] ml-[64px] mt-[25px] border-[1px] rounded-[25px]">
     <div className="flex gap-[20px]">
-      <img className="h-[24px] ml-[30px] mt-[24px] w-[24px]" src={icon} alt="" />
+      <img
+        className="h-[24px] ml-[30px] mt-[24px] w-[24px]"
+        src={icon}
+        alt=""
+      />
       <h1 className="mt-[20px] text-[20px] font-[500]">{title}</h1>
     </div>
     <div className="flex justify-between mt-[10px] text-[15px] font-[500] ml-[28px]">

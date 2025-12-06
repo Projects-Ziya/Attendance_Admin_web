@@ -69,7 +69,7 @@ const PunchCard: React.FC = () => {
           ${
             status === "IN"
               ? "bg-green-500 border-green-500 text-white"
-              : "border-green-500 text-green-500"
+              : "border-red-500 text-red-500"
           }`}
         >
           ✓

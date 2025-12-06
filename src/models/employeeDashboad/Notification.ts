@@ -1,40 +1,48 @@
-import img1 from "../../assets/img1.jpg";
-export type NotificationStatus = "success" | "warning" | "error" | "info";
+import { useEffect, useState } from "react";
+import api from "../../Api/api";
+import img1 from "../assets/img1.jpg";
 
-export interface Notification {
-  id: string;
-  avatar: string;
+export interface NotificationItem {
+  id: number;
+  title: string;
   message: string;
-  statusColor: string;
-  secondary: string;
-  action: string;
-  actionHref?: string;
+  timestamp: string;
+  icon?: string;
 }
 
-// Static fallback data for API failure fallback
-export const fallbackNotifications: Notification[] = [
-  {
-    id: "1",
-    avatar: img1,
-    message: "Hemant Rangarajan late punch-in recorded today.",
-    statusColor: "text-[#FFA500]",
-    secondary: "Need to make corrections?",
-    action: "Edit Log"
-  },
-  {
-    id: "2",
-    avatar: img1,
-    message: "Hemant Rangarajan No punch-in record found for today.",
-    statusColor: "text-[#FF0000] 2xl:w-[80%]",
-    secondary: "Need to make corrections?",
-    action: "Edit Log"
-  },
-  {
-    id: "3",
-    avatar: img1,
-    message: "Hemant Rangarajan Punch-in missing for today.",
-    statusColor: "text-[#FF5722]",
-    secondary: "Mark Attendance",
-    action: "Edit Log"
-  }
-];
+export const useNotificationViewModel = () => {
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await api.get("/api/notification-list-admin/");
+      const apiData = response.data.data || [];
+
+      const formatted = apiData.map((n: any) => ({
+        id: n.id,
+        title: n.title || "Notification",
+        message: n.action,
+        timestamp: n.timestamp,
+        icon: img1,  // consistent avatar
+      }));
+
+      setNotifications(formatted);
+    } catch (error) {
+      console.error("Notification fetch failed:", error);
+      setNotifications([]); // no dummy fallback
+    }
+  };
+
+  const hideNotification = (id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  return {
+    notifications,
+    hideNotification,
+  };
+};

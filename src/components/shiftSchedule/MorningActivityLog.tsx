@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../../Api/api";
+
 import p_in from "../../assets/icons/shiftschedule/p_in.svg";
 import Break from "../../assets/icons/shiftschedule/break.svg";
 import P_out from "../../assets/icons/shiftschedule/p_out.svg";
@@ -12,8 +14,8 @@ type Props = {
   lunchStart: string;
   lunchEnd: string;
   punchOut: string;
-  shiftType: string;       // ✅ dynamic heading
-  onDelete: () => void;    // ✅ delete handler
+  shiftType: string;
+  onDelete: () => void;
 };
 
 const ActivityLog: React.FC<Props> = ({
@@ -26,13 +28,51 @@ const ActivityLog: React.FC<Props> = ({
   shiftType,
   onDelete,
 }) => {
+  const [apiData, setApiData] = useState({
+    punchIn,
+    breakStart,
+    breakEnd,
+    lunchStart,
+    lunchEnd,
+    punchOut,
+    shiftType,
+  });
+
+  // ✅ Fetch latest updated shift activity from backend
+  useEffect(() => {
+    const fetchShiftData = async () => {
+      try {
+        const response = await api.get("/api/list-shifts/");
+
+        const list = Array.isArray(response.data) ? response.data : [];
+
+        // If backend has no data, fallback to props
+        const last = list.length > 0 ? list[list.length - 1] : null;
+
+        setApiData({
+          punchIn: last?.punch_in ?? punchIn,
+          breakStart: last?.break_start ?? breakStart,
+          breakEnd: last?.break_end ?? breakEnd,
+          lunchStart: last?.lunch_start ?? lunchStart,
+          lunchEnd: last?.lunch_end ?? lunchEnd,
+          punchOut: last?.punch_out ?? punchOut,
+          shiftType: last?.shift_type ?? shiftType,
+        });
+      } catch (error) {
+        console.error("API Fetch Error:", error);
+      }
+    };
+
+    fetchShiftData();
+  }, []);
+
   return (
-    <div className="flex mt-5 h-[686px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w-[1462px] bg-white justify-center items-center">
+    <div className="flex mt-5 h-[686px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w=[1462px] bg-white justify-center items-center">
       <div>
-        {/* Header with dynamic shift type and delete icon */}
+        {/* Header */}
         <div className="flex justify-between pt-[44px] pl-[45px] items-center">
           <h1 className="text-[22px] font-[500]">
-            {shiftType} Activity Log
+            {apiData.shiftType} Activity Log
           </h1>
           <img
             src={deleteicon}
@@ -42,13 +82,13 @@ const ActivityLog: React.FC<Props> = ({
           />
         </div>
 
-        {/* Activity rows */}
-        <ActivityRow icon={p_in} label="Punch In" time={punchIn} />
-        <ActivityRow icon={Break} label="Break Start" time={breakStart} />
-        <ActivityRow icon={Break} label="Break End" time={breakEnd} />
-        <ActivityRow icon={Lunch} label="Lunch Start" time={lunchStart} />
-        <ActivityRow icon={Lunch} label="Lunch End" time={lunchEnd} />
-        <ActivityRow icon={P_out} label="Punch Out" time={punchOut} />
+        {/* Rows */}
+        <ActivityRow icon={p_in} label="Punch In" time={apiData.punchIn} />
+        <ActivityRow icon={Break} label="Break Start" time={apiData.breakStart} />
+        <ActivityRow icon={Break} label="Break End" time={apiData.breakEnd} />
+        <ActivityRow icon={Lunch} label="Lunch Start" time={apiData.lunchStart} />
+        <ActivityRow icon={Lunch} label="Lunch End" time={apiData.lunchEnd} />
+        <ActivityRow icon={P_out} label="Punch Out" time={apiData.punchOut} />
       </div>
     </div>
   );
