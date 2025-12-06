@@ -61,7 +61,7 @@ const handleDelete = async (id: string) => {
   return (
     <MainLayout>
       <div
-        className={`w-[1579px] sm:px-4 lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
+        className={`w-[1469px] sm:px-4 lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
           isUploadModalOpen ? "blur-sm pointer-events-none" : ""
         }`}
       >
