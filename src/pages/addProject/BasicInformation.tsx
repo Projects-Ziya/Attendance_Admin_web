@@ -13,17 +13,22 @@ const BasicInformation: React.FC<Props> = ({ formData, handleChange, handleNext 
     <>
       {/* Upload Logo */}
       <div className="bg-purple-50 p-4 rounded-lg mb-6 flex items-center gap-4 w-[72.344vw] h-[19.537vh]">
-        <div className="w-[6.25vw] h-[11.111vh] rounded-full overflow-hidden bg-gray-200">
-          {formData.project_logo ? (
-            <img
-              src={URL.createObjectURL(formData.project_logo)}
-              alt="logo"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <img src={profileImage || null}alt="placeholder" className="w-full h-full object-cover" />
-          )}
-        </div>
+       <div className="w-[6.25vw] h-[11.111vh] rounded-full overflow-hidden bg-gray-200">
+  {formData.project_logo ? (
+    <img
+      src={URL.createObjectURL(formData.project_logo)}
+      alt="logo"
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <img
+      src="https://via.placeholder.com/50"
+      alt="placeholder"
+      className="w-full h-full object-cover"
+    />
+  )}
+</div>
+
         <div>
           <p className="text-gray-600">Upload Project Logo</p>
           <p className="text-xs text-gray-400">Image should be below 4 MB</p>

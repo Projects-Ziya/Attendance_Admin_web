@@ -1,38 +1,48 @@
-import { useState, useEffect } from "react";
-import type { Notification } from "../../models/employeeDashboad/Notification";
-import { fallbackNotifications } from "../../models/employeeDashboad/Notification";
-import { fetchNotifications } from "../../services/employeeDashboard/employeeDashboardServices";
-import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import api from "../Api/api";
+import img1 from "../assets/img1.svg";
 
-export function useNotificationsVM() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export interface NotificationItem {
+  id: number;
+  title: string;
+  message: string;
+  timestamp: string;
+  icon?: string;
+}
 
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
+export const useNotificationViewModel = () => {
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
-    fetchNotifications()
-      .then((data) => {
-        if (isMounted) setNotifications(data);
-      })
-      .catch(() => {
-        if (isMounted) setNotifications(fallbackNotifications);
-        setError("Failed to load notifications from API.");
-      })
-      .finally(() => {
-        if (isMounted) setLoading(false);
-      });
+  const fetchNotifications = async () => {
+    try {
+      const response = await api.get("/api/notification-list-admin/");
+      const apiData = response.data?.data || [];
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+      const formatted = apiData.map((n: any) => ({
+        id: n.id,
+        title: n.title || "Notification",
+        message: n.action,
+        timestamp: n.timestamp,
+        icon: img1,
+      }));
 
-  const handleActionClick = (id: string) => {
-    toast(`Action for notification ID: ${id}`);
+      setNotifications(formatted);
+    } catch (error) {
+      console.error("Notification fetch failed:", error);
+      setNotifications([]);
+    }
   };
 
-  return { notifications, loading, error, handleActionClick };
-}
+  const hideNotification = (id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  return {
+    notifications,
+    hideNotification,
+  };
+};

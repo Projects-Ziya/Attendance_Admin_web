@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "../../Api/api";
 
 type Status = "IN" | "OUT";
 
@@ -32,20 +33,49 @@ export const useShiftScheduleVM = () => {
   const [punchOutTime, setPunchOutTime] = useState<Date | null>(null);
   const [status, setStatus] = useState<Status>("OUT");
 
-  const handlePunchIn = () => {
-    const now = new Date();
-    setPunchInTime(now);
-    setPunchOutTime(null);
-    setStatus("IN");
-    setMorningPunchIn(formatTime(now));
+  const handlePunchIn = async () => {
+    try {
+      const body = {
+        latitude: "10.0921616",
+        longitude: "76.3180602",
+      };
+
+      const response = await api.post("/api/admin-punch-in/", body);
+
+      console.log("Punch-in response:", response.data);
+
+      const now = new Date();
+      setPunchInTime(now);
+      setPunchOutTime(null);
+      setStatus("IN");
+      setMorningPunchIn(formatTime(now));
+    } catch (error) {
+      console.error("Punch-in error:", error);
+      alert("Punch-in failed.");
+    }
   };
 
-  const handlePunchOut = () => {
+  const handlePunchOut = async () => {
     if (!punchInTime) return;
-    const now = new Date();
-    setPunchOutTime(now);
-    setStatus("OUT");
-    setMorningPunchOut(formatTime(now));
+
+    try {
+      const body = {
+        latitude: "10.0921616",
+        longitude: "76.3180602",
+      };
+
+      const response = await api.post("/api/admin-punch-out/", body);
+
+      console.log("Punch-out response:", response.data);
+
+      const now = new Date();
+      setPunchOutTime(now);
+      setStatus("OUT");
+      setMorningPunchOut(formatTime(now));
+    } catch (error) {
+      console.error("Punch-out error:", error);
+      alert("Punch-out failed.");
+    }
   };
 
   const punchInLabel = formatTime(punchInTime);
@@ -75,11 +105,31 @@ export const useShiftScheduleVM = () => {
 
   const [scheduleShifts, setScheduleShifts] = useState<ScheduledShift[]>([]);
   const [showActivityLog, setShowActivityLog] = useState(false);
+  const [shiftType, setShiftType] = useState("Morning");
 
-  
- const [shiftType, setShiftType] = useState("Morning");
+  // FETCH SHIFTS API
+  useEffect(() => {
+    const fetchShifts = async () => {
+      try {
+        const res = await api.get("/api/list-shifts/");
 
+        const mapped = res.data.map((sh: any) => ({
+          id: sh.id,
+          team: sh.team_name || sh.team || "Unknown Team",
+          startDate: sh.start_date,
+          endDate: sh.end_date,
+          startTime: sh.start_time,
+          endTime: sh.end_time,
+        }));
 
+        setScheduleShifts(mapped);
+      } catch (error) {
+        console.error("Error fetching shifts:", error);
+      }
+    };
+
+    fetchShifts();
+  }, []);
 
   const handleSubmit = () => {
     if (!startDate || !endDate || !startTime || !endTime || selected === "Select a team") {
@@ -97,24 +147,25 @@ export const useShiftScheduleVM = () => {
     };
 
     setScheduleShifts((prev) => [...prev, newShift]);
-
-    // ✅ Do NOT trigger ActivityLog here
     resetForm();
   };
 
   const handleSaveSchedule = () => {
     const allFilled =
-      relaxationStart && relaxationEnd &&
-      breakStart && breakEnd &&
-      lunchStart && lunchEnd &&
-      eveningBreakStart && eveningBreakEnd;
+      relaxationStart &&
+      relaxationEnd &&
+      breakStart &&
+      breakEnd &&
+      lunchStart &&
+      lunchEnd &&
+      eveningBreakStart &&
+      eveningBreakEnd;
 
     if (!allFilled) {
       alert("Please fill all break times before saving.");
       return;
     }
 
-    // Map break times to MorningActivityLog
     setMorningPunchIn(relaxationStart);
     setMorningBreakStart(breakStart);
     setMorningBreakEnd(breakEnd);
@@ -122,7 +173,6 @@ export const useShiftScheduleVM = () => {
     setMorningLunchEnd(lunchEnd);
     setMorningPunchOut(eveningBreakEnd);
 
-    // ✅ Only ConfigureBreakTimes triggers ActivityLog
     setShowActivityLog(true);
   };
 
@@ -144,12 +194,10 @@ export const useShiftScheduleVM = () => {
   };
 
   const handleDeleteShift = (id: number) => {
-    // ✅ Only removes the scheduled shift
     setScheduleShifts((prev) => prev.filter((s) => s.id !== id));
   };
 
   const handleDeleteActivityLog = () => {
-    // ✅ Only removes the Activity Log
     setShowActivityLog(false);
   };
 
@@ -162,7 +210,6 @@ export const useShiftScheduleVM = () => {
   const [morningPunchOut, setMorningPunchOut] = useState("09:20");
 
   return {
-    // PunchCard
     punchInLabel,
     punchOutLabel,
     totalHoursLabel,
@@ -171,7 +218,6 @@ export const useShiftScheduleVM = () => {
     handlePunchIn,
     handlePunchOut,
 
-    // BreakTimes
     relaxationStart,
     relaxationEnd,
     breakStart,
@@ -190,7 +236,6 @@ export const useShiftScheduleVM = () => {
     setEveningBreakEnd,
     handleSaveSchedule,
 
-    // TeamShift
     startDate,
     endDate,
     startTime,
@@ -208,9 +253,8 @@ export const useShiftScheduleVM = () => {
     handleSubmit,
     resetForm,
     handleEdit,
-    handleDeleteShift,   // ✅ renamed for clarity
+    handleDeleteShift,
 
-    // MorningActivityLog
     morningPunchIn,
     morningBreakStart,
     morningBreakEnd,
@@ -225,8 +269,9 @@ export const useShiftScheduleVM = () => {
     setMorningPunchOut,
     showActivityLog,
     setShowActivityLog,
-    handleDeleteActivityLog, 
+    handleDeleteActivityLog,
+
     shiftType,
-  setShiftType,  
+    setShiftType,
   };
 };

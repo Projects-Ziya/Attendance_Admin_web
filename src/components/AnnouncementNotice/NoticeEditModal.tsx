@@ -48,7 +48,6 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({
       });
 
       if (res.data.success) {
-        toast.success("Notice updated successfully");
         onSaveEdit(); // Refresh parent list
         onClose(); // Close modal
       } else {

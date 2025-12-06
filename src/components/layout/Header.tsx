@@ -52,20 +52,24 @@ const Header: React.FC = () => {
   // ---------------------------------------
   // FETCH NOTIFICATION COUNT
   // ---------------------------------------
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const response = await fetch("/api/notification-list-admin/");
-        const data = await response.json();
-        setHasNotification(data?.unreadCount > 0);
-      } catch (error) {
-        console.error("Notification fetch error:", error);
-        setHasNotification(false);
-      }
-    };
+ // ----------------------------
+// FETCH NOTIFICATION COUNT
+// ----------------------------
+useEffect(() => {
+  const fetchNotificationCount = async () => {
+    try {
+      const response = await api.get("/api/notification-list-admin/");
+      const unread = response.data?.data?.length || 0;
 
-    fetchNotifications();
-  }, []);
+      setHasNotification(unread > 0);
+    } catch (error) {
+      console.error("Notification fetch error:", error);
+      setHasNotification(false);
+    }
+  };
+
+  fetchNotificationCount();
+}, []);
 
   // ---------------------------------------
   // PROFILE DATA SENT TO POPOVER

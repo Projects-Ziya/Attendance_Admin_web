@@ -213,7 +213,7 @@ const Notices: React.FC = () => {
         </div>
 
         {/* Notice Board */}
-        <fieldset className="border w-[769px] bg-[#FCFCFC] min-h-[700px] max-h-[2000px] pb-5 scrollable border-gray-200 rounded-lg pl-[46px] pr-[35px] pt-[60px] pb-[25px]">
+        <fieldset className="border w-[769px] bg-[#FCFCFC] scrollable h-[700px] pb-5 scrollable border-gray-200 rounded-lg pl-[46px] pr-[35px] pt-[60px] pb-[25px]">
           <legend className="mx-auto">
             <span className="bg-[#00A0E3] text-white text-sm font-semibold px-5 py-1 rounded-full">
               Notice Board
@@ -240,24 +240,29 @@ const Notices: React.FC = () => {
             ))}
           </div>
 
-          <div className="mt-8">
-            <SectionTitle title="Recent Notices" />
-            <div className="flex flex-col gap-4">
-              {recentNotices.map((n) => (
-                <NoticeCard
-                  key={n.id}
-                  id={n.id}
-                  title={n.title}
-                  date={n.date}
-                  department="HR Department"
-                  content={n.content}
-                  onDelete={handleDelete}
-                  onTogglePin={() => togglePin(n.title)}
-                  onEdit={() => handleEditClick(n)}
-                />
-              ))}
-            </div>
-          </div>
+         <div className="mt-8">
+  {/* Sticky header */}
+  <div className="sticky top-0 bg-white z-10 py-2">
+    <SectionTitle title="Recent Notices" />
+  </div>
+
+  <div className="flex flex-col gap-4 max-h-[400px] overflow-y-auto">
+    {recentNotices.map((n) => (
+      <NoticeCard
+        key={n.id}
+        id={n.id}
+        title={n.title}
+        date={n.date}
+        department="HR Department"
+        content={n.content}
+        onDelete={handleDelete}
+        onTogglePin={() => togglePin(n.title)}
+        onEdit={() => handleEditClick(n)}
+      />
+    ))}
+  </div>
+</div>
+
         </fieldset>
       </div>
 

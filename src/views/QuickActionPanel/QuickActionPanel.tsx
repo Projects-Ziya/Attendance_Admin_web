@@ -1,18 +1,36 @@
+import React from "react";
+import { motion } from "framer-motion";
 import headimg from "../../assets/head.svg";
 import CreateCard from "../../components/quickActionPanel/CreateCard";
 import AddBranch from "../../components/quickActionPanel/AddBranch";
 import EmployeeList from "../../components/quickActionPanel/EmployeeList";
 import List from "../../components/quickActionPanel//List";
-import EmployeeManager from "../../components/quickActionPanel/EmloyeeManager"; // ✅ import the manager
+import EmployeeManager from "../../components/quickActionPanel/EmloyeeManager";
 import MainLayout from "../../components/layout/MainLayout";
+
+// Animation variants
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
 
 function QuickActionPanel() {
   return (
     <MainLayout>
-      <div className="bg-[#F6F5FA]  w-[1469px]  sm:px-4  lg:px-6 ">
-
-        <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 ">
-          <h1 className=" flex items-center gap-2 text-midGray text-[16px]  leading-[16px] font-[500] ">
+      <motion.div
+        className="bg-[#F6F5FA] w-[1469px] sm:px-4 lg:px-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Header */}
+        <motion.div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12" variants={itemVariants}>
+          <h1 className="flex items-center gap-2 text-midGray text-[16px] leading-[16px] font-[500]">
             <span className="bg-[#DAF1FB] rounded-full w-[40px] h-[40px] flex items-center justify-center">
               <img
                 src={headimg}
@@ -22,48 +40,56 @@ function QuickActionPanel() {
             </span>
             Quick Action panel
           </h1>
-        </div>
+        </motion.div>
 
-        {/* ✅ Employee search + locate + delete handled by EmployeeManager */}
-        <section className="mt-[10px]">
+        {/* Employee Manager */}
+        <motion.section className="mt-[10px]" variants={itemVariants}>
           <EmployeeManager />
-        </section>
+        </motion.section>
 
-        <section className="mt-[10px] ">
+        {/* Employee List */}
+        <motion.section className="mt-[10px]" variants={itemVariants}>
           <EmployeeList />
-        </section>
+        </motion.section>
 
-        <section className="mt-[10px] mb-[60px]">
+        {/* List Section */}
+        <motion.section className="mt-[10px] mb-[60px]" variants={itemVariants}>
           <List searchTerm="" statusFilter="" />
-        </section>
+        </motion.section>
 
-        <div className="flex gap-[15px] w-[1469px]">
-          <CreateCard
-            title="Create Departments"
-            description="Add new departments and keep your organisation structured."
-            inputs={[
-              { label: "Department Name", type: "text" },
-              { label: "Department head", type: "select" },
-            ]}
-            buttonLabel="Create"
-            enableSearch={true} // 👈 only this card has searchable dropdown
-          />
+        {/* Create Cards */}
+        <motion.div className="flex gap-[15px] w-[1469px]" variants={containerVariants}>
+          <motion.div variants={itemVariants}>
+            <CreateCard
+              title="Create Departments"
+              description="Add new departments and keep your organisation structured."
+              inputs={[
+                { label: "Department Name", type: "text" },
+                { label: "Department head", type: "select" },
+              ]}
+              buttonLabel="Create"
+              enableSearch={true}
+            />
+          </motion.div>
 
-          <CreateCard
-            title="Create Designation"
-            description="Create designstion to structure your workforce."
-            inputs={[
-              { label: "Designation Name", type: "text" },
-              { label: "Select Department", type: "select" },
-            ]}
-            buttonLabel="add Task"
-          />
-        </div>
+          <motion.div variants={itemVariants}>
+            <CreateCard
+              title="Create Designation"
+              description="Create designstion to structure your workforce."
+              inputs={[
+                { label: "Designation Name", type: "text" },
+                { label: "Select Department", type: "select" },
+              ]}
+              buttonLabel="add Task"
+            />
+          </motion.div>
+        </motion.div>
 
-        <section className="mt-[60px] mb-[95px] w-[1469px] ">
+        {/* Add Branch Section */}
+        <motion.section className="mt-[60px] mb-[95px] w-[1469px]" variants={itemVariants}>
           <AddBranch />
-        </section>
-      </div>
+        </motion.section>
+      </motion.div>
     </MainLayout>
   );
 }

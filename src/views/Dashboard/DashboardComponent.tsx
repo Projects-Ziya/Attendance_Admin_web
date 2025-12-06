@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import ProfileCard from "./DashComponents/ProfileCard";
 import TotalEmployee from "./DashComponents/TotalEmployee";
 import TotalActivies from "./DashComponents/TotalActivities";
@@ -7,48 +8,93 @@ import PendingLeaveRequests from "./DashComponents/PendingLeaveRequests";
 import Totaltaskprogress from "./DashComponents/Totaltaskprogress";
 import RecentActivities from "./DashComponents/RecentActivities";
 import BirthdayCard from "./DashComponents/BirthdayCard";
+
 interface DashboardComponentsProps {
   selectedSidebarItem: string;
 }
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const DashboardComponents: React.FC<DashboardComponentsProps> = ({
   selectedSidebarItem,
 }) => {
   return (
     <div className="flex-1 overflow-hidden mb-[47px] text-white pt-3">
-      {/* ProfileCard */}
-      <div className="mb-4">
-        <ProfileCard />
-      </div>
 
-      {/* Dashboard layout */}
+      {/* ProfileCard */}
+      <motion.div
+        className="mb-4"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={{ duration: 0.4 }}
+      >
+        <ProfileCard />
+      </motion.div>
+
+      {/* Dashboard rows */}
       <div className="flex gap-4">
+
         {/* Left column */}
-        <div className="flex flex-col flex-shrink-0">
+        <motion.div
+          className="flex flex-col flex-shrink-0"
+          initial="hidden"
+          animate="visible"
+          variants={fadeUp}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
           <TotalEmployee />
-        </div>
+        </motion.div>
 
         {/* Right column */}
         <div className="flex flex-col gap-4 flex-1">
-          <div className="flex gap-4">
+          <motion.div
+            className="flex gap-4"
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            transition={{ duration: 0.4, delay: 0.15 }}
+          >
             <TotalActivies />
             <TotalAttendance />
-          </div>
-          <div>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
             <PendingLeaveRequests />
-          </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Bottom section */}
-      <div className="mt-4">
+      <motion.div
+        className="mt-4"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={{ duration: 0.4, delay: 0.25 }}
+      >
         <Totaltaskprogress />
-      </div>
+      </motion.div>
 
-      <div className="flex gap-4">
+      {/* Recent & Birthday */}
+      <motion.div
+        className="flex gap-4"
+        initial="hidden"
+        animate="visible"
+        variants={fadeUp}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
         <RecentActivities />
         <BirthdayCard />
-      </div>
+      </motion.div>
     </div>
   );
 };

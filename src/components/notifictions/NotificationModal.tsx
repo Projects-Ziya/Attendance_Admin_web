@@ -9,26 +9,23 @@ const NotificationModal: React.FC<Props> = ({ onHide }) => {
   const { notifications, hideNotification } = useNotificationViewModel();
 
   return (
-    // Instead of full-screen fixed, make this absolute
     <div className="absolute top-12 right-0 z-50">
-      <div className="w-[748px] h-[273px] bg-[#181818] rounded-[10px] overflow-y-auto scrollable pt-[31px] pl-[46px] flex shadow-lg">
-        {/* Notifications */}
+      <div className="w-[748px] h-[273px] bg-[#181818] rounded-[10px] overflow-y-auto pt-[31px] pl-[46px] flex shadow-lg">
         <div className="flex flex-col pr-[48px] space-y-[10px]">
           {notifications.map((n) => (
             <div key={n.id} className="flex items-start gap-[32px]">
-              <img title="nn" src={n.icon} className="w-[21px] h-[25px] mt-1" />
+              <img src={n.icon} className="w-[21px] h-[25px] mt-1" />
               <div>
-                <h3
-                  className="font-semibold text-[18px]"
-                  style={{
-                    color: n.type === "success" ? "#8BC34A" : "#00BCD4",
-                  }}
-                >
+                <h3 className="font-semibold text-[18px] text-[#8BC34A]">
                   {n.title}
                 </h3>
-                <p className="text-[#FFFFFF] text-[14px] leading-[20px]">
-                  {n.message}
+
+                <p className="text-white text-[14px]">{n.message}</p>
+
+                <p className="text-gray-400 text-[12px] mt-1">
+                  {n.timestamp}
                 </p>
+
                 <button
                   className="text-xs text-red-400 mt-1"
                   onClick={() => hideNotification(n.id)}
@@ -40,10 +37,9 @@ const NotificationModal: React.FC<Props> = ({ onHide }) => {
           ))}
         </div>
 
-        {/* Header with Hide button */}
         <div className="me-[10px]">
           <button
-            className="text-[#FFFFFF] text-[18px] mt-[11px] w-[126px] h-[43px] rounded-md hover:bg-white hover:text-black transition"
+            className="text-white text-[18px] mt-[11px] w-[126px] h-[43px] rounded-md hover:bg-white hover:text-black transition"
             onClick={onHide}
           >
             Hide
