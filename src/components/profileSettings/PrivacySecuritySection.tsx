@@ -17,9 +17,9 @@ const PrivacySecuritySection = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await api.get(""); // <-- replace with your endpoint
+        const res = await api.get("/api/admin-email/"); // <-- replace with your endpoint
         setProfile({
-          email: res.data.email,
+          email: res.data.data.email,
           password: res.data.password, // backend should return encrypted OR masked
         });
       } catch (error) {
