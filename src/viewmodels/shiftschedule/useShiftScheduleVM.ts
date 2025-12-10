@@ -108,28 +108,47 @@ export const useShiftScheduleVM = () => {
   const [shiftType, setShiftType] = useState("Morning");
 
   // FETCH SHIFTS API
-  useEffect(() => {
-    const fetchShifts = async () => {
-      try {
-        const res = await api.get("/api/list-shifts/");
+  // FETCH SHIFTS API
+useEffect(() => {
+  const fetchShifts = async () => {
+    try {
+      const res = await api.get("/api/list-shifts/");
 
-        const mapped = res.data.map((sh: any) => ({
-          id: sh.id,
-          team: sh.team_name || sh.team || "Unknown Team",
-          startDate: sh.start_date,
-          endDate: sh.end_date,
-          startTime: sh.start_time,
-          endTime: sh.end_time,
-        }));
+      console.log("API RESPONSE:", res.data);
 
-        setScheduleShifts(mapped);
-      } catch (error) {
-        console.error("Error fetching shifts:", error);
+      // Extract array safely
+      const list =
+        Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data?.data)
+          ? res.data.data
+          : Array.isArray(res.data?.shifts)
+          ? res.data.shifts
+          : [];
+
+      if (!Array.isArray(list)) {
+        console.error("Shift list is not an array!", list);
+        return;
       }
-    };
 
-    fetchShifts();
-  }, []);
+      const mapped = list.map((sh: any) => ({
+        id: sh.id,
+        team: sh.team_name || sh.team || "Unknown Team",
+        startDate: sh.start_date,
+        endDate: sh.end_date,
+        startTime: sh.start_time,
+        endTime: sh.end_time,
+      }));
+
+      setScheduleShifts(mapped);
+    } catch (error) {
+      console.error("Error fetching shifts:", error);
+    }
+  };
+
+  fetchShifts();
+}, []);
+
 
   const handleSubmit = () => {
     if (!startDate || !endDate || !startTime || !endTime || selected === "Select a team") {

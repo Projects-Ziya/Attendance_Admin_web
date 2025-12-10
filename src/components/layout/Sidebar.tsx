@@ -21,9 +21,15 @@ interface SidebarItem {
   label: string;
   icon: string;
   path: string;
+  
+}
+interface SidebarProps {
+  selectedItem: string;
+  onItemClick: (item: string) => void;
 }
 
-const Sidebar: React.FC = () => {
+
+const Sidebar: React.FC<SidebarProps> = ({selectedItem, onItemClick}) => {
   const sidebarItems: SidebarItem[] = [
     { id: 'overview', label: 'Overview Cards', icon: overview, path: '/dashboard' },
     { id: 'employee', label: 'Employee Dashboard', icon: employee, path: '/Employee-Dashboard' },

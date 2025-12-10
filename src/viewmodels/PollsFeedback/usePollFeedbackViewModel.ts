@@ -1,104 +1,128 @@
 // PollFeedbackViewModel.ts (VIEWMODEL)
 
 import { useState } from "react";
-import type { Shift } from "../model/Shift";
+import type { PollForm, PollQuestion, PollOption } from "../../models/pollsFeedbackModel";
 
 export const usePollFeedbackViewModel = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState("Select List");
+  // -----------------------------
+  // Polls & Feedback state
+  // -----------------------------
+  const [form, setForm] = useState<PollForm>({
+    id: Date.now(),
+    title: "Untitled Form",
+    description: "",
+    questions: [
+      {
+        id: Date.now(),
+        type: "CheckBox",
+        text: "Question",
+        options: [{ id: 1, label: "Option 1" }],
+      },
+    ],
+  });
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
+  // -----------------------------
+  // Methods
+  // -----------------------------
 
-  const [scheduleShifts, setScheduleShifts] = useState<Shift[]>([]);
-  const [editingId, setEditingId] = useState<string | null>(null);
-
-  const teams = ["Sales Team", "Operation Team", "Design Team", "Marketing Team"];
-
-  const makeId = () => Math.random().toString(36).slice(2, 10);
-
-  const resetForm = () => {
-    setSelected("Select List");
-    setStartDate("");
-    setEndDate("");
-    setStartTime("");
-    setEndTime("");
+  // Update form title
+  const setFormTitle = (title: string) => {
+    setForm((prev) => ({ ...prev, title }));
   };
 
-  const handleSubmit = () => {
-    if (
-      selected === "Select List" ||
-      !startDate ||
-      !endDate ||
-      !startTime ||
-      !endTime
-    ) {
-      return;
-    }
-
-    if (editingId) {
-      setScheduleShifts((prev) =>
-        prev.map((s) =>
-          s.id === editingId
-            ? { ...s, team: selected, startDate, endDate, startTime, endTime }
-            : s
-        )
-      );
-      setEditingId(null);
-    } else {
-      const newShift: Shift = {
-        id: makeId(),
-        team: selected,
-        startDate,
-        endDate,
-        startTime,
-        endTime,
-      };
-      setScheduleShifts((prev) => [...prev, newShift]);
-    }
-
-    resetForm();
+  // Update form description
+  const setFormDescription = (description: string) => {
+    setForm((prev) => ({ ...prev, description }));
   };
 
-  const handleEdit = (shift: Shift) => {
-    setEditingId(shift.id);
-    setSelected(shift.team);
-    setStartDate(shift.startDate);
-    setEndDate(shift.endDate);
-    setStartTime(shift.startTime);
-    setEndTime(shift.endTime);
+  // Add a new question
+  const handleAddQuestion = (type: PollQuestion["type"] = "CheckBox") => {
+    const newQuestion: PollQuestion = {
+      id: Date.now(),
+      type,
+      text: "New Question",
+      options: type !== "Text" ? [{ id: 1, label: "Option 1" }] : undefined,
+    };
+    setForm((prev) => ({
+      ...prev,
+      questions: [...prev.questions, newQuestion],
+    }));
   };
 
-  const handleDelete = (id: string) => {
-    setScheduleShifts((prev) => prev.filter((s) => s.id !== id));
-    if (editingId === id) resetForm();
+  // Edit a question text
+  const handleEditQuestionText = (questionId: number, text: string) => {
+    setForm((prev) => ({
+      ...prev,
+      questions: prev.questions.map((q) =>
+        q.id === questionId ? { ...q, text } : q
+      ),
+    }));
+  };
+
+  // Add option to a question
+  // Add option to a question
+const handleAddOption = (questionId: number) => {
+  setForm((prevForm) => {
+    return {
+      ...prevForm,
+      questions: prevForm.questions.map((q) => {
+        if (q.id === questionId && q.options) {
+          const newOption: PollOption = {
+            id: Date.now(),
+            label: `Option ${q.options.length + 1}`,
+          };
+          return {
+            ...q,
+            options: [...q.options, newOption],
+          };
+        }
+        return q;
+      }),
+    };
+  });
+};
+
+
+  // Edit option text
+  const handleEditOption = (questionId: number, optionId: number, label: string) => {
+    setForm((prev) => ({
+      ...prev,
+      questions: prev.questions.map((q) =>
+        q.id === questionId && q.options
+          ? {
+              ...q,
+              options: q.options.map((opt) =>
+                opt.id === optionId ? { ...opt, label } : opt
+              ),
+            }
+          : q
+      ),
+    }));
+  };
+
+  // Delete option
+  const handleDeleteOption = (questionId: number, optionId: number) => {
+    setForm((prev) => ({
+      ...prev,
+      questions: prev.questions.map((q) =>
+        q.id === questionId && q.options
+          ? {
+              ...q,
+              options: q.options.filter((opt) => opt.id !== optionId),
+            }
+          : q
+      ),
+    }));
   };
 
   return {
-    // state
-    isOpen,
-    selected,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-    scheduleShifts,
-    teams,
-
-    // setters
-    setIsOpen,
-    setSelected,
-    setStartDate,
-    setEndDate,
-    setStartTime,
-    setEndTime,
-
-    // methods
-    handleSubmit,
-    handleEdit,
-    handleDelete,
-    resetForm,
+    form,
+    setFormTitle,
+    setFormDescription,
+    handleAddQuestion,
+    handleEditQuestionText,
+    handleAddOption,
+    handleEditOption,
+    handleDeleteOption,
   };
 };
