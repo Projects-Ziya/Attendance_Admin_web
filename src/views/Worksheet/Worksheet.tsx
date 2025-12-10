@@ -80,7 +80,7 @@ function Worksheet() {
           <div className="flex justify-end mb-[94px] mr-[40px]">
             <button
               onClick={onUploadClick}
-              className="flex items-center justify-center gap-6 mt-[94px] bg-sky-500 h-[57px] w-[379px] text-[25px] font-[500] text-white hover:bg-sky-600"
+              className="flex items-center justify-center gap-6 mt-[94px] bg-sky-500 h-[57px] w-[379px] text-[25px] font-[500] rounded text-white hover:bg-sky-600"
             >
               <img className="w-[30px] h-[30px]" src={uploadicon} alt="" />
               <span>Upload Worksheet</span>
