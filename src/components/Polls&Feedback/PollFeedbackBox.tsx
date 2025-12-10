@@ -1,27 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import saveicon from "../../assets/icons/pollsfeedback/save.svg";
 import { usePollFeedbackViewModel } from "../../viewmodels/PollsFeedback/usePollFeedbackViewModel";
 import type { PollQuestion } from "../../models/pollsFeedbackModel";
+import api from "../../Api/api";
 
-// Dropdown component now receives a full question object from the viewmodel
+// --------------------------------------------------
+// Dropdown Component
+// --------------------------------------------------
 function CheckBoxDropdown({
   question,
   handleAddOption,
+  handleEditQuestionText,
+  handleEditOption,
 }: {
   question: PollQuestion;
   handleAddOption: (questionId: number) => void;
+  handleEditQuestionText: (questionId: number, text: string) => void;
+  handleEditOption: (
+    questionId: number,
+    optionId: number,
+    label: string
+  ) => void;
 }) {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="mt-[24px] ml-[28px] ">
-      {/* Top Select (CheckBox) */}
+    <div className="mt-[24px] ml-[28px]">
+      {/* Question input */}
+      <input
+        className="mt-[36px] text-[#8E8B8B] placeholder:text-[25px] placeholder:font-[500] h-[71px] pl-[14px] justify-center w-[1299px] text-[25px] font-[500] bg-[#F5F5F5] focus:outline-none rounded-[10px]"
+        type="text"
+        placeholder="Question"
+        value={question.text ?? ""}
+        onChange={(e) => handleEditQuestionText(question.id, e.target.value)}
+      />
+
+      {/* Select Field */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className=" bg-[#F5F5F5] h-[71px] w-[478px] rounded-[10px] flex items-center px-4 justify-between"
+        className="bg-[#F5F5F5] h-[71px] w-[478px] rounded-[10px] flex items-center px-4 justify-between mt-4"
       >
-        <span className="text-[#8E8B8B] text-[22px] font-[500]">{question.type}</span>
+        <span className="text-[#8E8B8B] text-[22px] font-[500]">
+          {question.type}
+        </span>
         <span
           className={`text-[#8E8B8B] pb-4 text-[30px] w-10 transition-transform ${
             open ? "rotate-180" : ""
@@ -31,26 +53,31 @@ function CheckBoxDropdown({
         </span>
       </button>
 
-      {/* Dropdown options */}
+      {/* Options */}
       {open && question.options && (
         <div className="mt-3 space-y-2">
           {question.options.map((opt) => (
             <div key={opt.id} className="flex items-center pl-[28px] space-x-3">
-              <input type="checkbox" className="h-[26px] w-[26px] border border-gray-400" />
+              <input
+                type="checkbox"
+                className="h-[26px] w-[26px] border border-gray-400"
+              />
               <input
                 type="text"
-                value={opt.label}
-                readOnly
-                className="h-[41px] w-[478px] bg-[#F5F5F5] rounded-[6px] px-3 focus:outline-none"
+                value={opt.label ?? ""}
+                onChange={(e) =>
+                  handleEditOption(question.id, opt.id, e.target.value)
+                }
+                className="h-[41px] w-[478px] bg-[#F5F5F5] rounded-[6px] px-3 focus:outline-none placeholder:text-[#B5B3B3] placeholder:text-[16px]"
+                placeholder={`Option ${opt.id}`}
               />
             </div>
           ))}
 
-          {/* Add Option */}
           <button
             type="button"
             className="text-[#8E8B8B] pl-[28px] text-[14px] font-[500] hover:underline"
-            onClick={() => handleAddOption(question.id)} // ✅ pass questionId
+            onClick={() => handleAddOption(question.id)}
           >
             Add Option
           </button>
@@ -60,10 +87,56 @@ function CheckBoxDropdown({
   );
 }
 
+// --------------------------------------------------
+// Main Component
+// --------------------------------------------------
 function PollsAndFeedback() {
-  // ✅ Use the viewmodel
-  const { form, handleAddOption } = usePollFeedbackViewModel();
+  const {
+    form,
+    setFormFromApi,
+    handleAddOption,
+    handleEditQuestionText,
+    handleEditOption,
+  } = usePollFeedbackViewModel();
 
+  // --------------------------------------------------
+  // 📌 API INTEGRATION ADDED HERE
+  // --------------------------------------------------
+  useEffect(() => {
+    const fetchFeedbackQuestions = async () => {
+      try {
+        const res = await api.get("/api/add-feedback-questions/");
+
+        const apiData = res.data;
+
+        // Map API DATA → ViewModel format
+        const mappedForm = {
+          title: apiData.title,
+          description: apiData.description,
+          questions: apiData.questions.map((q: any, index: number) => ({
+            id: index + 1,
+            text: q.question_text,
+            type: q.question_type,
+            required: q.is_required,
+            options: q.options.map((opt: any, i: number) => ({
+              id: i + 1,
+              label: opt.option_text,
+            })),
+          })),
+        };
+
+        setFormFromApi(mappedForm);
+      } catch (error) {
+        console.error("Failed to fetch feedback questions:", error);
+      }
+    };
+
+    fetchFeedbackQuestions();
+  }, []);
+
+  // --------------------------------------------------
+  // UI (NO CHANGES MADE)
+  // --------------------------------------------------
   return (
     <div className="h-auto pl-[61px] w-[1469px] shadow-[0px_0px_2px_0px_#00000040] bg-white pb-[40px] rounded-[10px] flex items-center justify-center mb-[20px]">
       <div>
@@ -93,17 +166,17 @@ function PollsAndFeedback() {
               key={q.id}
               question={q}
               handleAddOption={handleAddOption}
+              handleEditQuestionText={handleEditQuestionText}
+              handleEditOption={handleEditOption}
             />
           ))}
 
-          {/* Add Question button */}
           <div className="mt-[29px] ml-[28px] w-[1299px] h-[78px] rounded-[10px] bg-[#F5F5F5] flex items-center ">
             <button className="ml-[76px] text-[18px] font-[500] h-[59px] w-[1151px] rounded-[10px] bg-[#FFFFFF]">
               + Add Questions
             </button>
           </div>
 
-          {/* Buttons */}
           <div className="bottom-[40px] mt-[100px] left-[42px] right-[32px] flex justify-between px-[28px] pb-[20px]">
             <button className="h-[68px] w-[252px] text-[#00A0E3] text-[22px] font-[500] border border-[#00A0E3] rounded-[10px]">
               Cancel

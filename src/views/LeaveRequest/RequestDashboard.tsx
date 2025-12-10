@@ -49,16 +49,16 @@ export default function RequestDashboard() {
       )}
 
       {/* Project Approvals Table */}
-      {activeTab === "projects" && (
-        <motion.div variants={itemVariants}>
-          <ProjectApprovalTable
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            loading={approvalsLoading}
-            approvals={approvals}
-          />
-        </motion.div>
-      )}
+  {activeTab === "projects" && (
+  <ProjectApprovalTable
+    activeTab={activeTab}
+    setActiveTab={setActiveTab}
+    loading={approvalsLoading}
+  />
+)}
+
+
+      
     </motion.div>
   );
 }

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import Search from "../../assets/images/icons/search.svg";
 import Button from "../../components/common/ui/Button";
 
@@ -8,8 +8,21 @@ interface SearchBarProps {
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ value, onSearch }) => {
-
   const [inputValue, setInputValue] = useState(value);
+
+  // 🔥 Sync input with parent
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
+  // ⏳ Debounce for live search (runs 300ms after typing stops)
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      onSearch(inputValue.trim());
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [inputValue, onSearch]);
 
   const handleSearchClick = () => {
     onSearch(inputValue.trim());
@@ -27,6 +40,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onSearch }) => {
           className="w-full bg-transparent outline-none text-[12px] sm:text-[13px] lg:text-[14px] text-global-4 placeholder:text-global-4 font-['Poppins']"
         />
       </div>
+
       <Button
         onClick={handleSearchClick}
         variant="subprimary"

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MdOutlineWorkHistory } from "react-icons/md";
 import api from "../../../Api/api";
+import { useNavigate } from "react-router-dom";
 
 const WorkHistoryIcon = MdOutlineWorkHistory as React.FC<{
   size?: number;
@@ -13,6 +14,8 @@ export default function PendingLeaveRequests() {
   const [leaveRequests, setLeaveRequests] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate(); // ✅ FIXED: moved here
 
   useEffect(() => {
     const fetchPendingData = async () => {
@@ -68,7 +71,11 @@ export default function PendingLeaveRequests() {
           {loading ? "..." : error ? "Err" : pendingApprovals} Pending Approvals &{" "}
           {loading ? "..." : error ? "Err" : leaveRequests} Leave Requests
         </p>
-        <button className="font-poppins text-[18px] font-medium text-gray-500 hover:text-ziyablue">
+
+        <button
+          className="font-poppins text-[18px] font-medium text-gray-500 hover:text-ziyablue"
+          onClick={() => navigate("/allLeaveRequests")} // ✅ Works now
+        >
           View All
         </button>
       </div>

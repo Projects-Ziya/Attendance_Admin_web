@@ -17,13 +17,12 @@ import OnlineInt from "../../assets/images/icons/OnIntern.svg";
 import OfflineEmp from "../../assets/images/icons/OffEicon.svg";
 import OfflineInt from "../../assets/images/icons/OffIntern.svg";
 import { employeeService } from "../../services/employeeService";
+import api from "../../Api/api";   // ✅ Added to call your API
 
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: {
-      staggerChildren: 0.15
-    }
+    transition: { staggerChildren: 0.15 }
   }
 };
 
@@ -40,6 +39,10 @@ const EmployeeDashboardHome = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [attendanceSummaryData, setAttendanceSummaryData] = useState<any>(null);
 
+  // ✅ NEW: designation list
+  const [designations, setDesignations] = useState<any[]>([]);
+
+  // Fetch attendance
   useEffect(() => {
     const fetchAttendance = async () => {
       try {
@@ -52,17 +55,37 @@ const EmployeeDashboardHome = () => {
     fetchAttendance();
   }, []);
 
+  // ✅ NEW: Fetch Designations from API
+  useEffect(() => {
+    const fetchDesignations = async () => {
+      try {
+        const res = await api.get("/api/list-designations/");
+        setDesignations(res.data.data || []);
+      } catch (err) {
+        console.error("Failed to fetch designations:", err);
+      }
+    };
+    fetchDesignations();
+  }, []);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   if (loading) return <p>Loading...</p>;
 
+  // -----------------------------
+  // FILTER EMPLOYEES
+  // -----------------------------
   const filteredEmployees = employees.filter((emp) => {
     const matchesSearch = emp.name.toLowerCase().includes(search.toLowerCase());
+
+    // 🔥 MATCH USING designation.id FROM API
     const matchesDesignation =
-      !selectedDesignation || emp.designation === selectedDesignation;
+      !selectedDesignation || emp.designation_id?.toString() === selectedDesignation;
+
     const matchesStatus =
       !selectedStatus || emp.status === selectedStatus;
+
     const matchesYear =
       !selectedYear || emp.joiningYear.toString() === selectedYear;
 
@@ -118,21 +141,35 @@ const EmployeeDashboardHome = () => {
       {/* Filters */}
       <motion.div className="flex items-center justify-between bg-white rounded-t-[10px] shadow-sm px-7 py-8 text-sm" variants={itemVariants}>
         <SearchBar value={search} onSearch={setSearch} />
+
         <div className="flex gap-3 text-ziyablack">
-          <select className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
+
+          {/* ---------------------- */}
+          {/* ✅ DESIGNATION DROPDOWN */}
+          {/* ---------------------- */}
+          <select
+            className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
             value={selectedDesignation}
-            onChange={(e) => setSelectedDesignation(e.target.value)}>
+            onChange={(e) => setSelectedDesignation(e.target.value)}
+          >
             <option value="">Designation</option>
-            <option value="Software Engineer">Software Engineer</option>
-            <option value="UI/UX Designer">UI/UX Designer</option>
+            {designations.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.title}
+              </option>
+            ))}
           </select>
-          <select className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
+
+          <select
+            className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
             value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}>
+            onChange={(e) => setSelectedStatus(e.target.value)}
+          >
             <option value="">Select Status</option>
             <option value="Active">Active</option>
             <option value="Inactive">Inactive</option>
           </select>
+
           <select
             className="appearance-none border border-gray-300 underline rounded-lg px-5 py-2 w-19 h-10 text-ziyablue font-medium cursor-pointer"
             value={selectedYear}
@@ -144,6 +181,7 @@ const EmployeeDashboardHome = () => {
             <option value="2025">2025</option>
             <option value="2026">2026</option>
           </select>
+
         </div>
       </motion.div>
 
@@ -179,23 +217,24 @@ const EmployeeDashboardHome = () => {
                   key={pageNum}
                   onClick={() => setCurrentPage(pageNum)}
                   className={`text-lg font-semibold ${
-                    currentPage === pageNum
-                      ? "text-ziyablue"
-                      : "text-gray-400 hover:text-ziyablue"
+                    currentPage === pageNum ? "text-ziyablue" : "text-gray-400 hover:text-ziyablue"
                   }`}
                 >
                   {pageNum}
                 </button>
               );
             })}
+
             <button
               onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
               className="text-ziyablue"
             >
               <IoMdArrowDropright size={36} />
             </button>
+
           </div>
         </motion.div>
+
       </motion.div>
     </motion.div>
   );

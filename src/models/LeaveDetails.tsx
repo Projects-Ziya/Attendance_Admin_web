@@ -182,6 +182,6 @@ const LeaveDetails = () => {
       </div>
     </div>
   );
-};
+} ;
 
 export default LeaveDetails;

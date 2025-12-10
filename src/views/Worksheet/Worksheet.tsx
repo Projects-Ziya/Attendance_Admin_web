@@ -19,7 +19,6 @@ import MainLayout from "../../components/layout/MainLayout";
 function Worksheet() {
   const {
     worksheets,
-    onDownload,
     editingWorksheet,
     onEditClick,
     onCloseModal,
@@ -50,13 +49,43 @@ function Worksheet() {
     }
   };
 
+  // New: download file properly
+  const handleDownload = async (worksheet: any) => {
+    if (!worksheet || !worksheet.fileUrl) {
+      toast.error("File not found.");
+      return;
+    }
+
+    try {
+      const res = await fetch(worksheet.fileUrl, {
+        method: "GET",
+        credentials: "include",
+      });
+      const blob = await res.blob();
+      const fileExtension = worksheet.fileUrl.split(".").pop() || "xlsx";
+      const fileName = `${worksheet.title}.${fileExtension}`;
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      toast("Downloading.....!");
+    } catch (err) {
+      console.error("Download Error:", err);
+      toast.error("Failed to download file.");
+    }
+  };
+
   return (
     <MainLayout>
       <div
-
         className={`w-[1469px] sm:px-4 lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
           isUploadModalOpen ? "blur-sm pointer-events-none" : ""
-
         }`}
       >
         {/* Top bar */}
@@ -69,7 +98,7 @@ function Worksheet() {
         </div>
 
         {/* Main card */}
-        <div className="h-[1601px] w-[1469px] bg-[#FCFCFC] border rounded-[10px] shadow-sm pl-[40px]">
+        <div className="h-auto w-[1469px] bg-[#FCFCFC] border rounded-[10px] shadow-sm pl-[40px]">
           {/* Header */}
           <div className="pt-[60px]">
             <h1 className="font-[600] text-[24px]">Worksheets</h1>
@@ -77,18 +106,29 @@ function Worksheet() {
           </div>
 
           {/* Upload button */}
-          <div className="flex justify-end mb-[94px] mr-[40px]">
-            <button
-              onClick={onUploadClick}
-              className="flex items-center justify-center gap-6 mt-[94px] bg-sky-500 h-[57px] w-[379px] text-[25px] font-[500] rounded text-white hover:bg-sky-600"
-            >
-              <img className="w-[30px] h-[30px]" src={uploadicon} alt="" />
-              <span>Upload Worksheet</span>
-            </button>
+          <div className="flex justify-end mb-[40px] mr-[40px]">
+           <motion.button
+  onClick={onUploadClick}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="flex items-center justify-center gap-4 mt-[40px] h-[57px] w-[379px] rounded-lg 
+             bg-[#00A0E3] text-white font-semibold text-[25px]
+             shadow-lg hover:shadow-xl transition-all duration-300"
+>
+  <motion.img
+    src={uploadicon}
+    alt="Upload"
+    className="w-[30px] h-[30px]"
+    whileHover={{ rotate: 15 }}
+    transition={{ type: "spring", stiffness: 300 }}
+  />
+  <span className="tracking-wide">Upload Worksheet</span>
+</motion.button>
+
           </div>
 
           {/* Team Worksheets */}
-          <div className="h-[1061px] w-[1389px] shadow-sm border border-[#DED1D1] rounded-[20px]">
+          <div className="h-[700px] w-[1389px] shadow-sm border border-[#DED1D1] rounded-[20px] scrollable pb-8">
             <h1 className="font-[600] text-[24px] pt-[49px] pl-[51px]">Team Worksheets</h1>
 
             <div className="mt-[70px] space-y-[40px] pl-[51px]">
@@ -101,7 +141,7 @@ function Worksheet() {
               {worksheets.map((w, index) => (
                 <motion.div
                   key={w.id}
-                  className="h-[108px] w-[1297px] rounded-[20px] border border-[#C6C6C6] bg-white flex items-center justify-between px-[32px]"
+                  className="h-[108px] w-[1297px] rounded-[20px] border border-[#C6C6C6]  bg-white flex items-center justify-between px-[32px]"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.4 }}
@@ -121,27 +161,45 @@ function Worksheet() {
 
                   {/* RIGHT: buttons */}
                   <div className="flex items-center gap-[16px]">
-                    <button
-                      onClick={() => onDownload(w.id)}
-                      className="flex items-center justify-center gap-[10px] border border-[#C6C6C6] rounded-[12px] h-[50px] w-[173px] px-[20px] text-[16px] font-[500] text-[#282828] hover:bg-[#F4F4F4]"
-                    >
-                      <img src={download_icon} alt="Download" className="w-[22px] h-[22px]" />
-                      <span>Download</span>
-                    </button>
+                   <motion.button
+  onClick={() => handleDownload(w)}
+  whileHover={{ scale: 1.05 }}
+  whileTap={{ scale: 0.95 }}
+  className="flex items-center justify-center gap-3 h-[50px] w-[173px] px-[20px] rounded-lg
+             bg-gradient-to-r 0  font-medium text-[16px]
+             shadow-md hover:shadow-xl transition-all duration-300"
+>
+  <motion.img
+    src={download_icon}
+    alt="Download"
+    className="w-[22px] h-[22px]"
+    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+  />
+  <span>Download</span>
+</motion.button>
 
-                    <button
-                      onClick={() => onEditClick(w)}
-                      className="flex items-center justify-center h-[50px] w-[40px] rounded-[12px] border border-[#C6C6C6] bg-white hover:bg-[#F4F4F4] transition"
-                    >
-                      <img src={edit_icon} alt="Edit" className="w-[22px] h-[22px]" />
-                    </button>
 
-                    <button
-                      onClick={() => handleDelete(w.id)}
-                      className="flex items-center justify-center h-[50px] w-[40px] border border-[#FFD0D0] rounded-[12px] hover:bg-[#FFF1F1]"
-                    >
-                      <img src={dlt_icon} alt="Delete" className="w-[22px] h-[22px]" />
-                    </button>
+                    <motion.button
+  onClick={() => onEditClick(w)}
+  whileHover={{ scale: 1.1, rotate: 5 }}
+  whileTap={{ scale: 0.95 }}
+  className="flex items-center justify-center h-[50px] w-[50px] rounded-lg border border-gray-300 
+             bg-white hover:bg-blue-50 transition-all duration-300 shadow-sm hover:shadow-md"
+>
+  <img src={edit_icon} alt="Edit" className="w-[24px] h-[24px]" />
+</motion.button>
+
+
+                    <motion.button
+  onClick={() => handleDelete(w.id)}
+  whileHover={{ scale: 1.1, rotate: -5 }}
+  whileTap={{ scale: 0.95 }}
+  className="flex items-center justify-center h-[50px] w-[50px] rounded-lg border border-red-300 
+             bg-white hover:bg-red-50 transition-all duration-300 shadow-sm hover:shadow-md"
+>
+  <img src={dlt_icon} alt="Delete" className="w-[24px] h-[24px]" />
+</motion.button>
+
                   </div>
                 </motion.div>
               ))}
