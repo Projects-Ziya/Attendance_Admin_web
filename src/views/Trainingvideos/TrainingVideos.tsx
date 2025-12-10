@@ -5,6 +5,18 @@ import MainLayout from "../../components/layout/MainLayout";
 import api from "../../Api/api";
 import type { Video } from "../../models/Video";
 import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+
+// Animation variants
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.15 } }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
 
 const TrainingVideo: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -45,7 +57,14 @@ const TrainingVideo: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="w-[1469px] mx-auto p-6">
+<motion.div
+        className="bg-[#F6F5FA] px-4 sm:px-6 lg:pl-[37px] pr-[37px]"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      ></motion.div>
+
+      <motion.div className="w-[1469px] mx-auto p-6" variants={itemVariants}>
         <div className="w-full h-auto mt-[35px] shadow-[0px_0px_2px_0px_#00000040] bg-[#FCFCFC] pt-[50px] pb-[50px] px-[96px] flex flex-col gap-[40px]">
           <h1 className="text-[24px] font-bold text-[#4D4D4D]">Training Videos</h1>
 
@@ -62,7 +81,7 @@ const TrainingVideo: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </MainLayout>
   );
 };

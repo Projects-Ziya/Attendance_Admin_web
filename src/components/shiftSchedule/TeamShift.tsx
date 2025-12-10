@@ -51,8 +51,7 @@ const TeamShift: React.FC<Props> = ({
   scheduleShifts,
   handleSubmit,
   resetForm,
-  handleEdit,
-  handleDelete,
+  
 }) => {
   const [deptList, setDeptList] = useState<{ id: number; name: string }[]>([]);
   const [shifts, setShifts] = useState<ScheduledShift[]>(scheduleShifts || []);
