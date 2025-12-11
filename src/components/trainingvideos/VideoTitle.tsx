@@ -3,12 +3,21 @@ import UploadVideo from "./UploadVideo";
 import type { Video } from "../../models/Video";
 import api from "../../Api/api";
 import toast from "react-hot-toast";
+import DragDropUpload from "../DragDropUpload";
 
 const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+
+
+
+  // const handleFileSelect = (file: File) => {
+  //   setSelectedFile(file);
+  //   console.log("Selected file:", file);
+  // };
+
 
   const handleUpload = async () => {
     if (!title || !description || !selectedFile) {
@@ -41,8 +50,10 @@ const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }
     }
   };
 
+
+
   return (
-    <div className="w-full max-w-[1275px] mx-auto space-y-6">
+    <div className="w-full max-w-[1350px] mx-auto space-y-6">
       <div>
         <label className="block text-[16px] font-semibold text-gray-700 mb-1">Title</label>
         <input
@@ -54,7 +65,8 @@ const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }
         />
       </div>
 
-      <div>
+      <div className="
+      pb-10">
         <label className="block text-[16px] font-semibold text-gray-700 mb-1">Description</label>
         <input
           type="text"
@@ -66,6 +78,8 @@ const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }
       </div>
 
       <UploadVideo onFileSelect={setSelectedFile} />
+
+       
 
       <button
         className={`w-full h-[58px] text-white text-[18px] font-medium rounded-lg flex items-center justify-center gap-2 ${

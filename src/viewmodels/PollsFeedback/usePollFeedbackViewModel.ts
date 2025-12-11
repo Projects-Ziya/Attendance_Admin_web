@@ -32,7 +32,10 @@ export const usePollFeedbackViewModel = () => {
 
   // Update form description
   const setFormDescription = (description: string) => {
-    setForm((prev) => ({ ...prev, description }));
+    setForm((prevForm) => ({
+      ...prevForm,
+      description,
+    }));
   };
 
   // Add a new question
@@ -60,10 +63,8 @@ export const usePollFeedbackViewModel = () => {
   };
 
   // Add option to a question
-  // Add option to a question
-const handleAddOption = (questionId: number) => {
-  setForm((prevForm) => {
-    return {
+  const handleAddOption = (questionId: number) => {
+    setForm((prevForm) => ({
       ...prevForm,
       questions: prevForm.questions.map((q) => {
         if (q.id === questionId && q.options) {
@@ -78,10 +79,8 @@ const handleAddOption = (questionId: number) => {
         }
         return q;
       }),
-    };
-  });
-};
-
+    }));
+  };
 
   // Edit option text
   const handleEditOption = (questionId: number, optionId: number, label: string) => {
@@ -115,6 +114,20 @@ const handleAddOption = (questionId: number) => {
     }));
   };
 
+  // Save form (could be used to persist or move to Submit tab)
+  const handleSave = () => {
+    console.log("Form saved:", form);
+    return form;
+  };
+
+  // Handle submit response (later you can wire API calls here)
+  const handleSubmitResponse = () => {
+    console.log("Response submitted for form:", form.id);
+  };
+
+  // -----------------------------
+  // Return API
+  // -----------------------------
   return {
     form,
     setFormTitle,
@@ -124,5 +137,7 @@ const handleAddOption = (questionId: number) => {
     handleAddOption,
     handleEditOption,
     handleDeleteOption,
+    handleSave,
+    handleSubmitResponse,
   };
 };
