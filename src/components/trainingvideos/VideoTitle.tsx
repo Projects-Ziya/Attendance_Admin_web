@@ -68,7 +68,7 @@ const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }
       <UploadVideo onFileSelect={setSelectedFile} />
 
       <button
-        className={`w-full h-[58px] text-white text-[18px] font-medium rounded-lg flex items-center justify-center gap-2 ${
+        className={`w-full h-[58px] text-white text-[18px] font-medium rounded-lg flex items-center justify-center gap-2 hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90 ${
           title && description && selectedFile
             ? "bg-[#00A0E3]"
             : "bg-gray-400 cursor-not-allowed"

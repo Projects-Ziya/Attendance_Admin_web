@@ -116,7 +116,7 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
             <button
               type="button"
               onClick={() => handleRemove(field, idx)}
-              className="text-gray-500 hover:text-red-500"
+              className="text-gray-500 hover:text-red-500 hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               <X size={14} />
             </button>
@@ -136,7 +136,7 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
         <button
           type="button"
           onClick={() => addFromPlus(field)}
-          className="text-blue-500 hover:text-blue-600"
+          className="text-blue-500 hover:text-blue-600 hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
         >
           <PlusCircle size={18} />
         </button>
@@ -179,7 +179,7 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
             if (!formData.tags.length) return toast("Please add at least one Tag");
             goNext();
           }}
-          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
         >
           Add Tasks
         </button>

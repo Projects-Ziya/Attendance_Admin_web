@@ -137,7 +137,7 @@ const UploadSalaryReport: React.FC = () => {
 
       <div className="pt-[61px]">
         <button
-          className="w-full bg-[#00A0E3] text-white h-11  rounded text-sm hover:bg-blue-600 transition"
+          className="w-full bg-[#00A0E3] text-white h-11  rounded text-sm hover:bg-blue-600 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
           onClick={handleSubmit}
         >
           Submit

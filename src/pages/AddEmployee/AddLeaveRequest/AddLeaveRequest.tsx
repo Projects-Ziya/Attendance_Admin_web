@@ -5,9 +5,9 @@ import api from '../../../Api/api';
 
 interface LeaveRequestForm {
   employeeName: string;
-  leaveType: string;
-  fromDate: string;
-  toDate: string;
+  leave_type: string;
+  start_date: string;
+  end_date: string;
   reason: string;
   attachment?: File | null;
 }
@@ -17,9 +17,9 @@ type LeaveRequestErrors = Partial<Record<keyof LeaveRequestForm, string>>;
 const AddLeaveRequest: React.FC = () => {
   const [formData, setFormData] = useState<LeaveRequestForm>({
     employeeName: '',
-    leaveType: '',
-    fromDate: '',
-    toDate: '',
+    leave_type: '',
+    start_date: '',
+    end_date: '',
     reason: '',
     attachment: null,
   });
@@ -51,24 +51,24 @@ const AddLeaveRequest: React.FC = () => {
       newErrors.employeeName = 'Employee name should only contain letters and spaces.';
     }
 
-    if (!data.leaveType) {
-      newErrors.leaveType = 'Please select a leave type.';
+    if (!data.leave_type) {
+      newErrors.leave_type = 'Please select a leave type.';
     }
 
-    if (!data.fromDate) {
-      newErrors.fromDate = 'From date is required.';
+    if (!data.start_date) {
+      newErrors.start_date = 'From date is required.';
     }
-    if (!data.toDate) {
-      newErrors.toDate = 'To date is required.';
+    if (!data.end_date) {
+      newErrors.end_date = 'To date is required.';
     }
-    if (data.fromDate && data.toDate) {
-      const from = new Date(data.fromDate);
-      const to = new Date(data.toDate);
+    if (data.start_date && data.end_date) {
+      const from = new Date(data.start_date);
+      const to = new Date(data.end_date);
       if (isNaN(from.getTime()) || isNaN(to.getTime())) {
-        if (isNaN(from.getTime())) newErrors.fromDate = 'Invalid from date.';
-        if (isNaN(to.getTime())) newErrors.toDate = 'Invalid to date.';
+        if (isNaN(from.getTime())) newErrors.start_date = 'Invalid from date.';
+        if (isNaN(to.getTime())) newErrors.end_date = 'Invalid to date.';
       } else if (from > to) {
-        newErrors.toDate = 'To date must be on or after the from date.';
+        newErrors.end_date = 'To date must be on or after the from date.';
       }
     }
 
@@ -93,24 +93,24 @@ const AddLeaveRequest: React.FC = () => {
     try {
       const data = new FormData();
       data.append('employeeName', formData.employeeName);
-      data.append('leaveType', formData.leaveType);
-      data.append('fromDate', formData.fromDate);
-      data.append('toDate', formData.toDate);
+      data.append('leave_type', formData.leave_type);
+      data.append('start_date', formData.start_date);
+      data.append('end_date', formData.end_date);
       data.append('reason', formData.reason);
       if (formData.attachment) {
         data.append('attachment', formData.attachment);
       }
 
-      await api.post('/api/leave-request/', data, {
+      await api.post('/api/leave-applying/', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
       toast.success('Leave request submitted successfully',{id: "unique-toast-id",});
       setFormData({
         employeeName: '',
-        leaveType: '',
-        fromDate: '',
-        toDate: '',
+        leave_type: '',
+        start_date: '',
+        end_date: '',
         reason: '',
         attachment: null,
       });
@@ -158,10 +158,10 @@ const AddLeaveRequest: React.FC = () => {
             </label>
             <select
             title='leave type'
-              name="leaveType"
-              value={formData.leaveType}
+              name="leave_type"
+              value={formData.leave_type}
               onChange={handleChange}
-              className={`${inputBase} ${errors.leaveType ? invalidClass : ''}`}
+              className={`${inputBase} ${errors.leave_type ? invalidClass : ''}`}
               required
             >
               <option value="">Select</option>
@@ -169,7 +169,7 @@ const AddLeaveRequest: React.FC = () => {
               <option value="Casual">Casual</option>
               <option value="Vacation">Vacation</option>
             </select>
-            {errors.leaveType && <p className={errorText}>{errors.leaveType}</p>}
+            {errors.leave_type && <p className={errorText}>{errors.leave_type}</p>}
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -180,13 +180,13 @@ const AddLeaveRequest: React.FC = () => {
               <input
               title='date'
                 type="date"
-                name="fromDate"
-                value={formData.fromDate}
+                name="start_date"
+                value={formData.start_date}
                 onChange={handleChange}
-                className={`${inputBase} ${errors.fromDate ? invalidClass : ''}`}
+                className={`${inputBase} ${errors.start_date ? invalidClass : ''}`}
                 required
               />
-              {errors.fromDate && <p className={errorText}>{errors.fromDate}</p>}
+              {errors.start_date && <p className={errorText}>{errors.start_date}</p>}
             </div>
             <div className="w-full sm:w-1/2">
               <label className="block font-medium mb-1 text-[1.0rem] text-ziyablack">
@@ -195,13 +195,13 @@ const AddLeaveRequest: React.FC = () => {
               <input
               title='date'
                 type="date"
-                name="toDate"
-                value={formData.toDate}
+                name="end_date"
+                value={formData.end_date}
                 onChange={handleChange}
-                className={`${inputBase} ${errors.toDate ? invalidClass : ''}`}
+                className={`${inputBase} ${errors.end_date ? invalidClass : ''}`}
                 required
               />
-              {errors.toDate && <p className={errorText}>{errors.toDate}</p>}
+              {errors.end_date && <p className={errorText}>{errors.end_date}</p>}
             </div>
           </div>
 
@@ -253,9 +253,9 @@ const AddLeaveRequest: React.FC = () => {
               onClick={() =>
                 setFormData({
                   employeeName: '',
-                  leaveType: '',
-                  fromDate: '',
-                  toDate: '',
+                  leave_type: '',
+                  start_date: '',
+                  end_date: '',
                   reason: '',
                   attachment: null,
                 })

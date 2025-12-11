@@ -75,7 +75,7 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete, onEdit }) => {
              bg-sky-500/90 backdrop-blur-sm text-white border border-white/20
              hover:bg-sky-600 transition-all duration-200
              before:absolute before:inset-0 before:rounded before:bg-gradient-to-r before:from-transparent before:to-white/20
-             before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+             before:opacity-0 hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90"
   onClick={() => videoUrl && window.open(videoUrl, "_blank")}
 >
   Watch
@@ -87,13 +87,13 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete, onEdit }) => {
           <img
             src={editicon}
             alt="Edit"
-            className="w-5 h-5 cursor-pointer"
+            className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
             onClick={() => onEdit(videos)}
           />
           <img
             src={deleteicon}
             alt="Delete"
-            className="w-5 h-5 cursor-pointer"
+            className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
             onClick={() => onDelete(videos.id)}
           />
         </div>

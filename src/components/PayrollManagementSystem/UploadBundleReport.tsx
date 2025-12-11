@@ -118,7 +118,7 @@ const UploadBundleReport: React.FC = () => {
               <div className="pt-[49px]">
                 <label
                   htmlFor="fileUpload"
-                  className="bg-[#00A0E3] text-white text-sm px-4 py-2 rounded cursor-pointer"
+                  className="bg-[#00A0E3] text-white text-sm px-4 py-2 rounded cursor-pointer "
                 >
                   Select PDF
                 </label>
@@ -140,7 +140,7 @@ const UploadBundleReport: React.FC = () => {
         <div className="pt-[61px]">
           <button
             onClick={handleSubmit}
-            className="w-full bg-[#00A0E3] text-white h-11 rounded text-sm hover:bg-blue-600 transition"
+            className="w-full bg-[#00A0E3] text-white h-11 rounded text-sm hover:bg-blue-600 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
           >
             Submit
           </button>

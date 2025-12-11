@@ -43,7 +43,7 @@ const BasicInformation: React.FC<Props> = ({ formData, handleChange, handleNext 
             />
             <label
               htmlFor="logoUpload"
-              className="bg-[#00A0E3] hover:bg-blue-500 text-white px-4 text-[1.125rem] py-1 rounded cursor-pointer w-[6.51vw] h-[3.889vh] flex items-center justify-center"
+              className="bg-[#00A0E3] hover:bg-blue-500 text-white px-4 text-[1.125rem] py-1 rounded cursor-pointer w-[6.51vw] h-[3.889vh] flex items-center justify-center hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               Upload
             </label>
@@ -54,7 +54,7 @@ const BasicInformation: React.FC<Props> = ({ formData, handleChange, handleNext 
                   target: { name: "project_logo", value: null },
                 } as any)
               }
-              className="border px-4 py-1 rounded text-[1.125rem] w-[6.51vw] h-[3.889vh]"
+              className="border px-4 py-1 rounded text-[1.125rem] w-[6.51vw] h-[3.889vh] hover:text-gray-800 hover:bg-red-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               Cancel
             </button>
@@ -204,7 +204,7 @@ const BasicInformation: React.FC<Props> = ({ formData, handleChange, handleNext 
       <button
         type="button"
         onClick={handleNext}
-        className="mt-14 px-6 py-2 ml-[1200px] bg-blue-500 hover:bg-blue-600 text-white font-medium rounded"
+        className="mt-14 px-6 py-2 ml-[1200px] bg-blue-500 hover:bg-blue-600 text-white font-medium rounded hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
       >
         Add Team Member
       </button>

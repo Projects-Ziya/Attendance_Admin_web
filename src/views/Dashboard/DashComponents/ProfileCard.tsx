@@ -63,7 +63,7 @@ const DashboardHeader: React.FC = () => {
             <Button onClick={handleAddProject}
               variant="primary"
               size="large"
-              className="w-[219px] h-[62px] flex items-center justify-center bg-[#94C21A] hover:bg-[#59981A]"
+              className="w-[219px] h-[62px] flex items-center justify-center bg-[#94C21A] hover:bg-[#59981A] hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               <img src={add} alt="Add" className="mr-2" />
               Add Project
@@ -71,7 +71,7 @@ const DashboardHeader: React.FC = () => {
             <Button onClick={handleLeaveRequest}
               variant="primary"
               size="large"
-              className="w-[219px] h-[62px] flex items-center justify-center bg-[#00A0E3]"
+              className="w-[219px] h-[62px] flex items-center justify-center bg-[#00A0E3] hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               <img src={add} alt="Add" className="mr-2" />
               Add Requests
@@ -80,7 +80,7 @@ const DashboardHeader: React.FC = () => {
 
           <button
             onClick={handleAddEmployee}
-            className="flex items-center  justify-center border text-ziyablack px-4 py-2 rounded hover:bg-gray-100 w-[462px] h-[62px]"
+            className="flex items-center  justify-center border text-ziyablack px-4 py-2 rounded hover:bg-gray-100 w-[462px] h-[62px] hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90"
           >
             <img src={addblue} alt="Add" className="mr-2" />
             Add New Employee

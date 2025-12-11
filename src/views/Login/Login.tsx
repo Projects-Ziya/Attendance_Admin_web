@@ -4,6 +4,7 @@ import login from '../../assets/images/login.png';
 import logo from '../../assets/images/logo.png';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
+import toast from 'react-hot-toast';
 
 import { AuthVM } from "../../viewmodels/authViewModel";
 export default function ZiyaAttendLogin() {
@@ -22,28 +23,58 @@ export default function ZiyaAttendLogin() {
     }
   }, []);
 
-  useEffect(() => {
+ useEffect(() => {
   const access = Cookies.get("access");
-  if (access) {
-    navigate("/dashboard");
-  }
+  const role = localStorage.getItem("role");
+
+  if (access && role) {
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else if (role === "manager") {
+      navigate("/manager-dashboard");
+    }
+  } 
 }, [navigate]);
 
+
 const handleSubmit = async () => {
+  localStorage.clear();
+
   try {
     const data = await AuthVM.handleLogin(email, password, rememberMe);
 
-    if (data.success) {
-      console.log("Login successful:", data);
-      navigate("/dashboard");
-    } else {
+    if (!data.success) {
       alert(data.error || data.message || "Login failed.");
+      return;
     }
+
+    const role = data.user.role; // admin / manager / employee
+
+    // ❌ Block employee login
+    if (role === "employee") {
+      toast.error("Employees are not allowed to login.");
+      return; // stop here
+    }
+
+    // Store only for admin + manager
+    localStorage.setItem("token", data.access);
+    localStorage.setItem("role", role);
+
+    // Navigate based on role
+    if (role === "admin") {
+      navigate("/dashboard");
+    } else if (role === "manager") {
+      navigate("/manager-dashboard");
+    } else {
+      alert("Unknown role");
+    }
+
   } catch (error) {
     console.error("Error during login:", error);
     alert("Something went wrong. Please try again later.");
   }
 };
+
   return (
     <div className="min-h-screen flex p-3">
       {/* Left Hero Section */}

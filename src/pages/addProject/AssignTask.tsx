@@ -167,7 +167,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveMember(idx)}
-                    className="text-gray-500 hover:text-red-500"
+                    className="text-gray-500 hover:text-red-500 hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
                   >
                     ✕
                   </button>
@@ -265,7 +265,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
             <button
               onClick={handleAddTask}
               type="button"
-              className="px-5 py-2 bg-blue-500 text-white rounded"
+              className="px-5 py-2 bg-blue-500 text-white rounded hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               Add Task
             </button>
@@ -310,7 +310,7 @@ const AssignTasks: React.FC<AssignTasksProps> = ({
         <button
           type="button"
           onClick={handleAddProject}
-          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition"
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
         >
           Add Project
         </button>

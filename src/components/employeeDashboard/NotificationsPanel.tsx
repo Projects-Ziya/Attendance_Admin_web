@@ -75,28 +75,44 @@ const NotificationsPanel: React.FC<Props> = ({ onActionClick }) => {
   return (
     <div
       className="
-        bg-[#FCFCFC] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040]
-        p-3 sm:p-4 md:p-6 2xl:pt-7 2xl:px-9 lg:w-[739px] 2xl:pb-12
+        bg-[#FCFCFC] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] 
+        p-3 sm:p-4 md:p-6 2xl:pt-7  2xl:px-9 lg:w-[739px] h-[510px] scrollable 2xl:pb-12
       "
     >
       {/* Header */}
-      <span
-        className="
-          block text-[16px] sm:text-[18px] 2xl:text-[24px]
-          text-[#4D4D4D] font-medium mb-3
-        "
-      >
-        Notifications
-      </span>
+    <div className="flex justify-between items-center w-full">
+  <span
+    className="
+      block text-[16px] sm:text-[18px] 2xl:text-[24px]
+      text-[#4D4D4D] font-medium mb-3
+    "
+  >
+    Notifications
+  </span>
+
+  {notifications.length > 4 && (
+    <button
+      onClick={() => setShowAll(!showAll)}
+      className="
+        text-[13px] sm:text-[14px] font-medium
+        text-[#6B7280] hover:text-[#00A0E3]
+        transition-colors duration-200 
+      "
+    >
+      {showAll ? "Show Less" : "View All"}
+    </button>
+  )}
+</div>
+
 
       <div className="border-t border-[#43C8FF] mb-3" />
 
       {/* Notifications List */}
-      <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-9 py-3 md:py-5">
+      <div className="flex flex-col gap-3 sm:gap-5 md:gap-7 lg:gap-9 py-3 md:py-5 ">
         {visibleNotifications.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center "
           >
             {/* Avatar */}
             <div
@@ -155,18 +171,7 @@ const NotificationsPanel: React.FC<Props> = ({ onActionClick }) => {
       </div>
 
       {/* 👇 View All / Show Less Button */}
-      {notifications.length > 3 && (
-        <button
-          onClick={() => setShowAll(!showAll)}
-          className="
-            block mt-4 text-[13px] sm:text-[14px] font-medium
-            text-[#6B7280] hover:text-[#00A0E3] text-center sm:text-left
-            transition-colors duration-200
-          "
-        >
-          {showAll ? "Show Less" : "View All"}
-        </button>
-      )}
+     
     </div>
   );
 };

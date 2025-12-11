@@ -9,6 +9,12 @@ const DeductionDetailsCards: React.FC = () => {
   const [deductions, setDeductions] = useState<(DeductionCard & { id: number })[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState<any>({}); // selected card for edit
+const themeMap: any = {
+  PF: "blue",
+  ESI: "green",
+  PT: "orange",
+  TDS: "red",
+};
 
   // ------------------------------
   // FETCH ALL DEDUCTIONS
@@ -29,7 +35,10 @@ const DeductionDetailsCards: React.FC = () => {
         example: item.example_text,
 
         // 🟢 FIXED: dynamic color theme support
-        colorTheme: item.color_theme || "blue",
+colorTheme:
+  (item.color_theme?.toLowerCase() ||
+    themeMap[item.component_type] ||
+    "blue") as keyof typeof themeStyles,
       }));
 
       setDeductions(mapped);
