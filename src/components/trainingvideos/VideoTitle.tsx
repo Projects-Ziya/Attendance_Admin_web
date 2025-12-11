@@ -3,7 +3,7 @@ import UploadVideo from "./UploadVideo";
 import type { Video } from "../../models/Video";
 import api from "../../Api/api";
 import toast from "react-hot-toast";
-import DragDropUpload from "../DragDropUpload";
+// import DragDropUpload from "../DragDropUpload";
 
 const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }) => {
   const [title, setTitle] = useState("");
