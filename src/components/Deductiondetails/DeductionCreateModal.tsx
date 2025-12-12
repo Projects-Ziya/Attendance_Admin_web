@@ -24,23 +24,27 @@ const DeductionCreateModal = ({ isOpen, onClose, onCreated }) => {
   };
 
   const handleCreate = async () => {
-    try {
-      const payload = {
-        component_type: form.component_type,
-        title: form.title,
-        rate_type: "PERCENTAGE",
-        rate_value: Number(form.rate.replace("%", "")),
-        description: form.description,
-        employee_contribution: form.contribution,
-        employer_contribution: form.employerContribution,
-        example_text: form.example,
-      };
+  try {
+    const payload = {
+      component_type: form.component_type,
+      title: form.title,
+      rate_type: "PERCENTAGE",
+      rate_value: Number(form.rate.replace("%", "")),
+      description: form.description,
+      employee_contribution: form.contribution,
+      employer_contribution: form.employerContribution,
+      example_text: form.example,
+    };
 
-      await api.post("/api/salary-component-create/", payload);
+    const res = await api.post("/api/salary-component-create/", payload);
 
-        onCreated();
+    console.log("STATUS:", res.status);
 
-      // Reset form
+    // SUCCESS: any 2xx response
+    if (res.status >= 200 && res.status < 300) {
+      onCreated();   // refresh parent
+      handleClose(); // close modal with animation
+
       setForm({
         component_type: "PF",
         title: "",
@@ -50,11 +54,13 @@ const DeductionCreateModal = ({ isOpen, onClose, onCreated }) => {
         employerContribution: "",
         example: "",
       });
-
-    } catch (err) {
-      console.error("CREATE FAILED", err);
     }
-  };
+
+  } catch (err) {
+    console.error("CREATE FAILED", err);
+  }
+};
+
 
   if (!isOpen && !show) return null;
 

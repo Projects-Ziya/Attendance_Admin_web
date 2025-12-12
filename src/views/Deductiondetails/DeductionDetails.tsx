@@ -106,7 +106,6 @@ const DeductionDetails: React.FC = () => {
         onClose={() => setOpenCreateModal(false)}
         onCreated={() => {
           fetchDeductions(); // refresh cards
-          setOpenCreateModal(false); // automatically close modal
         }}
       />
     </MainLayout>

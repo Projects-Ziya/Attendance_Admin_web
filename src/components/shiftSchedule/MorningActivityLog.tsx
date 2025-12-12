@@ -48,16 +48,16 @@ const ActivityLog: React.FC<Props> = ({
 
         // If backend has no data, fallback to props
         const last = list.length > 0 ? list[list.length - 1] : null;
+setApiData({
+  punchIn: last?.start_time ?? punchIn,
+  breakStart: last?.break_start ?? breakStart,
+  breakEnd: last?.break_end ?? breakEnd,
+  lunchStart: last?.lunch_start ?? lunchStart,
+  lunchEnd: last?.lunch_end ?? lunchEnd,
+  punchOut: last?.end_time ?? punchOut,
+  shiftType: last?.shifts_name ?? shiftType,
+});
 
-        setApiData({
-          punchIn: last?.punch_in ?? punchIn,
-          breakStart: last?.break_start ?? breakStart,
-          breakEnd: last?.break_end ?? breakEnd,
-          lunchStart: last?.lunch_start ?? lunchStart,
-          lunchEnd: last?.lunch_end ?? lunchEnd,
-          punchOut: last?.punch_out ?? punchOut,
-          shiftType: last?.shift_type ?? shiftType,
-        });
       } catch (error) {
         console.error("API Fetch Error:", error);
       }
@@ -67,7 +67,7 @@ const ActivityLog: React.FC<Props> = ({
   }, []);
 
   return (
-    <div className="flex mt-5 h-[686px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w=[1462px] bg-white justify-center items-center">
+    <div className="flex mt-5 h-[686px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w-[1462px] bg-white justify-center items-center">
       <div>
         {/* Header */}
         <div className="flex justify-between pt-[44px] pl-[45px] items-center">
