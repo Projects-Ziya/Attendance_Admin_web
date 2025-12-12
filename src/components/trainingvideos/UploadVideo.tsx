@@ -54,7 +54,7 @@ const UploadVideo: React.FC<Props> = ({ onFileSelect }) => {
         </p>
 
         <button
-          className="bg-[#00A0E3] text-white px-6 py-2 rounded text-sm font-medium"
+          className="bg-[#00A0E3] text-white px-6 py-2 rounded text-sm font-medium hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
           onClick={handleBrowse}
         >
           Browse

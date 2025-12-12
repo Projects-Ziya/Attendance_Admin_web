@@ -85,27 +85,35 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete }) => {
 
       {/* Buttons */}
       <div className="flex justify-center gap-6 pb-8">
-        <button
-          className="bg-[#00A0E3] text-white px-6 py-2 rounded text-[25px] font-medium w-[272px] h-[45px]"
-          onClick={() => videoUrl && window.open(videoUrl, "_blank")}
-        >
-          Watch
-        </button>
+       <button
+  className="relative px-6 py-1 w-[272px] h-[45px] text-[25px] font-medium rounded  
+             bg-sky-500/90 backdrop-blur-sm text-white border border-white/20
+             hover:bg-sky-600 transition-all duration-200
+             before:absolute before:inset-0 before:rounded before:bg-gradient-to-r before:from-transparent before:to-white/20
+             before:opacity-0 hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90"
+  onClick={() => videoUrl && window.open(videoUrl, "_blank")}
+>
+  Watch
+</button>
+
+
 
         <div className="pt-2 flex gap-6">
           {/* ✅ Edit Button */}
           <img
             src={editicon}
             alt="Edit"
+
             className="w-5 h-5 cursor-pointer"
             onClick={handleEditClick}
+
           />
 
           {/* ✅ Delete Button */}
           <img
             src={deleteicon}
             alt="Delete"
-            className="w-5 h-5 cursor-pointer"
+            className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
             onClick={() => onDelete(videos.id)}
           />
         </div>

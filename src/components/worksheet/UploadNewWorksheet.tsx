@@ -73,51 +73,69 @@ const UploadNewWorksheet: React.FC<Props> = ({ onClose }) => {
       <h1 className="text-[25px] font-[500] pt-[30px] pl-[77px]">
         Select Excel Files
       </h1>
-      <div className="ml-[65px] mt-[75px]">
-     <svg width="947" height="278" onClick={handleFileSelect} className="cursor-pointer">
-  <rect
-    width="100%"
-    height="100%"
-    fill="none"
-    stroke="#6C6C6C"
-    strokeWidth="3"
-    strokeDasharray="10 10"
-  />
-
-  <image
-    href={upload_icon}
-    x="50%"
-    y="40%"
-    width="60"
-    height="80"
-    transform="translate(-30,-30)"
-  />
-
-  {/* Centered Upload Text */}
-  <text
-    x="50%"
-    y="75%"
-    textAnchor="middle"
-    fill="#0F6EDD"
-    fontSize="25"
-    className="font-[500] select-none hover:opacity-80"
+    <div
+  className="ml-[65px] mt-[75px]"
+  onDragOver={(e) => {
+    e.preventDefault(); // Required for drop to work
+  }}
+  onDrop={(e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setSelectedFile(file);
+      console.log("Dropped File:", file.name);
+    }
+  }}
+>
+  <svg
+    width="947"
+    height="278"
+    onClick={handleFileSelect}
+    className="cursor-pointer"
   >
-    {selectedFile ? selectedFile.name : "Click to upload"}
-  </text>
+    <rect
+      width="100%"
+      height="100%"
+      fill="none"
+      stroke="#6C6C6C"
+      strokeWidth="3"
+      strokeDasharray="10 10"
+    />
 
-  <text
-    x="50%"
-    y="88%"
-    textAnchor="middle"
-    fill="#0F6EDD"
-    fontSize="25"
-    className="font-[500] select-none hover:opacity-80"
-  >
-    {selectedFile ? selectedFile.name : "Drag & Drop"}
-  </text>
-</svg>
+    <image
+      href={upload_icon}
+      x="50%"
+      y="40%"
+      width="60"
+      height="80"
+      transform="translate(-30,-30)"
+    />
 
-      </div>
+    {/* Centered Upload Text */}
+    <text
+      x="50%"
+      y="75%"
+      textAnchor="middle"
+      fill="#0F6EDD"
+      fontSize="25"
+      className="font-[500] select-none hover:opacity-80"
+    >
+      {selectedFile ? selectedFile.name : "Click to upload"}
+    </text>
+
+    <text
+      x="50%"
+      y="88%"
+      textAnchor="middle"
+      fill="#0F6EDD"
+      fontSize="25"
+      className="font-[500] select-none hover:opacity-80"
+    >
+      {selectedFile ? selectedFile.name : "Drag & Drop"}
+    </text>
+  </svg>
+</div>
+
 
       {/* Worksheet Name */}
       <h1 className="text-[30px] font-[500] pt-[47px] pl-[65px]">

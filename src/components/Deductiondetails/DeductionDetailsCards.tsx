@@ -9,6 +9,12 @@ const DeductionDetailsCards: React.FC = () => {
   const [deductions, setDeductions] = useState<(DeductionCard & { id: number })[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [formData, setFormData] = useState<any>({}); // selected card for edit
+const themeMap: any = {
+  PF: "blue",
+  ESI: "green",
+  PT: "orange",
+  TDS: "red",
+};
 
   // ------------------------------
   // FETCH ALL DEDUCTIONS
@@ -16,7 +22,7 @@ const DeductionDetailsCards: React.FC = () => {
   const fetchDeductions = async () => {
     try {
       const response = await api.get("/api/salary-component-list/");
-      const data = response.data.data; // all items
+      const data = response.data.data;
 
       const mapped = data.map((item: any) => ({
         id: item.id,
@@ -27,7 +33,12 @@ const DeductionDetailsCards: React.FC = () => {
         contribution: item.employee_contribution,
         employerContribution: item.employer_contribution,
         example: item.example_text,
-        colorTheme: "blue",
+
+        // 🟢 FIXED: dynamic color theme support
+colorTheme:
+  (item.color_theme?.toLowerCase() ||
+    themeMap[item.component_type] ||
+    "blue") as keyof typeof themeStyles,
       }));
 
       setDeductions(mapped);
@@ -48,15 +59,15 @@ const DeductionDetailsCards: React.FC = () => {
   return (
     <div className="grid grid-cols-2 gap-[40px] justify-center pb-[40px]">
       {deductions.map((deduction, index) => {
-        const theme = themeStyles[deduction.colorTheme];
+        const theme = themeStyles[deduction.colorTheme] || themeStyles.blue;
 
         return (
           <div
-            key={deduction.id} // use id instead of index
+            key={deduction.id}
             className="w-[700px] h-[607px] border rounded-[10px] shadow-sm flex flex-col"
             style={{ borderColor: theme.borderColor }}
           >
-            {/* header */}
+            {/* Header */}
             <div
               className="px-[30px] py-[20px] rounded-t-[10px] flex items-center justify-between"
               style={{ backgroundColor: theme.headerBg }}
@@ -68,6 +79,7 @@ const DeductionDetailsCards: React.FC = () => {
                 >
                   <img src={pficon} alt="PF Icon" className="w-[25px] h-[17px]" />
                 </span>
+
                 <div className="flex flex-col">
                   <h2 className="text-[23px] font-medium text-[#4D4D4D] mb-[4px]">
                     {deduction.title}
@@ -96,7 +108,9 @@ const DeductionDetailsCards: React.FC = () => {
               <p className="text-[20px] text-[#5C5B5B] mb-[13px]">{deduction.contribution}</p>
 
               <h1 className="text-[20px] text-[#000000]">Employer Contribution</h1>
-              <p className="text-[20px] text-[#5C5B5B] mb-[30px]">{deduction.employerContribution}</p>
+              <p className="text-[20px] text-[#5C5B5B] mb-[30px]">
+                {deduction.employerContribution}
+              </p>
 
               <div
                 className="w-[655px] h-[90px] pl-[29px] pt-[10px] rounded-[20px] mt-[20px]"
@@ -122,7 +136,7 @@ const DeductionDetailsCards: React.FC = () => {
         onClose={() => setOpenModal(false)}
         formData={formData}
         setFormData={setFormData}
-        onSave={fetchDeductions} // refresh all cards after editing
+        onSave={fetchDeductions}
       />
     </div>
   );

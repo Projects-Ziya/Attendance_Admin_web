@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import saveicon from "../../assets/icons/pollsfeedback/save.svg";
 import { usePollFeedbackViewModel } from "../../viewmodels/PollsFeedback/usePollFeedbackViewModel";
 import type { PollQuestion } from "../../models/pollsFeedbackModel";
-import formicon from "../../assets/icons/formicon.svg";
-import submiticon from "../../assets/icons/sumbiticon.svg";
-import SubmitResponseTab from "./SubmitResponse";
+
+import api from "../../Api/api";
 
 // ✅ Dropdown Component
 function CheckBoxDropdown({
@@ -22,7 +21,7 @@ function CheckBoxDropdown({
 
   return (
     <div className="mt-[24px] ml-[28px]">
-      {/* Question Input */}
+      {/* Question input */}
       <input
         className="mt-[36px] text-[#8E8B8B] placeholder:text-[25px] placeholder:font-[500] h-[71px] pl-[14px] w-[1299px] text-[25px] font-[500] bg-[#F5F5F5] focus:outline-none rounded-[10px]"
         type="text"
@@ -31,15 +30,13 @@ function CheckBoxDropdown({
         onChange={(e) => handleEditQuestionText(question.id, e.target.value)}
       />
 
-      {/* Type Selector */}
+      {/* Select Field */}
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className="bg-[#F5F5F5] h-[71px] w-[478px] rounded-[10px] flex items-center px-4 justify-between mt-4"
       >
-        <span className="text-[#8E8B8B] text-[22px] font-[500]">
-          {question.type || "Select type"}
-        </span>
+        <span className="text-[#8E8B8B] text-[22px] font-[500]">{question.type}</span>
         <span
           className={`text-[#8E8B8B] pb-4 text-[30px] w-10 transition-transform ${
             open ? "rotate-180" : ""
@@ -55,6 +52,7 @@ function CheckBoxDropdown({
           {question.options.map((opt) => (
             <div key={opt.id} className="flex items-center pl-[28px] space-x-3">
               <input type="checkbox" className="h-[26px] w-[26px] border border-gray-400" />
+
               <input
                 type="text"
                 value={opt.label ?? ""}
@@ -78,19 +76,63 @@ function CheckBoxDropdown({
   );
 }
 
-// ✅ MAIN COMPONENT
+// ✅ Main Component
 function PollsAndFeedback() {
   const {
     form,
+    setFormFromApi,
     handleAddOption,
     handleEditQuestionText,
     handleEditOption,
-    setFormDescription,
     handleSubmitResponse,
   } = usePollFeedbackViewModel();
 
-  const [activeTab, setActiveTab] = useState<"create" | "submit">("create");
+  const [activeTab, setActiveTab] = useState("form"); // ✅ TAB STATE
 
+  // ✅ Fetch API Data
+  useEffect(() => {
+    const fetchFeedbackQuestions = async () => {
+      try {
+        const res = await api.get("/api/add-feedback-questions/");
+        const apiData = res.data;
+
+        const mappedForm = {
+          title: apiData.title,
+          description: apiData.description,
+          questions: apiData.questions.map((q: any, index: number) => ({
+            id: index + 1,
+            text: q.question_text,
+            type: q.question_type,
+            required: q.is_required,
+            options: q.options.map((opt: any, i: number) => ({
+              id: i + 1,
+              label: opt.option_text,
+            })),
+          })),
+        };
+
+        setFormFromApi(mappedForm);
+      } catch (error) {
+        console.error("Failed to fetch feedback questions:", error);
+      }
+    };
+
+    fetchFeedbackQuestions();
+  }, []);
+
+  // ✅ CONDITIONAL RENDERING
+  if (activeTab === "submit") {
+    return (
+      <SubmitResponseTab
+        formTitle={form.title}
+        formDescription={form.description}
+        questions={form.questions}
+        handleSubmitResponse={handleSubmitResponse}
+      />
+    );
+  }
+
+  // ✅ FORM TAB UI
   return (
     <div className="h-auto pl-[61px] w-[1469px] shadow-[0px_0px_2px_0px_#00000040] bg-white pb-[40px] rounded-[10px] mb-[20px]">
       <h1 className="text-[24px] pt-[56px] font-[600]">Polls and Feedback</h1>
@@ -98,115 +140,51 @@ function PollsAndFeedback() {
         Engage your workforce through interactive polls and honest feedback
       </p>
 
-      {/* ✅ TABS */}
-      <div className="flex gap-[10px] pt-[46px] pr-[50px]">
-        {/* CREATE TAB */}
-        <button
-          onClick={() => setActiveTab("create")}
-          className={`w-1/2 h-[60px] border flex items-center justify-center gap-2 tracking-[0.08em] rounded-[10px] ${
-            activeTab === "create"
-              ? "bg-[#00A0E3] text-white"
-              : "border-[#C8C8C8] bg-white text-[#4D4D4D]"
-          }`}
-        >
-          <img
-            src={formicon}
-            alt=""
-            className={`${activeTab === "create" ? "filter brightness-0 invert" : ""}`}
-          />
-          <span
-            className={`text-[16px] leading-[40px] font-medium font-['Poppins'] ${
-              activeTab === "create" ? "text-white" : "text-gray-700"
-            }`}
-          >
-            Create Form
-          </span>
-        </button>
+      {/* Form header */}
+      <div className="h-[208px] pl-[28px] w-[1359px] border rounded-[10px] mt-[60px] border-[#00A0E3]">
+        <h1 className="text-[28px] font-[500] pt-[50px]">{form.title}</h1>
+        <p className="text-[19px] font-[500] mt-[20px] text-[#686767]">Form Description</p>
 
-        {/* SUBMIT TAB */}
-        <button
-          onClick={() => setActiveTab("submit")}
-          className={`w-1/2 h-[60px] border flex items-center justify-center gap-2 tracking-[0.08em] rounded-[10px] ${
-            activeTab === "submit"
-              ? "bg-[#00A0E3] text-white"
-              : "border-[#C8C8C8] bg-white text-[#4D4D4D]"
-          }`}
-        >
-          <img
-            src={submiticon}
-            alt=""
-            className={`${activeTab === "submit" ? "filter brightness-0 invert" : ""}`}
-          />
-          <span
-            className={`text-[16px] leading-[40px] font-medium font-['Poppins'] ${
-              activeTab === "submit" ? "text-white" : "text-gray-700"
-            }`}
-          >
-            Submit Response
-          </span>
-        </button>
+        <input
+          type="text"
+          value={form.description}
+          className="w-[1299px] mt-3 outline-none border-b-2 pr-[20px]"
+          readOnly
+        />
       </div>
 
-      {/* ✅ TAB CONTENT */}
-      {activeTab === "create" ? (
-        <>
-          {/* FORM HEADER */}
-          <div className="h-[208px] pl-[28px] w-[1359px] border rounded-[10px] mt-[60px] border-[#D5D5D5]">
-            <h1 className="text-[28px] font-[500] pt-[50px]">{form.title}</h1>
-            <p className="text-[19px] font-[500] mt-[20px] text-[#686767]">Form Description</p>
+      {/* Questions */}
+      <div className="h-auto mt-[54px] w-[1359px] rounded-[10px] border border-[#D5D5D5]">
+        {form.questions.map((q) => (
+          <CheckBoxDropdown
+            key={q.id}
+            question={q}
+            handleAddOption={handleAddOption}
+            handleEditQuestionText={handleEditQuestionText}
+            handleEditOption={handleEditOption}
+          />
+        ))}
 
-            <input
-              type="text"
-              value={form.description ?? ""}
-              onChange={(e) => setFormDescription(e.target.value)}
-              placeholder="Enter form description"
-              className="w-[1299px] mt-3 outline-none border-b-2 pr-[20px] placeholder:text-[#B5B3B3] placeholder:text-[16px]"
-            />
-          </div>
+        <div className="mt-[29px] ml-[28px] w-[1299px] h-[78px] rounded-[10px] bg-[#F5F5F5] flex items-center">
+          <button className="ml-[76px] text-[18px] font-[500] h-[59px] w-[1151px] rounded-[10px] bg-[#FFFFFF]">
+            + Add Questions
+          </button>
+        </div>
 
-          {/* QUESTIONS */}
-          <div className="h-auto mt-[54px] w-[1359px] rounded-[10px] border-[1px] border-[#D5D5D5]">
-            {form.questions.map((q) => (
-              <CheckBoxDropdown
-                key={q.id}
-                question={q}
-                handleAddOption={handleAddOption}
-                handleEditQuestionText={handleEditQuestionText}
-                handleEditOption={handleEditOption}
-              />
-            ))}
+        <div className="mt-[100px] flex justify-between px-[28px] pb-[20px]">
+          <button className="h-[68px] w-[252px] text-[#00A0E3] text-[22px] font-[500] border border-[#00A0E3] rounded-[10px]">
+            Cancel
+          </button>
 
-            {/* ADD QUESTION */}
-            <div className="mt-[29px] ml-[28px] w-[1299px] h-[78px] rounded-[10px] bg-[#F5F5F5] flex items-center ">
-              <button className="ml-[76px] text-[18px] font-[500] h-[59px] w-[1151px] rounded-[10px] bg-[#FFFFFF]">
-                + Add Questions
-              </button>
-            </div>
-
-            {/* BUTTONS */}
-            <div className="mt-[100px] flex justify-between px-[28px] pb-[20px]">
-              <button className="h-[68px] w-[252px] text-[#00A0E3] text-[22px] font-[500] border border-[#00A0E3] rounded-[10px]">
-                Cancel
-              </button>
-
-              <button
-                className="h-[68px] w-[252px] bg-[#00A0E3] text-[22px] font-[500] rounded-[10px] text-white flex items-center justify-center gap-2"
-                onClick={() => setActiveTab("submit")}
-              >
-                <img src={saveicon} alt="" className="w-[22px] h-[22px]" />
-                Save
-              </button>
-            </div>
-          </div>
-        </>
-      ) : (
-        <SubmitResponseTab
-          formTitle={form.title}
-          formDescription={form.description}
-          questions={form.questions}
-          handleSubmitResponse={handleSubmitResponse}
-        />
-      )}
+          <button
+            className="h-[68px] w-[252px] bg-[#00A0E3] text-[22px] font-[500] rounded-[10px] text-white flex items-center justify-center gap-2"
+            onClick={() => setActiveTab("submit")}
+          >
+            <img src={saveicon} alt="" className="w-[22px] h-[22px]" />
+            Save
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

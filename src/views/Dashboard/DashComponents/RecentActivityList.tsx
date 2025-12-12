@@ -5,9 +5,9 @@ import SortDropdown from "../../../components/recentactivities/SortDropdown";
 import top from "../../../assets/topicon.svg";
 import type { Activity } from "../../../models/recentactivity/Activity";
 import MainLayout from "../../../components/layout/MainLayout";
-import api from "../../../Api/api";
+import api from "../../../Api/api";``
 
-// 🔹 Status color mapping
+// 🔹 Status color mapping (added API statuses here)
 const statusColors: Record<string, string> = {
   "Project Created": "text-[#4CAF50]",
   "New Task Assigned": "text-[#3F51B5]",
@@ -19,6 +19,10 @@ const statusColors: Record<string, string> = {
   "Employee Deleted": "text-[#F44336]",
   "Settings Modified": "text-[#607D8B]",
   "New Employee Added": "text-[#2196F3]",
+
+  // ✅ NEW COLORS FOR API VALUES  
+  "Attendance Updated": "text-[#9C27B0]",
+  "Attendance": "text-[#9C27B0]",
 };
 
 // 🔹 Row Component
@@ -73,14 +77,12 @@ const RecentActivityList: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortKey, setSortKey] = useState("Time");
 
+  // Api integration
+  const [data, setData] = useState<Activity[]>([]);
+  const [loading, setloading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Api integration 
-  const [data , setData] = useState<Activity[]>([]);
-  const [loading , setloading] = useState(true);
-  const [error, setError] = useState<string|null>(null);
-
-
-  // ✅ pagination state
+  // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -93,8 +95,8 @@ const RecentActivityList: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // 🔹 Filter + Sort
-  const filteredActivities = activities
+  // 🔹 Use API data
+  const filteredActivities = data
     .filter((a) => {
       const q = searchQuery.toLowerCase();
       return (
@@ -116,7 +118,6 @@ const RecentActivityList: React.FC = () => {
       }
     });
 
-  // ✅ Pagination calculations
   const totalPages = Math.max(1, Math.ceil(filteredActivities.length / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedActivities = filteredActivities.slice(
@@ -124,61 +125,53 @@ const RecentActivityList: React.FC = () => {
     startIndex + itemsPerPage
   );
 
-  // ✅ Keep currentPage in range if filtered size changes
   useEffect(() => {
     if (currentPage > totalPages) {
       setCurrentPage(totalPages);
     }
   }, [totalPages, currentPage]);
 
-  // Debug (optional)
-  // console.log({ len: filteredActivities.length, itemsPerPage, totalPages, currentPage });
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const res = await api.get("/api/employeesactivity/");
+        const mapped = res.data.activities.map((a: any) => ({
+          id: a.id,
+          personName: `${a.first_name} ${a.last_name}`,
+          role: a.employee_id,
+          team: a.type,
+          status: a.activity_type,
+          description: a.activity_type,
+          time: a.activity_time,
+          profileImage: null,
+        }));
+        setData(mapped);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to fetch Recent Activities list");
+      } finally {
+        setloading(false);
+      }
+    };
 
- useEffect(() => {
-  const fetchActivities = async () => {
-    try {
-      const res = await api.get("/api/employeesactivity/");
-      // Map backend fields to Activity model
-      const mapped = res.data.activities.map((a: any) => ({
-        id: a.id,
-        personName: `${a.first_name} ${a.last_name}`,
-        role: a.employee_id,              // or map to actual role if available
-        team: a.type,                     // using "type" as team for now
-        status: a.activity_type,
-        description: a.activity_type,     // backend has no description, reuse status
-        time: a.activity_time,
-        profileImage: null                // backend has no image, fallback handled in ActivityRow
-      }));
-      setData(mapped);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to fetch Recent Activities list");
-    } finally {
-      setloading(false);
-    }
-  };
-
-  fetchActivities();
-}, []);
-
+    fetchActivities();
+  }, []);
 
   if (loading) {
- return  (
- <div className="flex items-center justify-center w-full h-[573px]">
+    return (
+      <div className="flex items-center justify-center w-full h-[573px]">
+        <p>Loading Recent Activity list...</p>
+      </div>
+    );
+  }
 
- 
- <p>Loading Recent Activity list...</p>;
- </div>
- ) };
-
-
-  if (error){
-   return(
-<div className="flex items-center justify-center w-full h-[573px]">
-<p className="text-gray-500 text-lg">Failed to load Recent Activity list</p>  
-</div>
-  )} 
-
+  if (error) {
+    return (
+      <div className="flex items-center justify-center w-full h-[573px]">
+        <p className="text-gray-500 text-lg">Failed to load Recent Activity list</p>
+      </div>
+    );
+  }
 
   return (
     <MainLayout>
@@ -242,7 +235,6 @@ const RecentActivityList: React.FC = () => {
               <tr className="border-t">
                 <td colSpan={3} className="pt-[44px] pb-[33px]">
                   <div className="flex justify-end">
-                    {/* Page 1 */}
                     <button
                       onClick={() => setCurrentPage(1)}
                       className={`px-4 text-[18px] font-semibold ${
@@ -251,18 +243,20 @@ const RecentActivityList: React.FC = () => {
                     >
                       1
                     </button>
-                    {/* Page 2 (shown only if totalPages >= 2) */}
+
                     {totalPages >= 2 && (
                       <button
                         onClick={() => setCurrentPage(2)}
                         className={`px-4 text-[18px] ${
-                          currentPage === 2 ? "text-[#00A0E3] font-semibold" : "text-[#909090]"
+                          currentPage === 2
+                            ? "text-[#00A0E3] font-semibold"
+                            : "text-[#909090]"
                         }`}
                       >
                         2
                       </button>
                     )}
-                    {/* Next */}
+
                     <button
                       onClick={() =>
                         setCurrentPage((prev) => Math.min(prev + 1, totalPages))

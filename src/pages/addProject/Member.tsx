@@ -64,7 +64,7 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
     return () => clearTimeout(debounceTimer);
   }, [newLeader, newManager, newTag]);
 
-  // 🧩 Add item by ID (not name)
+  // 🧩 Add item by ID
   const handleAdd = (
     field: "teamLeaders" | "projectManagers" | "tags",
     member: { id: string; full_name: string } | null
@@ -90,12 +90,10 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
     }));
   };
 
-  // ✅ Validate and go next
-  const validateAndNext = () => {
-    if (!formData.teamLeaders.length) return toast("Please add at least one Team Leader");
-    if (!formData.projectManagers.length) return toast("Please add at least one Project Manager");
-    if (!formData.tags.length) return toast("Please add at least one Tag");
-    goNext();
+  // 🟦 FIXED: plus button now adds the FIRST suggestion
+  const addFromPlus = (field: "teamLeaders" | "projectManagers" | "tags") => {
+    if (suggestions.length === 0) return;
+    handleAdd(field, suggestions[0]); // 👈 This is the correct expected behavior
   };
 
   // 🎨 Reusable input + list field
@@ -118,7 +116,7 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
             <button
               type="button"
               onClick={() => handleRemove(field, idx)}
-              className="text-gray-500 hover:text-red-500"
+              className="text-gray-500 hover:text-red-500 hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
             >
               <X size={14} />
             </button>
@@ -134,15 +132,11 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
           className="outline-none flex-1 h-[40px] min-w-[100px]"
         />
 
+        {/* 🔧 FIXED PLUS BUTTON LOGIC */}
         <button
           type="button"
-          onClick={() => {
-            const match = suggestions.find(
-              (s) => s.full_name.toLowerCase() === value.toLowerCase()
-            );
-            if (match) handleAdd(field, match);
-          }}
-          className="text-blue-500 hover:text-blue-600"
+          onClick={() => addFromPlus(field)}
+          className="text-blue-500 hover:text-blue-600 hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
         >
           <PlusCircle size={18} />
         </button>
@@ -175,12 +169,17 @@ const Members: React.FC<Props> = ({ formData, setFormData, handleNext: goNext })
       {renderField("Project Manager", "projectManagers", newManager, setNewManager, "manager")}
       {renderField("Tags", "tags", newTag, setNewTag, "tag")}
 
-      {/* ✅ Next Button */}
       <div className="flex justify-end">
         <button
           type="button"
-          onClick={validateAndNext}
-          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          onClick={() => {
+            if (!formData.teamLeaders.length) return toast("Please add at least one Team Leader");
+            if (!formData.projectManagers.length)
+              return toast("Please add at least one Project Manager");
+            if (!formData.tags.length) return toast("Please add at least one Tag");
+            goNext();
+          }}
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
         >
           Add Tasks
         </button>

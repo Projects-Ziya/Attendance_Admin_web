@@ -165,7 +165,7 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
                       }}
                       className={`inline-flex items-center gap-2 ${
                         req.attachmentUrl ? "bg-[#4D4D4D]" : "bg-gray-400 cursor-not-allowed"
-                      } text-white h-[35px] px-3 rounded-md text-[15px] font-[500] w-[120px] truncate hover:brightness-110 transition`}
+                      } text-white h-[35px] px-3 rounded-md text-[15px] font-[500] w-[120px] truncate hover:brightness-110 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90`}
                       disabled={!req.attachmentUrl}
                     >
                       <img src={attachIcon} alt="Attach" className="w-3 h-3 flex-shrink-0" />
@@ -175,7 +175,7 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
                     {/* ✅ Approve Button */}
                     <button
                       onClick={() => handleApprove(req.id)}
-                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition"
+                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
                       style={{ backgroundColor: "#03C96F" }}
                     >
                       <img src={tickIcon} alt="Approve" className="w-4 h-4" />
@@ -185,7 +185,7 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
                     {/* ❌ Reject Button */}
                     <button
                       onClick={() => handleReject(req.id)}
-                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition"
+                      className="inline-flex items-center gap-2 px-4 h-[35px] rounded-md text-[15px] font-[500] text-white hover:brightness-110 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
                       style={{ backgroundColor: "#F11515" }}
                     >
                       <img src={crossIcon} alt="Reject" className="w-4 h-4" />

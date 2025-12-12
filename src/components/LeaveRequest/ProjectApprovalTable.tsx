@@ -267,7 +267,7 @@ export default function ProjectApprovalTable({
                       <div className="flex items-center gap-7">
                         <button
                           onClick={() => handleApprove(row.id)}
-                          className="inline-flex items-center gap-2 px-3 h-[34px] rounded-md text-[16px] font-[500] tracking-[1.28px] text-white hover:brightness-110 transition"
+                          className="inline-flex items-center gap-2 px-3 h-[34px] rounded-md text-[16px] font-[500] tracking-[1.28px] text-white hover:brightness-110 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
                           style={{ backgroundColor: "#03C96F" }}
                         >
                           <img
@@ -279,7 +279,7 @@ export default function ProjectApprovalTable({
                         </button>
                         <button
                           onClick={() => handleReject(row.id)}
-                          className="inline-flex items-center gap-2 px-3 h-[34px] rounded-md text-[16px] font-[500] tracking-[1.28px] text-white hover:brightness-110 transition"
+                          className="inline-flex items-center gap-2 px-3 h-[34px] rounded-md text-[16px] font-[500] tracking-[1.28px] text-white hover:brightness-110 transition hover:text-gray-100 transition-all duration-200 hover:scale-105 active:scale-90"
                           style={{ backgroundColor: "#F11515" }}
                         >
                           <img
