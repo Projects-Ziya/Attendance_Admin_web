@@ -1,6 +1,6 @@
 // src/viewmodels/useRequestDashboardVM.js
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../Api/api";
 
 export default function useRequestDashboardVM() {
   const [activeTab, setActiveTab] = useState("leave");
@@ -9,8 +9,8 @@ export default function useRequestDashboardVM() {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get("http://localhost:5000/leaveRequests")
+    api
+      .get("/api/list-all-leaves/")
       .then((res) => setLeaveRequests(res.data || []))
       .catch(() => setLeaveRequests([]))
       .finally(() => setLoading(false));

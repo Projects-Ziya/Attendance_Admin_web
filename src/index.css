@@ -12,6 +12,7 @@
 
 body {
   @apply font-poppins;
+
 }
 
 
@@ -25,3 +26,6 @@ body {
 .scrollable::-webkit-scrollbar {
   display: none;               /* Chrome, Safari, Opera */
 }
+
+
+

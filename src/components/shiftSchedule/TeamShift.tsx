@@ -226,7 +226,7 @@ setEndTime(shift.end_time.slice(0, 5));
         </div>
 
         <button
-          className="mt-4 bg-[#00A0E3] text-white px-6 py-2 rounded text-sm font-medium"
+          className="mt-4 bg-[#00A0E3]  text-white px-6 py-2 rounded text-sm font-medium"
           onClick={submitShift}
         >
           {editingShiftId ? "Update Shift" : "Submit"}
@@ -243,7 +243,7 @@ setEndTime(shift.end_time.slice(0, 5));
         </button>
       </div>
 
-      <div className="w-1/2 h-[650px] scrollable rounded-lg bg-white shadow-[0px_0px_2px_0px_#00000040]">
+      <div className="w-1/2 h-[650px]  scrollable rounded-lg bg-white shadow-[0px_0px_2px_0px_#00000040]">
         <h1 className="text-[#4D4D4D] text-[22px] font-[600] mt-[49px] ms-[69px]">
           Scheduled Shifts
         </h1>

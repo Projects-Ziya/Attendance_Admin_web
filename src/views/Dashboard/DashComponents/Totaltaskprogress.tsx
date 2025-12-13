@@ -18,7 +18,6 @@ const App: React.FC = () => {
       try {
         const response = await api.get("/api/taskpercentage/");
         setData(response.data.data);
-        console.log('ttttttttttttttt',response.data.data)
       } catch (error) {
         console.error("Error fetching task percentage:", error);
       } finally {

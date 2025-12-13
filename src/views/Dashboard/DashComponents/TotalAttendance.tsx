@@ -21,7 +21,6 @@ const TodayAttendanceCard: React.FC = () => {
         setLoading(true);
         const response = await api.get("/api/todays-attendance-count/"); // Replace with your endpoint
         const data = response.data;
-        console.log(data)
         const formattedData: AttendanceItem[] = [
           { label: "Present", count: data.present_count, color: "bg-green-600" },
           { label: "Late", count: data.late_count, color: "bg-orange-400" },
@@ -31,7 +30,6 @@ const TodayAttendanceCard: React.FC = () => {
         setAttendanceData(formattedData);
         setTotal(data.present_count + data.late_count );
         setPTotal(data.present_count + data.late_count + data.leave_count);
-        console.log(total)
       } catch (err) {
         console.error(err);
         setError("Failed to load attendance data.");

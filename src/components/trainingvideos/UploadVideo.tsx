@@ -30,10 +30,10 @@ const UploadVideo: React.FC<Props> = ({ onFileSelect }) => {
         onChange={handleFileChange}
       />
 
-      <svg width="1275" height="375" className="absolute top-0 left-0">
+      <svg width="1350" height="385" className="absolute top-0 left-0">
         <rect
-          width="1275"
-          height="370"
+          width="1350"
+          height="385"
           rx="8"
           fill="white"
           stroke="#000000"
@@ -42,12 +42,12 @@ const UploadVideo: React.FC<Props> = ({ onFileSelect }) => {
         />
       </svg>
 
-      <div className="absolute inset-0 flex flex-col items-center pt-5 text-center gap-4 z-10">
-        <p className="text-[#4D4D4D] text-[22px] font-semibold">
+      <div className="absolute inset-0 flex flex-col items-center pt-8 text-center gap-4 z-10">
+        <p className="text-[#4D4D4D] mb-[20px] text-[22px] font-semibold">
           Upload your video you want to convert to AVI
         </p>
 
-        <img src={clapboardicon} alt="Upload Icon" className="w-[145px] h-[143px]" />
+        <img src={clapboardicon} alt="Upload Icon" className="w-[145px] h-[143px] " />
 
         <p className="text-[#7D7D7D] text-[16px] font-normal">
           {selectedFileName || "Drag and drop video file or click Browse"}

@@ -9,9 +9,10 @@ export interface Employee {
   punchOut: string;
   late: string;
   productionHrs: string;
-  profile_pic?: string; // ✅ replaced 'avatar' with 'profile_pic'
+  profile_pic?: string;
   joiningYear: number;
 }
+
 
 export interface EmployeeList {
   id: string;

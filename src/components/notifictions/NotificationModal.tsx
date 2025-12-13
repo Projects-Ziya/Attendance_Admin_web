@@ -7,64 +7,71 @@ interface Props {
 
 const NotificationModal: React.FC<Props> = ({ onHide }) => {
   const { notifications, hideNotification } = useNotificationViewModel();
-
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // 🔥 Close modal when clicking outside
+  // Close when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+    const handleClick = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onHide();
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [onHide]);
 
   return (
-    // Background layer to detect outside click
-    <div className="fixed inset-0 z-40">
-      {/* Invisible overlay to detect click */}
-      <div className="absolute inset-0"></div>
+    <div className="fixed inset-0 z-40 flex justify-end items-start pt-12 bg-black/0">
 
-      {/* Actual modal */}
+      {/* Click-outside overlay */}
+      <div className="absolute inset-0" onClick={onHide}></div>
+
+      {/* MODAL */}
       <div
         ref={modalRef}
-        className="absolute top-12 right-0 z-50"
+        className="relative bg-[#1F1F1F] w-[700px] max-h-[330px] rounded-xl shadow-2xl overflow-hidden z-50"
       >
-        <div className="w-[748px] h-[273px] bg-[#181818] rounded-[10px] overflow-y-auto pt-[31px] pl-[46px] flex shadow-lg">
-          <div className="flex flex-col pr-[48px] space-y-[10px]">
-            {notifications.map((n) => (
-              <div key={n.id} className="flex items-start gap-[32px]">
-                <img src={n.icon} className="w-[21px] h-[25px] mt-1" />
-                <div>
-                  <h3 className="font-semibold text-[18px] text-[#8BC34A]">
+        {/* Header */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-800">
+          <h2 className="text-white text-lg font-semibold">Notifications</h2>
+
+          <button
+            onClick={onHide}
+            className="text-gray-300 hover:text-white text-sm"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* List */}
+        <div className="px-6 py-4 overflow-y-auto max-h-[250px] space-y-5">
+          {notifications.length === 0 ? (
+            <p className="text-gray-400 text-sm">No notifications available.</p>
+          ) : (
+            [...notifications].reverse().map((n) => (
+              <div key={n.id} className="flex gap-5">
+                <img src={n.icon} className="w-6 h-6 mt-1" />
+
+                <div className="flex-1">
+                  <p className="text-[#8BC34A] font-semibold text-[17px]">
                     {n.title}
-                  </h3>
-                  <p className="text-white text-[14px]">{n.message}</p>
-                  <p className="text-gray-400 text-[12px] mt-1">{n.timestamp}</p>
+                  </p>
+                  <p className="text-white text-sm">{n.message}</p>
+                  <p className="text-gray-500 text-xs mt-1">{n.timestamp}</p>
 
                   <button
-                    className="text-xs text-red-400 mt-1"
+                    className="text-red-400 text-xs mt-1 hover:underline"
                     onClick={() => hideNotification(n.id)}
                   >
                     Dismiss
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
-
-          <div className="me-[10px]">
-            <button
-              className="text-white text-[18px] mt-[11px] w-[126px] h-[43px] rounded-md hover:bg-white hover:text-black transition"
-              onClick={onHide}
-            >
-              Hide
-            </button>
-          </div>
+            ))
+          )}
         </div>
+
       </div>
     </div>
   );

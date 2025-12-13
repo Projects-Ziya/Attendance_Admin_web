@@ -23,7 +23,6 @@ const navigate = useNavigate()
         
 
         setData(res.data.data);
-      console.log(res.data.data)
       const totalCount = res.data.data.reduce((sum, item) => sum + item.count, 0);
         setTotalUsers(totalCount);
       } catch (err) {

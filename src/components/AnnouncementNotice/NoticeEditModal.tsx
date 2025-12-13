@@ -99,7 +99,7 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({
           type="date"
           value={localDate}
           onChange={(e) => setLocalDate(e.target.value)}
-          className="h-[60px] border-4 bg-[#EEEEEE] rounded-[15px] w-[960px] ml-[50px] mt-[16px] pl-5 text-[28px] border border-[#EEEEEE]"
+          className="h-[60px] border-4 bg-[#EEEEEE] rounded-[15px] w-[960px] ml-[50px] mt-[16px] pl-5 text-[28px]  border-[#EEEEEE]"
         />
 
         {/* Description */}
@@ -107,7 +107,7 @@ const EditNoticeModal: React.FC<EditNoticeModalProps> = ({
         <textarea
           value={localDescription}
           onChange={(e) => setLocalDescription(e.target.value)}
-          className="h-[120px] border-4 bg-[#EEEEEE] rounded-[15px] w-[960px] ml-[50px] mt-[16px] pl-5 pt-3 text-[24px] border border-[#EEEEEE] resize-none"
+          className="h-[120px] border-4 bg-[#EEEEEE] rounded-[15px] w-[960px] ml-[50px] mt-[16px] pl-5 pt-3 text-[24px]  border-[#EEEEEE] resize-none"
         />
 
         {/* Save Button */}

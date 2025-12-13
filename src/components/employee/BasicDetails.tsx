@@ -265,14 +265,14 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
             data.department === "Software Development Department" &&(
             <>
             <option value="Frontend Team Lead">Frontend Team Lead</option>
-            <option value="React Developers">React Developers</option>
-            <option value="MERN Stack Developers">MERN Stack Developers</option>
-            <option value="MEAN Stack Developers">MEAN Stack Developers</option>
+            <option value="React Developers">React Developer</option>
+            <option value="MERN Stack Developers">MERN Stack Developer</option>
+            <option value="MEAN Stack Developers">MEAN Stack Developer</option>
             <option value="Backend Team Lead">Backend Team Lead</option>
             <option value="Python Developer">Python Developer</option>
             <option value="Database Engineer">Database Engineer</option>
             <option value="Mobile Developers Team Lead">Mobile Developers Team Lead</option>
-            <option value="Flutter Developers">Flutter Developers</option>
+            <option value="Flutter Developers">Flutter Developer</option>
             <option value="Game Development Lead">Game Development Lead</option>
             <option value="Game Developer">Game Developer</option>
             </>

@@ -5,11 +5,11 @@ const AboutContent = () => {
   const navigate = useNavigate();
   return (
     <div
-      className="absolute left-0 bg-white shadow-md rounded-[12px] pl-[80px] pt-[84px] pr-[80px] border  flex flex-col  overflow-y-auto"
+      className="absolute left-0 bg-white shadow-md rounded-[12px] pl-[80px] pt-[84px] pb-[50px] pr-[80px] border  flex flex-col  overflow-y-auto"
       
     >
       {/* Back Button */}
-      <button onClick={() => navigate(-1)} className="flex items-center justify-center gap-2 mb-[92px] border w-[130px] h-[40px] text-midGray text-[18px] font-[500] tracking-[0.08em] leading-[16px] hover:shadow-md">
+      <button onClick={() => navigate(-1)} className="flex items-center justify-center gap-2 mb-[92px] border  w-[130px] h-[40px] text-[18px] font-[500] tracking-[0.08em] leading-[16px] hover:shadow-md">
        <img src={backicon} className="w-[16px] h-[10px]"/>
         Back
       </button>

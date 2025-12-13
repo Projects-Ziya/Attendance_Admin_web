@@ -121,5 +121,6 @@ const [deductions] = useState<DeductionCard[]>([
     deductions,
     notes,
     salaryBreakdown,
+    
   };
 }
