@@ -53,7 +53,7 @@ const navigate = useNavigate()
 
           </h2>
         </div>
-           <hr  className="  -mx-6  border-blue-100"/>
+           <hr  className=" border-b border-b-[#43C8FF]"/>
 
         {/* List */}
         {loading ? (

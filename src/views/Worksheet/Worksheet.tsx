@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
-
 import worksheeticon from "../../assets/icons/Worksicon.svg";
 import uploadicon from "../../assets/icons/upload.svg";
 import doc_icon from "../../assets/icons/doc.svg";
@@ -25,6 +24,8 @@ function Worksheet() {
     onChangeEditingName,
     onSaveEdit,
     isModalOpen,
+     removeWorksheetFromState, 
+     refetchWorksheets,
   } = useWorksheetVM();
 
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -40,6 +41,8 @@ function Worksheet() {
 
       if (res.data.success) {
         toast.success("Worksheet deleted successfully");
+
+         removeWorksheetFromState(id);
       } else {
         toast.error("⚠️ Failed to delete");
       }
@@ -111,18 +114,18 @@ function Worksheet() {
           <div className="flex justify-end mb-[40px] mr-[40px]">
            <motion.button
   onClick={onUploadClick}
-  whileHover={{ scale: 1.05 }}
+  whileHover={{ scale: 1.01 }}
   whileTap={{ scale: 0.95 }}
   className="flex items-center justify-center gap-4 mt-[40px] h-[57px] w-[379px] rounded-lg 
              bg-[#00A0E3] text-white font-semibold text-[25px]
-             shadow-lg hover:shadow-xl transition-all duration-300"
+             shadow-lg hover:shadow-md transition-transform duration-400"
 >
   <motion.img
     src={uploadicon}
     alt="Upload"
     className="w-[30px] h-[30px]"
-    whileHover={{ rotate: 15 }}
-    transition={{ type: "spring", stiffness: 300 }}
+    whileHover={{ rotate: 90 }}
+    transition={{ type: "spring", stiffness: 100 }}
   />
   <span className="tracking-wide">Upload Worksheet</span>
 </motion.button>
@@ -140,14 +143,22 @@ function Worksheet() {
                 </p>
               )}
 
+<AnimatePresence>
               {worksheets.map((w, index) => (
-                <motion.div
-                  key={w.id}
-                  className="h-[108px] w-[1297px] rounded-[20px] border border-[#C6C6C6]  bg-white flex items-center justify-between px-[32px]"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
-                >
+               <motion.div
+  key={w.id}
+  className="h-[108px] w-[1297px] rounded-[20px] border border-[#C6C6C6] bg-white flex items-center justify-between px-[32px]"
+  
+  // ✅ Entry animation
+  initial={{ opacity: 0, y: 10, scale: 0.98 }}
+  animate={{ opacity: 1, y: 0, scale: 1 }}
+  
+  // ✅ Exit animation (already correct)
+  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+
+  transition={{ duration: 0.25, ease: "easeOut" }}
+>
+
                   {/* LEFT: icon + text */}
                   <div className="flex items-center gap-[16px]">
                     <div className="h-[60px] w-[61px] rounded-[16px] bg-[#C0EDBF] flex items-center justify-center">
@@ -194,18 +205,33 @@ function Worksheet() {
 
                     <motion.button
   onClick={() => handleDelete(w.id)}
-  whileHover={{ scale: 1.1, rotate: -5 }}
+  whileHover={{ scale: 1.1 }}
   whileTap={{ scale: 0.95 }}
   className="flex items-center justify-center h-[50px] w-[50px] rounded-lg border border-red-300 
              bg-white hover:bg-red-50 transition-all duration-300 shadow-sm hover:shadow-md"
 >
-  <img src={dlt_icon} alt="Delete" className="w-[24px] h-[24px]" />
+  <motion.img src={dlt_icon} alt="Delete"
+  initial={{ rotate: 0 }}
+  animate={{ rotate: 0 }}
+   whileHover={{
+    rotate: [20, -20, 0],
+  }}
+  transition={{
+    rotate: {
+      duration: 0.4,
+      ease: "easeInOut",
+    },
+  }}
+     className="w-[24px] h-[24px]" />
 </motion.button>
 
                   </div>
                 </motion.div>
+                
               ))}
+              </AnimatePresence>
             </div>
+            
           </div>
         </div>
       </div>
@@ -236,7 +262,10 @@ function Worksheet() {
             onClick={onCloseUploadModal}
           ></div>
           <div className="fixed inset-0 flex items-center justify-center z-40">
-            <UploadNewWorksheet onClose={onCloseUploadModal} />
+<UploadNewWorksheet 
+  onClose={onCloseUploadModal}
+  onUploaded={refetchWorksheets}   // ✅ ADD THIS
+/>
           </div>
         </>
       )}

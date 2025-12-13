@@ -62,11 +62,14 @@ function PollsFeedback() {
               />
             ) : (
               <SubmitResponseTab
-                formTitle={form.title}
-                formDescription={form.description}
-                questions={form.questions}
-                handleSubmitResponse={handleSubmitResponse}
-              />
+  formTitle={form.title}
+  formDescription={form.description}
+  questions={form.questions}
+  handleSubmitResponse={handleSubmitResponse}
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+/>
+
             )}
           </motion.div>
         </motion.div>

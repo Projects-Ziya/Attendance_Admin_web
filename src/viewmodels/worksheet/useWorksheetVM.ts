@@ -51,6 +51,14 @@ export function useWorksheetVM() {
     }
   };
 
+
+  const refetchWorksheets = async () => {
+  await fetchWorksheets();
+};
+
+
+
+
   // =====================
   // 📌 Delete
   // =====================
@@ -84,6 +92,11 @@ export function useWorksheetVM() {
     setIsModalOpen(false);
   };
 
+  const removeWorksheetFromState = (id: string) => {
+  setWorksheets((prev) => prev.filter((w) => w.id !== id));
+};
+
+
   return {
     worksheets,
     onUploadClick,
@@ -95,5 +108,7 @@ export function useWorksheetVM() {
     onCloseModal,
     onChangeEditingName,
     onSaveEdit,
+     removeWorksheetFromState, // ✅ add this
+  refetchWorksheets,
   };
 }
