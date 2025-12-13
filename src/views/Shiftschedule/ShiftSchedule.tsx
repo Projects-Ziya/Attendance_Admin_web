@@ -23,6 +23,7 @@ const sectionVariants = {
 
 const ShiftSchedule: React.FC = () => {
   const vm = useShiftScheduleVM();
+
   const {
     punchInLabel,
     punchOutLabel,
@@ -31,7 +32,8 @@ const ShiftSchedule: React.FC = () => {
     statusText,
     handlePunchIn,
     handlePunchOut,
-    showActivityLog,
+
+    // ⬇ Morning activity data
     morningPunchIn,
     morningBreakStart,
     morningBreakEnd,
@@ -41,6 +43,13 @@ const ShiftSchedule: React.FC = () => {
     shiftType,
   } = vm;
 
+  // ✅ DATA-DRIVEN VISIBILITY (FIX)
+  const showMorningActivityLog =
+    !!morningPunchIn ||
+    !!morningBreakStart ||
+    !!morningLunchStart ||
+    !!morningPunchOut;
+
   return (
     <MainLayout>
       <div className="h-auto w-[1469px] mb-[50px] bg-[#F6F5FA]">
@@ -49,7 +58,11 @@ const ShiftSchedule: React.FC = () => {
         <div className="flex items-center pt-[46px] pb-[20px]">
           <div className="h-[40px] w-[40px] flex items-center justify-center bg-[#DAF1FB] ml-[24px] rounded-[30px]">
             <span className="bg-[#DAF1FB] rounded-full w-[40px] h-[40px] flex items-center justify-center">
-              <img className="h-[26px] w-[26px] filter-blue" src={ShiftScheduleicon} alt="" />
+              <img
+                className="h-[26px] w-[26px] filter-blue"
+                src={ShiftScheduleicon}
+                alt=""
+              />
             </span>
           </div>
           <p className="ml-[10px] font-[500]">Shift Schedule</p>
@@ -80,7 +93,7 @@ const ShiftSchedule: React.FC = () => {
           </motion.div>
 
           {/* Morning Activity Log */}
-          {showActivityLog && (
+          {showMorningActivityLog && (
             <motion.div variants={sectionVariants}>
               <MorningActivityLog
                 punchIn={morningPunchIn}
@@ -90,7 +103,9 @@ const ShiftSchedule: React.FC = () => {
                 lunchEnd={morningLunchEnd}
                 punchOut={morningPunchOut}
                 shiftType={shiftType}
-                onDelete={() => vm.setShowActivityLog(false)}
+                onDelete={() => {
+                  /* optional: keep empty or clear shift data */
+                }}
               />
             </motion.div>
           )}

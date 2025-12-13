@@ -24,22 +24,32 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
       .get("/api/list-all-leaves/")
       .then((res) => {
         if (res.data && res.data.success) {
-          const transformed = res.data.data.map((item: any) => ({
-            id: item.id,
-            date: item.requested_date,
-            days: item.leave_days,
-            employeeName: item.employee_name,
-            leaveType: item.leave_type,
-            reason: item.reason || "—",
-            attachment: item.attachments ? item.attachments.split("/").pop() : "No File",
-            attachmentUrl: item.attachments,
-            avatar: item.employee_profile_pic
-              ? `${BASE_URL}${item.employee_profile_pic}`
-              : "https://via.placeholder.com/40",
-            designation: item.employee_designation,
-            workMode: item.employee_job_type,
-            workModeColor: item.employee_job_type === "WFO" ? "#03C96F" : "#4D4D4D",
-          }));
+         const transformed = res.data.data.map((item: any) => ({
+  id: item.id,
+  date: item.requested_date,
+  days: item.leave_days,
+  employeeName: item.employee_name,
+  leaveType: item.leave_type,
+  reason: item.reason || "—",
+
+  attachment: item.attachments
+    ? item.attachments.split("/").pop()
+    : "No File",
+
+  // ✅ FIXED HERE
+  attachmentUrl: item.attachments
+    ? `${BASE_URL}${item.attachments}`
+    : "",
+
+  avatar: item.employee_profile_pic
+    ? `${BASE_URL}${item.employee_profile_pic}`
+    : "https://via.placeholder.com/40",
+
+  designation: item.employee_designation,
+  workMode: item.employee_job_type,
+  workModeColor: item.employee_job_type === "WFO" ? "#03C96F" : "#4D4D4D",
+}));
+
           setRequests(transformed);
         } else {
           setRequests([]);
