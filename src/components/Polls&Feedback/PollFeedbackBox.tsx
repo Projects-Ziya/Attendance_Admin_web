@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import saveicon from "../../assets/icons/pollsfeedback/save.svg";
 import { usePollFeedbackViewModel } from "../../viewmodels/PollsFeedback/usePollFeedbackViewModel";
 import type { PollQuestion } from "../../models/pollsFeedbackModel";
-
+import SubmitResponseTab from "./SubmitResponse";
 import api from "../../Api/api";
+import submiticon from "../../assets/icons/sumbiticon.svg"
+import formicon from "../../assets/icons/formicon.svg"
 
 // ✅ Dropdown Component
 function CheckBoxDropdown({
@@ -87,7 +89,7 @@ function PollsAndFeedback() {
     handleSubmitResponse,
   } = usePollFeedbackViewModel();
 
-  const [activeTab, setActiveTab] = useState("form"); // ✅ TAB STATE
+  const [activeTab, setActiveTab] = useState("create"); // ✅ TABS: create | submit
 
   // ✅ Fetch API Data
   useEffect(() => {
@@ -120,25 +122,73 @@ function PollsAndFeedback() {
     fetchFeedbackQuestions();
   }, []);
 
-  // ✅ CONDITIONAL RENDERING
+  // ✅ TAB SWITCHING
   if (activeTab === "submit") {
     return (
-      <SubmitResponseTab
-        formTitle={form.title}
-        formDescription={form.description}
-        questions={form.questions}
-        handleSubmitResponse={handleSubmitResponse}
-      />
+     <SubmitResponseTab
+  formTitle={form.title}
+  formDescription={form.description}
+  questions={form.questions}
+  handleSubmitResponse={handleSubmitResponse}
+  activeTab={activeTab}
+  setActiveTab={setActiveTab}
+/>
+
     );
   }
 
-  // ✅ FORM TAB UI
+  // ✅ CREATE FORM TAB UI
   return (
     <div className="h-auto pl-[61px] w-[1469px] shadow-[0px_0px_2px_0px_#00000040] bg-white pb-[40px] rounded-[10px] mb-[20px]">
       <h1 className="text-[24px] pt-[56px] font-[600]">Polls and Feedback</h1>
       <p className="text-[18px] pt-[10px] font-[500] text-[#4D4D4D]">
         Engage your workforce through interactive polls and honest feedback
       </p>
+
+      {/* ✅ Top Tabs */}
+<div className="flex gap-4 pt-[40px]">
+
+  {/* ✅ Create Form Tab */}
+  <button
+    onClick={() => setActiveTab("create")}
+    className={`flex w-1/2 items-center justify-center gap-2 px-6 py-3 rounded-[10px] text-[18px] font-[500] ${
+      activeTab === "create"
+        ? "bg-[#00A0E3] text-white"
+        : "bg-white text-[#4D4D4D] border border-[#D5D5D5]"
+    }`}
+  >
+    <img
+      src={formicon}
+      alt=""
+      className={`w-[24px] h-[24px] transition-all duration-200 ${
+        activeTab === "create" ? "invert brightness-0" : ""
+      }`}
+    />
+    Create Form
+  </button>
+
+  {/* ✅ Submit Response Tab */}
+  <button
+    onClick={() => setActiveTab("submit")}
+    className={`flex w-1/2 items-center justify-center gap-2 px-6 py-3 rounded-[10px] text-[18px] font-[500] ${
+      activeTab === "submit"
+        ? "bg-[#00A0E3] text-white"
+        : "bg-white text-[#4D4D4D] border border-[#D5D5D5]"
+    }`}
+  >
+    <img
+      src={submiticon}
+      alt=""
+      className={`w-[24px] h-[24px] transition-all duration-200 ${
+        activeTab === "submit" ? "invert brightness-0" : ""
+      }`}
+    />
+    Submit Response
+  </button>
+
+</div>
+
+
 
       {/* Form header */}
       <div className="h-[208px] pl-[28px] w-[1359px] border rounded-[10px] mt-[60px] border-[#00A0E3]">

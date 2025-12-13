@@ -204,17 +204,20 @@ const Notices: React.FC = () => {
             />
           </div>
 
-          <div className="flex gap-4 justify-end mt-[20px]">
-            <button className="bg-[#DAF1FB] text-[#00A0E3] px-4 py-2 rounded-lg text-[16px] font-[500]">
-              Are you sure you want to save this notice?
+          <div className="flex  justify-center  mt-[20px]">
+            <button className="bg-[#DAF1FB] w-full text-[#00A0E3] border border-[#00A0E3] px-4 py-3 rounded-lg text-[16px] font-[500]">
+              Are you sure you want to save this notice ?
             </button>
+           </div>
 
+           <div className="flex gap-5 justify-between items-center">
             <button
               onClick={handleConfirm}
-              className="bg-[#00A0E3] text-white px-6 py-2 rounded-lg text-[18px] font-[500]  hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
+              className="bg-[#00A0E3] w-1/2 text-white px-6 py-2 rounded-lg text-[18px] font-[500]  hover:text-gray-800 transition-all duration-200 hover:scale-105 hover:rounded-xl  active:scale-90"
             >
               Confirm
             </button>
+
 
             <button
               onClick={() => {
@@ -222,11 +225,12 @@ const Notices: React.FC = () => {
                 setDate("");
                 setDescription("");
               }}
-              className="bg-white border border-gray-300 px-6 py-2 rounded-lg text-[18px] font-[500]  hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
+              className="bg-white w-1/2 border text-[#00A0E3] border-[#00A0E3] px-6 py-2 rounded-lg text-[18px] font-[500]  hover:text-gray-800 transition-all duration-200 hover:rounded-xl  hover:scale-105 active:scale-90"
             >
               Cancel
             </button>
-          </div>
+            </div>
+         
         </div>
 
         {/* Notice Board */}
@@ -237,7 +241,7 @@ const Notices: React.FC = () => {
             </span>
           </legend>
 
-          <SectionTitle title="Pinned Notices" icon={<TiPin className="w-6 h-6 text-blue-500" />} />
+          <SectionTitle title="Pinned Notices" icon={<TiPin className="w-6 h-6 text-[#00A0E3]" />} />
 
           <div className="flex flex-col gap-4">
             {pinnedNotices.map((n) => (

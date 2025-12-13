@@ -6,9 +6,12 @@ import videoicon from "../../assets/icons/videoicon.svg";
 import EditVideoModal from "./EditVideoModal";
 import toast from "react-hot-toast";
 
+
+
 type Props = {
   videos: Video;
   onDelete: (id: string) => void;
+ 
 };
 
 const VideoCard: React.FC<Props> = ({ videos, onDelete }) => {
@@ -84,13 +87,12 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete }) => {
       </p>
 
       {/* Buttons */}
-      <div className="flex justify-center gap-6 pb-8">
+      <div className="flex justify-between items-center gap-6 pb-8">
        <button
-  className="relative px-6 py-1 w-[272px] h-[45px] text-[25px] font-medium rounded  
-             bg-sky-500/90 backdrop-blur-sm text-white border border-white/20
+  className="relative px-6 py-1 w-[150px] h-[50px] text-[20px] font-medium 
+             bg-[#00A0E3] backdrop-blur-sm rounded-lg text-white border border-white/20
              hover:bg-sky-600 transition-all duration-200
-             before:absolute before:inset-0 before:rounded before:bg-gradient-to-r before:from-transparent before:to-white/20
-             before:opacity-0 hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90"
+              hover:  hover:scale-105 active:scale-90 hover:rounded-xl"
   onClick={() => videoUrl && window.open(videoUrl, "_blank")}
 >
   Watch
@@ -100,22 +102,29 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete }) => {
 
         <div className="pt-2 flex gap-6">
           {/* ✅ Edit Button */}
+
+           <button className=" cursor-pointer w-[40px] h-[40px] flex rounded-lg justify-center items-center transition-all border border-gray-400 duration-200 hover:scale-110 active:scale-90 "
+            onClick={handleEditClick}>
           <img
+          
             src={editicon}
             alt="Edit"
+      
+            className="w-5 h-5"
+           
 
-            className="w-5 h-5 cursor-pointer"
-            onClick={handleEditClick}
-
-          />
+          ></img>
+          </button>
 
           {/* ✅ Delete Button */}
+          <button className=" cursor-pointer w-[40px] h-[40px] flex rounded-lg justify-center items-center transition-all border border-red-500 duration-200 hover:scale-110 active:scale-90 " onClick={() => onDelete(videos.id)}>
           <img
             src={deleteicon}
             alt="Delete"
-            className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-all duration-200 hover:scale-110 active:scale-90"
-            onClick={() => onDelete(videos.id)}
+            className="w-5 h-5"
+          
           />
+          </button>
         </div>
       </div>
 
