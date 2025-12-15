@@ -61,6 +61,7 @@ const EmployeeDashboardHome = () => {
       try {
         const res = await api.get("/api/list-designations/");
         setDesignations(res.data.data || []);
+        
       } catch (err) {
         console.error("Failed to fetch designations:", err);
       }
