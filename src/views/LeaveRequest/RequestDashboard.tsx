@@ -38,14 +38,14 @@ export default function RequestDashboard() {
 
       {/* Leave Requests Table */}
       {activeTab === "leave" && (
-        <motion.div variants={itemVariants}>
+      
           <LeaveRequestTable
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             loading={leaveLoading}
             requests={leaveRequests}
           />
-        </motion.div>
+      
       )}
 
       {/* Project Approvals Table */}

@@ -13,7 +13,7 @@ interface LeaveRequestTableProps {
 }
 
 
-export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequestTableProps) {
+export default function LeaveRequestTable({ activeTab, setActiveTab ,}: LeaveRequestTableProps) {
   const [requests, setRequests] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState("");
@@ -61,9 +61,16 @@ export default function LeaveRequestTable({ activeTab, setActiveTab }: LeaveRequ
       });
   };
 
-  useEffect(() => {
+useEffect(() => {
+  fetchRequests();
+}, []);
+
+useEffect(() => {
+  if (activeTab === "leave") {
     fetchRequests();
-  }, []);
+  }
+}, [activeTab]);
+
 
   // ✅ Approve Handler
   const handleApprove = async (id: string) => {

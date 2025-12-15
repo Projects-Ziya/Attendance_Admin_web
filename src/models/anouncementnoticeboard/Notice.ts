@@ -4,5 +4,6 @@ export type Notice = {
   date: string;
   content: string;
   department?: string;
+  description?: string;
   is_pinned?: boolean;
 };
