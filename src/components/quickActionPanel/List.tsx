@@ -4,6 +4,7 @@ import NotificationSuccess from "./NotificationSuccess";
 import type { Employee } from "../../models/quickActionPanel/Employee";
 import api from "../../Api/api";
 import toast from "react-hot-toast";
+import { BASE_URL } from "../../constants/urls";
 
 type ListProps = {
   searchTerm: string;
@@ -27,8 +28,9 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
           designation: item.designation,
           status: item.emp_status,
           exitDate: item.emp_exit_date,
-          avatarUrl: item.profile_pic,
-          description: item.department || "",
+   profile_pic: item.profile_pic
+              ? `${BASE_URL}${item.profile_pic}`
+              : "/default-avatar.png",          description: item.department || "",
         }));
         setEmployees(mappedData);
       }
@@ -48,8 +50,9 @@ const List = ({ searchTerm = "", statusFilter = "" }: ListProps) => {
           designation: item.designation,
           status: item.emp_status,
           exitDate: item.emp_exit_date,
-          avatarUrl: item.profile_pic,
-          description: item.department || "",
+   avatarUrl: item.profile_pic
+              ? `${BASE_URL}${item.profile_pic}`
+              : "/default-avatar.png",          description: item.department || "",
         }));
         setEmployees(mappedData);
       } else {

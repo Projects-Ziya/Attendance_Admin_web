@@ -4,7 +4,7 @@ import { usePollFeedbackViewModel } from "../../viewmodels/PollsFeedback/usePoll
 import type { PollQuestion } from "../../models/pollsFeedbackModel";
 import SubmitResponseTab from "./SubmitResponse";
 import api from "../../Api/api";
-import submiticon from "../../assets/icons/sumbiticon.svg"
+import submiticon from "../../assets/icons/submiticon.svg"
 import formicon from "../../assets/icons/formicon.svg"
 
 // ✅ Dropdown Component
@@ -180,7 +180,7 @@ function PollsAndFeedback() {
       src={submiticon}
       alt=""
       className={`w-[24px] h-[24px] transition-all duration-200 ${
-        activeTab === "submit" ? "invert brightness-0" : ""
+        activeTab === "submit" ?"invert brightness-0" : ""
       }`}
     />
     Submit Response

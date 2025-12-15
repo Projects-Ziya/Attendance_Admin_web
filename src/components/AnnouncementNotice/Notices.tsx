@@ -234,7 +234,8 @@ const Notices: React.FC = () => {
         </div>
 
         {/* Notice Board */}
-        <fieldset className="border w-[769px] bg-[#FCFCFC] h-[700px] border-gray-200 rounded-lg pl-[46px] pr-[35px] pt-[60px] pb-[25px]">
+        
+<fieldset className="border w-[769px] bg-[#FCFCFC] border-gray-200 rounded-lg pl-[46px] pr-[35px] pt-[60px] pb-[25px]">
           <legend className="mx-auto">
             <span className="bg-[#00A0E3] text-white text-sm font-semibold px-5 py-1 rounded-full">
               Notice Board

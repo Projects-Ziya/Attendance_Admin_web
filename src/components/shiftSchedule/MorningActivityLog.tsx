@@ -13,7 +13,7 @@ type Props = {
   breakEnd: string;
   lunchStart: string;
   lunchEnd: string;
-  punchOut: string;
+  punch_out_time: string;
   shiftType: string;
   onDelete: () => void;
 };
@@ -24,40 +24,37 @@ const ActivityLog: React.FC<Props> = ({
   breakEnd,
   lunchStart,
   lunchEnd,
-  punchOut,
+  punch_out_time,
   shiftType,
   onDelete,
 }) => {
-  const [apiData, setApiData] = useState({
-    punchIn,
-    breakStart,
-    breakEnd,
-    lunchStart,
-    lunchEnd,
-    punchOut,
-    shiftType,
-  });
+  const [apiData, setApiData] = useState<any>(null);
 
-  // ✅ Fetch latest updated shift activity from backend
+  // ✅ Fetch LAST created shift
   useEffect(() => {
     const fetchShiftData = async () => {
       try {
         const response = await api.get("/api/list-shifts/");
+        const list = response.data?.data || [];
 
-        const list = Array.isArray(response.data) ? response.data : [];
+        if (list.length === 0) return;
 
-        // If backend has no data, fallback to props
-        const last = list.length > 0 ? list[list.length - 1] : null;
-setApiData({
-  punchIn: last?.start_time ?? punchIn,
-  breakStart: last?.break_start ?? breakStart,
-  breakEnd: last?.break_end ?? breakEnd,
-  lunchStart: last?.lunch_start ?? lunchStart,
-  lunchEnd: last?.lunch_end ?? lunchEnd,
-  punchOut: last?.end_time ?? punchOut,
-  shiftType: last?.shifts_name ?? shiftType,
-});
-
+  const last = [...list].sort(
+          (a, b) =>
+            new Date(b.updated_at).getTime() -
+            new Date(a.updated_at).getTime()
+        )[0];
+        setApiData({
+          punchIn: last.relaxation_start ?? punchIn,
+          breakStart: last.break_start ?? breakStart,
+          breakEnd: last.break_end ?? breakEnd,
+          lunchStart: last.lunch_start ?? lunchStart,
+          lunchEnd: last.lunch_end ?? lunchEnd,
+          eveningBreakStart: last.evening_break_start ?? breakStart,
+          eveningBreakEnd: last.evening_break_end ?? breakEnd,
+          punch_out_time: last.punch_out_time ?? punch_out_time,
+          shiftType: last.shifts_name ?? shiftType,
+        });
       } catch (error) {
         console.error("API Fetch Error:", error);
       }
@@ -66,8 +63,13 @@ setApiData({
     fetchShiftData();
   }, []);
 
+  // ✅ Prevent blank render
+  if (!apiData) {
+    return null;
+  }
+
   return (
-    <div className="flex mt-5 h-[686px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w-[1462px] bg-white justify-center items-center">
+    <div className="flex mt-5 h-[886px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w-[1462px] bg-white justify-center items-center">
       <div>
         {/* Header */}
         <div className="flex justify-between pt-[44px] pl-[45px] items-center">
@@ -84,11 +86,13 @@ setApiData({
 
         {/* Rows */}
         <ActivityRow icon={p_in} label="Punch In" time={apiData.punchIn} />
-        <ActivityRow icon={Break} label="Break Start" time={apiData.breakStart} />
-        <ActivityRow icon={Break} label="Break End" time={apiData.breakEnd} />
-        <ActivityRow icon={Lunch} label="Lunch Start" time={apiData.lunchStart} />
-        <ActivityRow icon={Lunch} label="Lunch End" time={apiData.lunchEnd} />
-        <ActivityRow icon={P_out} label="Punch Out" time={apiData.punchOut} />
+        <ActivityRow icon={Break} label="Break 1 Start" time={apiData.breakStart} />
+        <ActivityRow icon={Break} label="Break 1 End" time={apiData.breakEnd} />
+        <ActivityRow icon={Lunch} label="Food time Start" time={apiData.lunchStart} />
+        <ActivityRow icon={Lunch} label="Food time End" time={apiData.lunchEnd} />
+        <ActivityRow icon={Break} label="Break 2 Start" time={apiData.eveningBreakStart} />
+        <ActivityRow icon={Break} label="Break 2 End" time={apiData.eveningBreakEnd} />
+        <ActivityRow icon={P_out} label="Punch Out" time={apiData.punch_out_time} />
       </div>
     </div>
   );

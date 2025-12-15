@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clock_icon from "../../assets/icons/shiftschedule/clock.svg";
 import break_icon from "../../assets/icons/shiftschedule/break.svg";
 import lunch_icon from "../../assets/icons/shiftschedule/lunch.svg";
@@ -47,14 +47,14 @@ const ConfigureBreakTimes: React.FC<Props> = ({
   shiftType,
   setShiftType,
 }) => {
+  // ✅ Punch Out State (ADDED)
+  const [punch_out_time, setpunch_out_time] = useState("");
 
   // ---------- API CALL ----------
   const saveToAPI = async () => {
     try {
       const payload = {
         shifts_name: `${shiftType} Shift`,
-        start_time: "09:00",
-        end_time: "18:00",
 
         relaxation_start: relaxationStart,
         relaxation_end: relaxationEnd,
@@ -67,10 +67,12 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
         evening_break_start: eveningBreakStart,
         evening_break_end: eveningBreakEnd,
+
+        // ✅ CONNECTED
+        punch_out_time: punch_out_time || null,
       };
 
       await api.post("/api/create-shift/", payload);
-
       handleSaveSchedule();
     } catch (error) {
       console.error("Shift creation failed", error);
@@ -95,7 +97,9 @@ const ConfigureBreakTimes: React.FC<Props> = ({
           className="w-full h-[45px] px-4 py-2 border border-gray-300 rounded-lg bg-white text-[16px] font-medium text-[#4D4D4D] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00A0E3]"
         >
           {shiftOptions.map((option) => (
-            <option key={option} value={option}>{option}</option>
+            <option key={option} value={option}>
+              {option}
+            </option>
           ))}
         </select>
       </div>
@@ -112,7 +116,7 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
       <BreakCard
         icon={break_icon}
-        title="Break Time"
+        title="Break 1"
         start={breakStart}
         end={breakEnd}
         onStartChange={setBreakStart}
@@ -121,7 +125,7 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
       <BreakCard
         icon={lunch_icon}
-        title="Lunch Time"
+        title="Food Time"
         start={lunchStart}
         end={lunchEnd}
         onStartChange={setLunchStart}
@@ -130,12 +134,35 @@ const ConfigureBreakTimes: React.FC<Props> = ({
 
       <BreakCard
         icon={break_icon}
-        title="Evening Break"
+        title="Break 2"
         start={eveningBreakStart}
         end={eveningBreakEnd}
         onStartChange={setEveningBreakStart}
         onEndChange={setEveningBreakEnd}
       />
+
+      {/* Punch Out Time */}
+      <div className="h-[160px] w-[1364px] ml-[64px] mt-[25px] border-[1px] rounded-[25px]">
+        <div className="flex gap-[20px]">
+          <img
+            className="h-[24px] ml-[30px] mt-[24px] w-[24px]"
+            src={clock_icon}
+            alt=""
+          />
+          <h1 className="mt-[20px] text-[20px] font-[500]">
+            Punch out time
+          </h1>
+        </div>
+
+        <div>
+          <input
+            type="time"
+            value={punch_out_time}
+            onChange={(e) => setpunch_out_time(e.target.value)}
+            className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] w-[1280px] ml-[28px] mt-[9px] rounded-[10px] bg-[#F6F5F5] outline-none"
+          />
+        </div>
+      </div>
 
       {/* Save Button */}
       <button
@@ -171,13 +198,11 @@ const BreakCard: React.FC<BreakCardProps> = ({
       <h1 className="mt-[20px] text-[20px] font-[500]">{title}</h1>
     </div>
 
-    {/* Labels */}
     <div className="flex justify-between mt-[10px] text-[15px] font-[500] ml-[28px]">
       <span>Start</span>
       <span className="pr-[599px]">End</span>
     </div>
 
-    {/* Time Inputs */}
     <div>
       <input
         type="time"

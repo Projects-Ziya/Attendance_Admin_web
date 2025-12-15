@@ -3,6 +3,7 @@ import { Eye, ChevronDown } from "lucide-react";
 import PayrollSlip from "../../components/PayrollManagementSystem/PayrollSlip";
 import toast from "react-hot-toast";
 import api from "../../Api/api";
+import { BASE_URL } from "../../constants/urls";
 
 const months = [
   "All",
@@ -24,8 +25,6 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
   const [selectedMonth, setSelectedMonth] = useState("");
   const [slipData, setSlipData] = useState(null);
 
-  const employeeId = 5; // TODO: Replace with logged user id
-
   const handleViewSlip = async () => {
     if (!selectedMonth) {
       toast.error("Please select a month!", { id: "unique-toast-id" });
@@ -35,21 +34,23 @@ const MyPayrollSlip = ({ showSlip, setShowSlip }) => {
     try {
       toast.loading("Fetching salary slip...", { id: "slip" });
 
-      const response = await api.get(`/api/login-user-salary-slip/`);
+      const response = await api.get("/api/login-user-salary-slip/");
 
-      // response.data.data = array → pick first match
       const slips = response.data?.data || [];
 
-      if (slips.length === 0) {
+      if (!slips.length) {
         toast.error("No slip found.", { id: "slip" });
         setShowSlip(false);
         return;
       }
 
-      // If you want filtering by month (optional)
-      const selectedSlip = slips[0]; // pick first for now
+      // ✅ Attach BASE_URL to PDF
+      const slip = {
+        ...slips[0],
+        pdfUrl: `${BASE_URL}${slips[0].pdf_file}`,
+      };
 
-      setSlipData(selectedSlip);
+      setSlipData(slip);
       setShowSlip(true);
 
       toast.success("Salary slip loaded!", { id: "slip" });

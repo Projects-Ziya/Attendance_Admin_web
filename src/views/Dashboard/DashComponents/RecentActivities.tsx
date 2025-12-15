@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../../Api/api"; // axios instance
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../../constants/urls";
 
 // Custom icon
 const CustomActivityIcon = () => (

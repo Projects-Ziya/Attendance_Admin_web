@@ -1,6 +1,6 @@
 import React from "react";
 import type { PollQuestion } from "../../models/pollsFeedbackModel";
-import submiticon from "../../assets/icons/sumbiticon.svg"
+import submiticon from "../../assets/icons/submiticon.svg"
 import formicon from "../../assets/icons/formicon.svg"
 
 
