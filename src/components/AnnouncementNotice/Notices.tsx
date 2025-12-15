@@ -85,7 +85,6 @@ const Notices: React.FC = () => {
   const {
     pinnedNotices,
     recentNotices,
-    deleteNotice,
     togglePin,
     addNotice,
     setNoticesFromApi,

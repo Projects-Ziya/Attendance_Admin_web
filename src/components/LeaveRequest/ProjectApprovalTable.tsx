@@ -6,22 +6,56 @@ import crossIcon from "../../assets/leaveRequestAssets/cross.png";
 import editIcon from "../../assets/leaveRequestAssets/edit.png";
 import toast from "react-hot-toast";
 
-function InitialAvatar({ name }) {
-  const initials = name
-    ?.split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+interface ProjectApprovalTableProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  loading?: boolean;
+  onApprove?: (id: number) => void;
+  onReject?: (id: number) => void;
+  onEdit?: (id: number) => void;
+}
+
+interface ProjectApprovalRow {
+  id: number;
+  project: string;
+  date: string;
+  endDate: string;
+  coordinatorName: string;
+  coordinatorAvatar?: string | null;
+  designation?: string | null;
+  coordinatorRole?: string | null;
+  members: number;
+  memberAvatars: string[];
+  tasks: number;
+  hours: number;
+}
+
+interface InitialAvatarProps {
+  name: string;
+}
+
+function InitialAvatar({ name }: InitialAvatarProps) {
+  const initials =
+    name
+      ?.split(" ")
+      .map((n) => n[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "?";
 
   return (
     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E6F4FF] text-[#1E90FF] text-xs font-semibold border border-[#D9D9D9]">
-      {initials || "?"}
+      {initials}
     </div>
   );
 }
 
-function Avatar({ src, alt }) {
+interface AvatarProps {
+  src: string;
+  alt: string;
+}
+
+function Avatar({ src, alt }: AvatarProps) {
   return (
     <img
       src={src}
@@ -31,82 +65,97 @@ function Avatar({ src, alt }) {
   );
 }
 
+const TOAST_ID = "project-approval-toast";
+
 export default function ProjectApprovalTable({
   activeTab,
   setActiveTab,
   loading = false,
-  onApprove = () => {},
-  onReject = () => {},
-  onEdit = () => {},
-}) {
-  const [data, setData] = useState([]);
-  const [loadingState, setLoadingState] = useState(true);
+  onApprove,
+  onReject,
+  onEdit,
+}: ProjectApprovalTableProps) {
+  const [data, setData] = useState<ProjectApprovalRow[]>([]);
+  const [loadingState, setLoadingState] = useState<boolean>(true);
 
-  // ✅ Fetch projects
   const fetchRequests = async () => {
     try {
       setLoadingState(true);
       const res = await api.get("/api/new-list-projects/");
-      if (res.data.success) {
-        const mappedData = res.data.projects.map((p) => ({
-          id: p.id,
-          project: p.project_name,
-          date: p.start_date,
-          endDate: p.end_date,
-          coordinatorName: p.coordinator?.name || "Unknown",
-          coordinatorAvatar: p.coordinator?.profile_pic,
-          designation: p.coordinator?.designation,
-          coordinatorRole: p.status,
-          members: p.members?.length || 0,
-          memberAvatars:
-            p.members
-              ?.map(
-                (m) =>
-                  m.tags_details?.profile_pic ||
-                  m.project_manager_details?.profile_pic ||
-                  m.team_leader_details?.profile_pic
-              )
-              .filter(Boolean) || [],
-          tasks: p.tasks?.length || 0,
-          hours: p.tasks?.[0]?.task_hours || 0,
-        }));
+
+      if (res.data?.success && Array.isArray(res.data.projects)) {
+        const mappedData: ProjectApprovalRow[] = res.data.projects.map(
+          (p: any) => ({
+            id: p.id,
+            project: p.project_name,
+            date: p.start_date,
+            endDate: p.end_date,
+            coordinatorName: p.coordinator?.name || "Unknown",
+            coordinatorAvatar: p.coordinator?.profile_pic || null,
+            designation: p.coordinator?.designation || null,
+            coordinatorRole: p.status || null,
+            members: p.members?.length || 0,
+            memberAvatars:
+              p.members
+                ?.map(
+                  (m: any) =>
+                    m.tags_details?.profile_pic ||
+                    m.project_manager_details?.profile_pic ||
+                    m.team_leader_details?.profile_pic
+                )
+                .filter(Boolean) || [],
+            tasks: p.tasks?.length || 0,
+            hours: p.tasks?.[0]?.task_hours || 0,
+          })
+        );
         setData(mappedData);
       } else {
         console.error("Failed to load projects");
+        toast.error("Failed to load projects", { id: TOAST_ID });
       }
     } catch (error) {
       console.error("Error fetching projects:", error);
+      toast.error("Error fetching projects", { id: TOAST_ID });
     } finally {
       setLoadingState(false);
     }
   };
 
+  // Initial fetch
   useEffect(() => {
     fetchRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // ✅ Approve Handler (fixed)
-  const handleApprove = async (id) => {
+  // Refetch when switching into Project tab
+  useEffect(() => {
+    if (activeTab === "project") {
+      fetchRequests();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
+  const handleApprove = async (id: number) => {
     try {
       const res = await api.post("/api/projects-accept/", { project_id: id });
-      if (res.data.success) {
-        toast.success(" Project approved successfully",{id: "unique-toast-id",});
-        fetchRequests(); // Refresh the list
+      if (res.data?.success) {
+        toast.success("Project approved successfully", { id: TOAST_ID });
+        fetchRequests();
+        if (onApprove) onApprove(id);
       } else {
-        toast("⚠️ Failed to approve project",{id: "unique-toast-id",});
+        toast.error("Failed to approve project", { id: TOAST_ID });
       }
     } catch (err) {
       console.error("Approve Error:", err);
-      toast.error(" Something went wrong while approving",{id: "unique-toast-id",});
+      toast.error("Something went wrong while approving", { id: TOAST_ID });
     }
   };
 
-  // ❌ Reject Handler (includes reason prompt)
-  const handleReject = async (id) => {
+  const handleReject = async (id: number) => {
     try {
-      const reason = prompt("Please enter the reason for rejection:");
+      const reason = window.prompt("Please enter the reason for rejection:");
       if (!reason) {
-        toast("⚠️ Rejection reason is required!",{id: "unique-toast-id",});
+        toast("Rejection reason is required", { id: TOAST_ID });
         return;
       }
 
@@ -115,16 +164,24 @@ export default function ProjectApprovalTable({
         reason_for_rejection: reason,
       });
 
-      if (res.data.success) {
-        toast("❌ Project was rejected successfully",{id: "unique-toast-id",});
-        fetchRequests(); // Refresh the list
+      if (res.data?.success) {
+        toast("Project was rejected successfully", { id: TOAST_ID });
+        fetchRequests();
+        if (onReject) onReject(id);
       } else {
-        toast("⚠️ Failed to reject project",{id: "unique-toast-id",});
+        toast.error("Failed to reject project", { id: TOAST_ID });
       }
     } catch (err) {
       console.error("Reject Error:", err);
-      toast.error(" Something went wrong while rejecting",{id: "unique-toast-id",});
+      toast.error("Something went wrong while rejecting", { id: TOAST_ID });
     }
+  };
+
+  const handleEdit = (id: number) => {
+    if (onEdit) {
+      onEdit(id);
+    }
+    // If you want default behavior here later, add it.
   };
 
   if (loading || loadingState) {
