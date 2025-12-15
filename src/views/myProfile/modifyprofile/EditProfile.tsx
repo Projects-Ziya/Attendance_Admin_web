@@ -1,4 +1,6 @@
+// src/views/modifyprofile/EditProfile.tsx
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import api from "../../../Api/api";
 import toast from "react-hot-toast";
 import EditBasicDetails from "../../../components/modifyProfile/EditBasicDetails";
@@ -6,7 +8,15 @@ import EditPersonalDetails from "../../../components/modifyProfile/EditPersonalD
 import EditBankDetails from "../../../components/modifyProfile/EditBankDetails";
 import MainLayout from "../../../components/layout/MainLayout";
 
-const EditProfile = () => {
+type EditProfileProps = {
+  // optional: if present, edit this employee; if absent, use route/admin
+  employeeIdFromProps?: string;
+};
+
+const EditProfile: React.FC<EditProfileProps> = ({ employeeIdFromProps }) => {
+  const params = useParams<{ id?: string }>();
+  const employeeIdFromRoute = params.id;
+
   const [activeTab, setActiveTab] = useState<"basic" | "personal" | "bank">("basic");
   const [employeeData, setEmployeeData] = useState<any>(null);
   const [employeeId, setEmployeeId] = useState<string | null>(null);
@@ -17,31 +27,44 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchEmployeeDetails = async () => {
       try {
-        // Get current admin profile
-        const meRes = await api.get("/api/adminprofile/");
-        console.log("adminprofile response", meRes.data);
+        let idToUse: string | undefined;
 
-        const idFromApi = meRes.data?.data?.id as string | undefined;
+        // 1) If parent gave us an ID (explicit), use it
+        if (employeeIdFromProps) {
+          idToUse = employeeIdFromProps;
+        }
+        // 2) Else if route has :id, use that (edit employee mode)
+        else if (employeeIdFromRoute) {
+          idToUse = employeeIdFromRoute;
+        }
+        // 3) Else admin edits own profile (no explicit id)
+        else {
+          const meRes = await api.get("/api/adminprofile/");
+          console.log("adminprofile response", meRes.data);
+          idToUse = meRes.data?.data?.id as string | undefined;
+        }
 
-        if (!idFromApi) {
-          console.error("No data.${id} in /api/adminprofile/ response");
+        if (!idToUse) {
+          console.error("No employee id found for edit");
+          toast.error("No employee ID found.");
           return;
         }
 
-        setEmployeeId(idFromApi);
+        setEmployeeId(idToUse);
 
         // Use that id to fetch editable details
-        const res = await api.get(`/api/employeedetailedit/${idFromApi}/`);
+        const res = await api.get(`/api/employeedetailedit/${idToUse}/`);
         setEmployeeData(res.data);
       } catch (error) {
         console.error("Failed to fetch employee details", error);
+        toast.error("Failed to load employee details.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchEmployeeDetails();
-  }, []);
+  }, [employeeIdFromProps, employeeIdFromRoute]);
 
   // This is the only place that controls tab navigation + save
   const handleContinue = async () => {
@@ -70,11 +93,11 @@ const EditProfile = () => {
           employeeData
         );
 
-        toast("Changes saved successfully!");
+        toast.success("Changes saved successfully!");
         setEmployeeData(res.data);
       } catch (error) {
         console.error("Failed to update employee details", error);
-        toast("Failed to save changes. Try again.");
+        toast.error("Failed to save changes. Try again.");
       } finally {
         setUpdating(false);
       }
@@ -87,7 +110,7 @@ const EditProfile = () => {
     } else if (activeTab === "personal") {
       setActiveTab("basic");
     } else if (activeTab === "basic") {
-      alert("Employee Adding canceled");
+      alert("Employee editing canceled");
     }
   };
 

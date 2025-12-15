@@ -115,13 +115,16 @@ const EmployeeProfileCard: React.FC = () => {
                 Leave Today
               </button>
             </div>
-            <button className="mt-3 px-5 py-1 text-xs rounded-md bg-[#00A0E3] text-white hover:bg-[#00A0F3] transition flex items-center gap-2"  onClick={() => navigate("/modifyprofile/Editprofile")}>
-              <div className="relative w-5 h-5" >
-                <User2Icon className="absolute top-0 left-0 h-5 w-5 text-white" />
-                <PencilIcon className="absolute bottom-0 right-0 h-3 w-3 text-blue-300" />
-              </div>
-              Modify Profile
-            </button>
+           <button
+    className="mt-3 px-5 py-1 text-xs rounded-md bg-[#00A0E3] text-white hover:bg-[#00A0F3] transition flex items-center gap-2"
+    onClick={() => navigate(`/modifyprofile/Editprofile/${id}`)}
+  >
+    <div className="relative w-5 h-5">
+      <User2Icon className="absolute top-0 left-0 h-5 w-5 text-white" />
+      <PencilIcon className="absolute bottom-0 right-0 h-3 w-3 text-blue-300" />
+    </div>
+    Modify Profile
+  </button>
           </div>
         </div>
 

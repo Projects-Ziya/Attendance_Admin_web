@@ -90,6 +90,14 @@ function App() {
         <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
         <Route path="/notifications" element={<NotificationLayout />} />
         <Route path="/Payroll" element={<PayrollManagementSystem />} />
+
+
+        // Admin edits own profile
+<Route path="/modifyprofile/Editprofile" element={<EditProfile />} />
+
+// Admin edits specific employee (id from URL)
+<Route path="/modifyprofile/Editprofile/:id" element={<EditProfile />} />
+
       </Routes>
 
       <Toaster position="top-center" />
