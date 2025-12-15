@@ -37,10 +37,10 @@ const navigate = useNavigate()
   }, []);
   return (
 <div className="w-[17vw]  max-w-[324px] h-[443px]
-                rounded-md border border-blue-100 bg-white  p-3 pl-6 flex flex-col justify-between">
+                rounded-md border border-blue-100 bg-white  p-5 flex flex-col justify-between">
                         <div>
         {/* Header */}
-        <div className="flex flex-col items-start gap-5 mb-4 pb-4">
+      <div className="flex flex-col items-start gap-5 mb-4 border-b border-b-[#43C8FF] pb-4">
          
           <div className="bg-[#E6F7FF] p-2 rounded-full">
             <LineChart className="text-[#00AEEF] w-6 h-6" />
@@ -53,7 +53,7 @@ const navigate = useNavigate()
 
           </h2>
         </div>
-           <hr  className=" border-b border-b-[#43C8FF]"/>
+           
 
         {/* List */}
         {loading ? (

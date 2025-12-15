@@ -33,7 +33,7 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="bg-white rounded-xl shadow-sm p-8 
+      className="bg-white rounded-xl border border-blue-100  p-8 
                 w-full max-w-[1469px] overflow-hidden"
     >
       <div className="pt-[10px] pl-[10px] ">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FingerPrintIcon, PencilIcon } from "@heroicons/react/16/solid";
 import { User2Icon } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../Api/api";
 
 // ✅ Row Subcomponent
@@ -20,6 +20,9 @@ const Row: React.FC<{ label: string; value?: any }> = ({ label, value }) => {
     displayValue = String(value);
   }
 
+
+  
+
   return (
     <div className="grid grid-cols-[100px_15px_1fr] text-sm items-start leading-6">
       <span className="text-gray-700">{label}</span>
@@ -29,8 +32,13 @@ const Row: React.FC<{ label: string; value?: any }> = ({ label, value }) => {
   );
 };
 
+
+
+
+
 const EmployeeProfileCard: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   // ✅ State Definitions
   const [data, setData] = useState<any | null>(null);
@@ -107,8 +115,8 @@ const EmployeeProfileCard: React.FC = () => {
                 Leave Today
               </button>
             </div>
-            <button className="mt-3 px-5 py-1 text-xs rounded-md bg-[#00A0E3] text-white hover:bg-[#00A0F3] transition flex items-center gap-2">
-              <div className="relative w-5 h-5">
+            <button className="mt-3 px-5 py-1 text-xs rounded-md bg-[#00A0E3] text-white hover:bg-[#00A0F3] transition flex items-center gap-2"  onClick={() => navigate("/modifyprofile/Editprofile")}>
+              <div className="relative w-5 h-5" >
                 <User2Icon className="absolute top-0 left-0 h-5 w-5 text-white" />
                 <PencilIcon className="absolute bottom-0 right-0 h-3 w-3 text-blue-300" />
               </div>

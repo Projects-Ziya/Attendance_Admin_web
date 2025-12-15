@@ -87,7 +87,7 @@ function Worksheet() {
   return (
     <MainLayout>
       <div
-        className={`w-[1469px] sm:px-4 lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
+        className={`w-[1469px] sm:px-4 mb-[30px] lg:px-6 bg-[#F6F5FA] transition-filter duration-300 ${
           isUploadModalOpen ? "blur-sm pointer-events-none" : ""
         }`}
       >
@@ -102,7 +102,7 @@ function Worksheet() {
         </div>
 
         {/* Main card */}
-        <div className="h-auto w-[1469px] bg-[#FCFCFC] border rounded-[10px] shadow-sm pl-[40px]">
+        <div className="h-auto w-[1469px] bg-[#FCFCFC] pb-[40px] border rounded-[10px] shadow-sm pl-[40px]">
           {/* Header */}
           <div className="pt-[60px]">
             <h1 className="font-[600] text-[24px]">Worksheets</h1>

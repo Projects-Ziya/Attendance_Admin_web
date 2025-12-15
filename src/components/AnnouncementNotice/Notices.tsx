@@ -260,7 +260,7 @@ const Notices: React.FC = () => {
           </div>
 
           <div className="mt-8">
-            <div className="sticky top-0 bg-white z-10 py-2">
+            <div className="sticky  py-2">
               <SectionTitle title="Recent Notices" />
             </div>
 

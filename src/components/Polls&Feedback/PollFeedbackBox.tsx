@@ -146,7 +146,7 @@ function PollsAndFeedback() {
       </p>
 
       {/* ✅ Top Tabs */}
-<div className="flex gap-4 pt-[40px]">
+<div className="flex gap-4 pt-[40px] pr-[50px]">
 
   {/* ✅ Create Form Tab */}
   <button

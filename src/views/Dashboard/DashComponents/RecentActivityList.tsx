@@ -175,7 +175,7 @@ const RecentActivityList: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="ms-[20px]">
+      <div className="ms-[20px] ">
         {/* heading */}
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8">
           <h1 className="flex items-center gap-2 text-gray-600 text-[15px] sm:text-[16px] font-[500] leading-[1.3] tracking-[1.28px]">

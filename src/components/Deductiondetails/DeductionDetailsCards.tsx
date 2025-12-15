@@ -4,21 +4,22 @@ import pficon from "../../assets/icons/deductiondetails/pficon.svg";
 import { themeStyles } from "../../viewmodels/deductondetails/useDeductionDetailsVM";
 import api from "../../Api/api";
 import DeductionEditModal from "./DeductionEditModal";
+import deleteicon from "../../assets/icons/delete.svg";
+import { motion } from "framer-motion";
 
 const DeductionDetailsCards: React.FC = () => {
   const [deductions, setDeductions] = useState<(DeductionCard & { id: number })[]>([]);
   const [openModal, setOpenModal] = useState(false);
-  const [formData, setFormData] = useState<any>({}); // selected card for edit
-const themeMap: any = {
-  PF: "blue",
-  ESI: "green",
-  PT: "orange",
-  TDS: "red",
-};
+  const [formData, setFormData] = useState<any>({});
 
-  // ------------------------------
-  // FETCH ALL DEDUCTIONS
-  // ------------------------------
+  const themeMap: any = {
+    PF: "blue",
+    ESI: "green",
+    PT: "orange",
+    TDS: "red",
+  };
+
+  // ✅ FETCH ALL DEDUCTIONS
   const fetchDeductions = async () => {
     try {
       const response = await api.get("/api/salary-component-list/");
@@ -27,18 +28,19 @@ const themeMap: any = {
       const mapped = data.map((item: any) => ({
         id: item.id,
         title: item.title,
-        rate: item.rate_type === "PERCENTAGE" ? `${item.rate_value}%` : `${item.rate_value}`,
+        rate:
+          item.rate_type === "PERCENTAGE"
+            ? `${item.rate_value}%`
+            : `${item.rate_value}`,
         amount: "",
         description: item.description,
         contribution: item.employee_contribution,
         employerContribution: item.employer_contribution,
         example: item.example_text,
-
-        // 🟢 FIXED: dynamic color theme support
-colorTheme:
-  (item.color_theme?.toLowerCase() ||
-    themeMap[item.component_type] ||
-    "blue") as keyof typeof themeStyles,
+        colorTheme:
+          (item.color_theme?.toLowerCase() ||
+            themeMap[item.component_type] ||
+            "blue") as keyof typeof themeStyles,
       }));
 
       setDeductions(mapped);
@@ -51,14 +53,37 @@ colorTheme:
     fetchDeductions();
   }, []);
 
+  // ✅ OPEN EDIT MODAL
   const handleEdit = (deduction: any) => {
     setFormData(deduction);
     setOpenModal(true);
   };
 
+  // ✅ DELETE DEDUCTION
+ const handleDelete = async (id: number) => {
+  console.log("Deleting ID:", id); // ✅ Check if ID is correct
+
+  try {
+    const res = await api.delete(`/api/salary-component-delete/${id}/`);
+
+    console.log("Delete Response:", res.data); // ✅ Check backend response
+
+    if (res.data.success) {
+      setDeductions(prev => prev.filter(d => d.id !== id));
+      console.log("UI updated");
+    } else {
+      console.error("Backend returned success = false");
+    }
+  } catch (error) {
+    console.error("Delete error:", error);
+  }
+};
+
+
+
   return (
     <div className="grid grid-cols-2 gap-[40px] justify-center pb-[40px]">
-      {deductions.map((deduction, index) => {
+      {deductions.map((deduction) => {
         const theme = themeStyles[deduction.colorTheme] || themeStyles.blue;
 
         return (
@@ -81,7 +106,7 @@ colorTheme:
                 </span>
 
                 <div className="flex flex-col">
-                  <h2 className="text-[23px] font-medium text-[#4D4D4D] mb-[4px]">
+                  <h2 className="text-[23px] font-medium text-[#000000] mb-[4px]">
                     {deduction.title}
                   </h2>
                   <p className="text-[16px]" style={{ color: theme.iconBg }}>
@@ -90,24 +115,49 @@ colorTheme:
                 </div>
               </div>
 
-              <img
-                src={theme.editIcon}
-                alt="Edit"
-                className="w-[32px] h-[32px] cursor-pointer"
-                onClick={() => handleEdit(deduction)}
-              />
+              <div className="flex items-center gap-5">
+                <motion.img
+                  src={theme.editIcon}
+                  alt="Edit"
+                  className="w-[30px] h-[30px] cursor-pointer"
+                  onClick={() => handleEdit(deduction)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+
+                <motion.img
+                  src={deleteicon}
+                  alt="delete"
+                  className="w-[22px] h-[22px] cursor-pointer"
+                  initial={{ rotate: 0 }}
+                  animate={{ rotate: 0 }}
+                  whileHover={{ scale: 1.1, rotate: [0, 20, -20, 0] }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handleDelete(deduction.id)} // ✅ FIXED
+                />
+              </div>
             </div>
 
-            {/* body */}
+            {/* Body */}
             <div className="pt-[40px] px-[27px]">
-              <h1 className="text-[23px] font-[400] text-[#000000] pb-[12px]">Description</h1>
-              <p className="text-[20px] text-[#655D5D] pb-[18px]">{deduction.description}</p>
+              <h1 className="text-[23px] font-[400] text-[#000000] pb-[12px]">
+                Description
+              </h1>
+              <p className="text-[20px] text-[#655D5D] pb-[18px]">
+                {deduction.description}
+              </p>
               <hr className="border-[#DBDBDB] mb-[19px]" />
 
-              <h1 className="text-[20px] text-[#000000]">Employee Contribution</h1>
-              <p className="text-[20px] text-[#5C5B5B] mb-[13px]">{deduction.contribution}</p>
+              <h1 className="text-[20px] text-[#000000]">
+                Employee Contribution
+              </h1>
+              <p className="text-[20px] text-[#5C5B5B] mb-[13px]">
+                {deduction.contribution}
+              </p>
 
-              <h1 className="text-[20px] text-[#000000]">Employer Contribution</h1>
+              <h1 className="text-[20px] text-[#000000]">
+                Employer Contribution
+              </h1>
               <p className="text-[20px] text-[#5C5B5B] mb-[30px]">
                 {deduction.employerContribution}
               </p>
