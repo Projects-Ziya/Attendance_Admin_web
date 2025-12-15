@@ -3,7 +3,7 @@ import search from "../../assets/search.svg";
 import dropdownicon from "../../assets/dropdown.svg";
 import type { Employee } from "../../models/quickActionPanel/Employee";
 import api from "../../Api/api";
-
+import { BASE_URL } from "../../constants/urls";
 type DeleteEmployeeProps = {
   onSearch: (query: string, employee?: Employee) => void;
 };
@@ -44,8 +44,8 @@ const DeleteEmployee = ({ onSearch }: DeleteEmployeeProps) => {
             name: `${item.first_name} ${item.last_name}`,
             designation: item.designation,
             department: item.department,
-            avatarUrl: item.profile_pic
-              ? item.profile_pic
+            profile_pic: item.profile_pic
+              ? `${BASE_URL}${item.profile_pic}`
               : "/default-avatar.png",
             status: item.emp_status || "",
             exitDate: item.emp_exit_date || "",
@@ -154,7 +154,7 @@ const DeleteEmployee = ({ onSearch }: DeleteEmployeeProps) => {
                     className="px-4 py-2 cursor-pointer hover:bg-gray-100 flex items-center gap-2"
                   >
                     <img
-                      src={emp.avatarUrl}
+                      src={emp.profile_pic}
                       alt={emp.name}
                       className="w-6 h-6 rounded-full"
                     />

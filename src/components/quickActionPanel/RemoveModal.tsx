@@ -33,10 +33,14 @@ const RemoveModal = ({
 
         <div className="flex flex-row pt-[56px]">
           <img
-            src={employeeImage}
+            src={employeeImage || "/default-avatar.png"}
             alt={employeeName}
             className="w-[100px] h-[100px] rounded-full object-cover mb-[16px]"
+            onError={(e) => {
+              e.currentTarget.src = "/default-avatar.png";
+            }}
           />
+
           <div className="flex flex-col pl-[20px]">
             <h2 className="text-[18px] font-medium text-[#4D4D4D] leading-[16px]">
               {employeeName}
@@ -62,6 +66,7 @@ const RemoveModal = ({
               <option value="resigned">Resigned</option>
             </select>
           </div>
+
           <div className="w-[309px]">
             <input
               type="text"
@@ -85,6 +90,7 @@ const RemoveModal = ({
           >
             Cancel
           </button>
+
           <div className="pl-[143px]">
             <button
               onClick={() => onConfirm(status, description)}
