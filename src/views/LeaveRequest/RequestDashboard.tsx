@@ -42,7 +42,7 @@ export default function RequestDashboard() {
           <LeaveRequestTable
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            loading={leaveLoading}
+            
             requests={leaveRequests}
           />
       
