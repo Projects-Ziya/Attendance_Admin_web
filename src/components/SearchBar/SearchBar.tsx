@@ -35,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onSearch }) => {
         <input
           type="text"
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+  onChange={(e) => onSearch(e.target.value)}
           placeholder="Search here"
           className="w-full bg-transparent outline-none text-[12px] sm:text-[13px] lg:text-[14px] text-global-4 placeholder:text-global-4 font-['Poppins']"
         />

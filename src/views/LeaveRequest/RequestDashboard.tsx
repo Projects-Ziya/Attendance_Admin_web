@@ -38,20 +38,15 @@ export default function RequestDashboard() {
 
       {/* Leave Requests Table */}
       {activeTab === "leave" && (
-<<<<<<< HEAD
-=======
+
       
->>>>>>> 54c88a7caf0b3a79b6e27b7e7c227cede2fb77e3
           <LeaveRequestTable
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            loading={leaveLoading}
+            
             requests={leaveRequests}
           />
-<<<<<<< HEAD
-=======
-      
->>>>>>> 54c88a7caf0b3a79b6e27b7e7c227cede2fb77e3
+
       )}
 
       {/* Project Approvals Table */}

@@ -5,7 +5,7 @@ import StatsCard from "../../components/employee/TotEmpStatsCard";
 import EmployeeCard from "../../components/employee/EmployeeCard";
 import { useEmployees } from "../../hooks/useEmployees";
 import type { Employee } from "../../models/Employee";
-import { IoMdArrowDropright } from "react-icons/io"; 
+import { IoMdArrowDropright } from "react-icons/io";
 
 import HeadingIcon from "../../assets/images/icons/TEicon.svg";
 import UsersIcon from "../../assets/images/icons/TE.svg";
@@ -17,7 +17,7 @@ import OnlineInt from "../../assets/images/icons/OnIntern.svg";
 import OfflineEmp from "../../assets/images/icons/OffEicon.svg";
 import OfflineInt from "../../assets/images/icons/OffIntern.svg";
 import { employeeService } from "../../services/employeeService";
-import api from "../../Api/api";   // ✅ Added to call your API
+import api from "../../Api/api";
 
 const containerVariants = {
   hidden: {},
@@ -39,7 +39,7 @@ const EmployeeDashboardHome = () => {
   const [selectedYear, setSelectedYear] = useState("");
   const [attendanceSummaryData, setAttendanceSummaryData] = useState<any>(null);
 
-  // ✅ NEW: designation list
+  // designation list
   const [designations, setDesignations] = useState<any[]>([]);
 
   // Fetch attendance
@@ -55,13 +55,12 @@ const EmployeeDashboardHome = () => {
     fetchAttendance();
   }, []);
 
-  // ✅ NEW: Fetch Designations from API
+  // Fetch Designations from API
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
         const res = await api.get("/api/list-designations/");
         setDesignations(res.data.data || []);
-        
       } catch (err) {
         console.error("Failed to fetch designations:", err);
       }
@@ -77,18 +76,27 @@ const EmployeeDashboardHome = () => {
   // -----------------------------
   // FILTER EMPLOYEES
   // -----------------------------
-  const filteredEmployees = employees.filter((emp) => {
-    const matchesSearch = emp.name.toLowerCase().includes(search.toLowerCase());
+  const filteredEmployees = employees.filter((emp: any) => {
+    const name = emp.name ? emp.name.toLowerCase() : "";
+    const matchesSearch = name.includes(search.toLowerCase());
 
-    // 🔥 MATCH USING designation.id FROM API
+    // emp.designation is a string in EmployeeCard
+    const empDesignationTitle = emp.designation || "";
+
+    const empStatus = emp.status;
+    const empJoinYear = emp.joiningYear ?? emp.joining_year;
+
     const matchesDesignation =
-      !selectedDesignation || emp.designation_id?.toString() === selectedDesignation;
+      !selectedDesignation ||
+      empDesignationTitle === selectedDesignation;
 
     const matchesStatus =
-      !selectedStatus || emp.status === selectedStatus;
+      !selectedStatus || empStatus === selectedStatus;
 
     const matchesYear =
-      !selectedYear || emp.joiningYear.toString() === selectedYear;
+      !selectedYear ||
+      (empJoinYear != null &&
+        empJoinYear.toString() === selectedYear);
 
     return matchesSearch && matchesDesignation && matchesStatus && matchesYear;
   });
@@ -100,11 +108,12 @@ const EmployeeDashboardHome = () => {
     startIndex + itemsPerPage
   );
 
-  const groupedByDepartment = paginatedEmployees.reduce((acc, emp) => {
-    if (!acc[emp.department]) {
-      acc[emp.department] = [];
+  const groupedByDepartment = paginatedEmployees.reduce((acc, emp: any) => {
+    const dept = emp.department || "Unknown";
+    if (!acc[dept]) {
+      acc[dept] = [];
     }
-    acc[emp.department].push(emp);
+    acc[dept].push(emp);
     return acc;
   }, {} as Record<string, Employee[]>);
 
@@ -144,10 +153,7 @@ const EmployeeDashboardHome = () => {
         <SearchBar value={search} onSearch={setSearch} />
 
         <div className="flex gap-3 text-ziyablack">
-
-          {/* ---------------------- */}
-          {/* ✅ DESIGNATION DROPDOWN */}
-          {/* ---------------------- */}
+          {/* Designation dropdown */}
           <select
             className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
             value={selectedDesignation}
@@ -155,7 +161,7 @@ const EmployeeDashboardHome = () => {
           >
             <option value="">Designation</option>
             {designations.map((d) => (
-              <option key={d.id} value={d.id}>
+              <option key={d.id} value={d.title}>
                 {d.title}
               </option>
             ))}
@@ -182,7 +188,6 @@ const EmployeeDashboardHome = () => {
             <option value="2025">2025</option>
             <option value="2026">2026</option>
           </select>
-
         </div>
       </motion.div>
 
@@ -200,7 +205,7 @@ const EmployeeDashboardHome = () => {
         {Object.entries(groupedByDepartment).map(([department, deptEmployees]) => (
           <motion.div key={department} className="px-7 pt-4" variants={itemVariants}>
             <h2 className="text-ziyablue font-medium">{department}</h2>
-            {deptEmployees.map((emp) => (
+            {deptEmployees.map((emp: any) => (
               <motion.div key={emp.id} variants={itemVariants}>
                 <EmployeeCard employee={emp} />
               </motion.div>
@@ -232,10 +237,8 @@ const EmployeeDashboardHome = () => {
             >
               <IoMdArrowDropright size={36} />
             </button>
-
           </div>
         </motion.div>
-
       </motion.div>
     </motion.div>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../../Api/api";
-
+import toast from "react-hot-toast";
 import EditBasicDetails from "../../../components/modifyProfile/EditBasicDetails";
 import EditPersonalDetails from "../../../components/modifyProfile/EditPersonalDetails";
 import EditBankDetails from "../../../components/modifyProfile/EditBankDetails";
@@ -70,11 +70,11 @@ const EditProfile = () => {
           employeeData
         );
 
-        alert("Changes saved successfully!");
+        toast("Changes saved successfully!");
         setEmployeeData(res.data);
       } catch (error) {
         console.error("Failed to update employee details", error);
-        alert("Failed to save changes. Try again.");
+        toast("Failed to save changes. Try again.");
       } finally {
         setUpdating(false);
       }
