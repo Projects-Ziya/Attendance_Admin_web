@@ -18,7 +18,7 @@ const LeaveDetails = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Fetch API data
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         const response = await api.get(`/api/leave-details-diagram/${id}/`);
