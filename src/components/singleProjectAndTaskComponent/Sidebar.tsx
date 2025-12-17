@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import TaskDetailsCard from './TaskDetailsCard';
-import { AppViewModel } from "../../viewmodels/AppViewModel"
 import TimeSpentCard from "../../components/singleProjectAndTaskComponent/TimeSpentCard";
 import EditProjectButton from "../../components/singleProjectAndTaskComponent/EditProjectButton";
 import CircleImage from "../../components/singleProjectAndTaskComponent/CircleImage";
 import { BASE_URL } from '../../constants/urls';
+import type { ApiProjectDetails } from '../../models/ProjectModel';
 
-const Sidebar: React.FC = ({ApiProject}) => {
-  const viewModel = new AppViewModel();
-  const taskData = viewModel.getTaskData();
-  const timeSpentData = viewModel.getTimeSpentData();
-  const avatarUrl = viewModel.getAvatarUrl();
- const [data, setData] = useState(ApiProject);
+interface SidebarProps {
+  ApiProject: ApiProjectDetails;
+}
 
-useEffect(() => {
-  setData(ApiProject);
-}, [ApiProject]);
+const Sidebar: React.FC<SidebarProps> = ({ApiProject}) => {
+  const [data, setData] = useState(ApiProject);
+
+  useEffect(() => {
+    setData(ApiProject);
+  }, [ApiProject]);
 
   return (
     <div className="w-[290px] h-fit bg-white  flex flex-col items-center">

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import type { BasicDetailsPayload } from "../../services/employeeService";
-
+import api from "../../Api/api";
 
 interface BasicDetailsProps {
   data: BasicDetailsPayload;
@@ -11,12 +11,39 @@ interface BasicDetailsProps {
 type Errors = Partial<Record<keyof BasicDetailsPayload, string>>;
 
 const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => {
-
   const [errors, setErrors] = useState<Errors>({});
   const defaultAvatar = "/default-avatar.jpeg";
   const [previewImage, setPreviewImage] = useState<string>(defaultAvatar);
+ const [departments, setDepartments] = useState<{id: string, name: string}[]>([]);
+const [designations, setDesignations] = useState<
+  { id: number; designation_name: string }[]
+>([]);
 
-    useEffect(() => {
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await api.get("/api/list-departments/");
+        setDepartments(res.data.data || []);
+      } catch (err) {
+        console.error("Failed to fetch departments:", err);
+      }
+    };
+    fetchDepartments();
+  }, []);
+
+useEffect(() => {
+  if (data.department) {
+    api
+      .get(`/api/list-designation-by-department/${Number(data.department)}/`)
+      .then(res => setDesignations(res.data.designations || []));
+  } else {
+    setDesignations([]);
+  }
+}, [data.department]);
+
+
+
+  useEffect(() => {
     if (data.profilePic instanceof File) {
       const url = URL.createObjectURL(data.profilePic);
       setPreviewImage(url);
@@ -29,12 +56,12 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-     const { name, value } = e.target;
+    const { name, value } = e.target;
     update({ [name]: value } as Partial<BasicDetailsPayload>);
     setErrors((prev) => ({ ...prev, [name as keyof BasicDetailsPayload]: "" }));
   };
 
-    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
     update({ profilePic: file });
   };
@@ -49,18 +76,14 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
     if (!payload.department) newErrors.department = "Select department";
     if (!payload.userType) newErrors.userType = "Select user type";
     if (!payload.repMgrTl) newErrors.repMgrTl = "Select Rep Mgr / TL";
-
     if (!payload.salary || isNaN(Number(payload.salary))) {
       newErrors.salary = "Enter valid salary";
     }
-
     const emailRegex = /\S+@\S+\.\S+/;
     if (!payload.email || !emailRegex.test(payload.email))
       newErrors.email = "Enter valid email";
-
     if (!payload.password || payload.password.length < 6)
       newErrors.password = "Password must be at least 6 characters";
-
     if (payload.confirmPassword !== payload.password)
       newErrors.confirmPassword = "Passwords do not match";
 
@@ -68,13 +91,12 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
     return Object.keys(newErrors).length === 0;
   };
 
- const allFieldsFilled = useMemo(() => {
+  const allFieldsFilled = useMemo(() => {
     const { profilePic, ...rest } = data;
-    // profilePic optional 
     return Object.values(rest).every((v) => v !== "" && v !== null && v !== undefined);
   }, [data]);
 
-   const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!validate(data)) return;
     onNext();
@@ -101,7 +123,6 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-
       <div className="bg-purple-50 p-3 rounded-md flex items-center space-x-4">
         {previewImage && (
           <img
@@ -128,7 +149,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
               Upload
             </label>
             {data.profilePic && (
-               <button
+              <button
                 type="button"
                 onClick={() => update({ profilePic: null })}
                 className="px-5 py-1 border bg-gray-100 rounded-md text-sm"
@@ -141,9 +162,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600">
-          First Name
-        </label>
+        <label className="block text-sm font-medium text-gray-600">First Name</label>
         <input
           type="text"
           name="firstName"
@@ -155,9 +174,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Last Name
-        </label>
+        <label className="block text-sm font-medium text-gray-600 mb-1">Last Name</label>
         <input
           type="text"
           name="lastName"
@@ -170,9 +187,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
 
       <div className="grid grid-cols-4 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Employee ID
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Employee ID</label>
           <input
             type="text"
             name="employeeId"
@@ -184,9 +199,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Job Type
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Job Type</label>
           <select
             name="jobType"
             value={data.jobType}
@@ -200,129 +213,50 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
           {errors.jobType && <p className="text-red-500 text-sm">{errors.jobType}</p>}
         </div>
 
-        
-
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Department
-          </label>
-          <select
-            name="department"
-            value={data.department}
-            onChange={handleChange}
-            className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
-          >
-            <option value="">Select</option>
-            <option value="Management & HR Department">Management & HR Department</option>
-            <option value="Creative & Design Department">Creative & Design Department</option>
-            <option value="Software Development Department">Software Development Department</option>
-            <option value="Cyber Security Department">Cyber Security Department</option>
-            <option value="Digital Marketing Department">Digital Marketing Department</option>
-            <option value="Sales & Marketing Department">Sales & Marketing Department</option>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Department</label>
+     <select
+  name="department"
+  value={data.department}
+  onChange={handleChange}
+  className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
+>
+  <option value="">Select</option>
+  {departments.map((d) => (
+    <option key={d.id} value={d.id}>
+      {d.name}
+    </option>
+  ))}
+</select>
 
-          </select>
           {errors.department && <p className="text-red-500 text-sm">{errors.department}</p>}
         </div>
+
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Designation
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Designation</label>
           <select
-            name="designation"
-            value={data.designation}
-            onChange={handleChange}
-            className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
-          >
-            <option value="">Select</option>
-           {
-  data.department === "Management & HR Department" && (
-    <>
-      <option value="CHRO">CHRO</option>
-      <option value="CTO">CTO</option>
-      <option value="CMO">CMO</option>
-      <option value="CHO">CHO</option>
-      <option value="HR manager">HR manager</option>
-      <option value="HR Executives / Recruiters">HR Executives / Recruiters</option>
-      <option value="Payroll & Compliance Officer">Payroll & Compliance Officer</option>
-      <option value="Training & Development Officer">Training & Development Officer</option>
-    </>
-  )
-}
-            {
-              data.department === "Creative & Design Department" &&(
-                <>
-  <option value="Creative Director">Creative Director</option>
-            <option value="Design Team Lead">Design Team Lead</option>
-            <option value="Graphic Designers">Graphic Designers</option>
-            <option value="UI/UX Designers">UI/UX Designers</option>
-            <option value="Media Production Lead">Media Production Lead</option>
-            <option value="Motion Graphics Designer">Motion Graphics Designer</option>
-                </>
+  name="designation"
+  value={data.designation}
+  onChange={handleChange}
+  className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
+>
+  <option value="">Select</option>
+  {designations.map((d) => (
+    <option key={d.id} value={d.id}>
+      {d.designation_name}
+    </option>
+  ))}
+</select>
 
-              )
-            }
-          {
-            data.department === "Software Development Department" &&(
-            <>
-            <option value="Frontend Team Lead">Frontend Team Lead</option>
-            <option value="React Developers">React Developer</option>
-            <option value="MERN Stack Developers">MERN Stack Developer</option>
-            <option value="MEAN Stack Developers">MEAN Stack Developer</option>
-            <option value="Backend Team Lead">Backend Team Lead</option>
-            <option value="Python Developer">Python Developer</option>
-            <option value="Database Engineer">Database Engineer</option>
-            <option value="Mobile Developers Team Lead">Mobile Developers Team Lead</option>
-            <option value="Flutter Developers">Flutter Developer</option>
-            <option value="Game Development Lead">Game Development Lead</option>
-            <option value="Game Developer">Game Developer</option>
-            </>
-            )
-          }
-          
-{data.department === "Cyber Security Department" &&(
-  <>
-            <option value="Head of Cyber Security">Head of Cyber Security</option>
-            <option value="Senior Security Analyst">Senior Security Analyst</option>
-            <option value="Cyber Security Analysts">Cyber Security Analysts</option>
-
-  </>
-)}
-
-{data.department === "Digital Marketing Department" &&(
-  <>
-   <option value="SEO & Content Team Lead">SEO & Content Team Lead</option>
-            <option value="SEO Specialists">SEO Specialists</option>
-            <option value="Content Writers">Content Writers</option>
-            <option value="Social Media Team Lead">Social Media Team Lead</option>
-            <option value="Digital Marketers">Digital Marketers</option>
-            <option value="Graphic Designer ">Graphic Designer</option>
-            <option value="Video Editor">Video Editor</option>
-            <option value="Data Analyst">Data Analyst </option>
-  </>
-)}
-           
-           
-{data.department === "Sales & Marketing Department" &&(
-  <>
- <option value="Sales Manager">Sales Manager</option>
-            <option value="Business Development Executives">Business Development Executives</option>
-            <option value="Client Relationship Managers">Client Relationship Managers</option>
-            <option value="Sales Associates / Executives">Sales Associates / Executives</option>
-  </>
-
-)}
-
-           
-          </select>
           {errors.designation && <p className="text-red-500 text-sm">{errors.designation}</p>}
         </div>
       </div>
 
+      {/* rest unchanged */}
+
       <div className="grid grid-cols-4 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            User Type
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">User Type</label>
           <select
             name="userType"
             value={data.userType}
@@ -336,9 +270,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
           {errors.userType && <p className="text-red-500 text-sm">{errors.userType}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Rep Mgr / TL
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Rep Mgr / TL</label>
           <select
             name="repMgrTl"
             value={data.repMgrTl}
@@ -346,21 +278,16 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
             className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
           >
             <option value="">Select</option>
-            <option value="emplo">Employee</option>
             <option value="mgr1">Manager 1</option>
             <option value="mgr2">Manager 2</option>
             <option value="tl1">Team Lead 1</option>
             <option value="tl2">Team Lead 2</option>
             <option value="Employee">Employee</option>
-
           </select>
           {errors.repMgrTl && <p className="text-red-500 text-sm">{errors.repMgrTl}</p>}
         </div>
-
         <div className="col-span-2">
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Salary
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Salary</label>
           <input
             type="text"
             name="salary"
@@ -373,9 +300,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Employee Email Address
-        </label>
+        <label className="block text-sm font-medium text-gray-600 mb-1">Employee Email Address</label>
         <input
           type="email"
           name="email"
@@ -388,9 +313,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Create Password
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Create Password</label>
           <input
             type="password"
             name="password"
@@ -401,9 +324,7 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
           {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-1">
-            Confirm Password
-          </label>
+          <label className="block text-sm font-medium text-gray-600 mb-1">Confirm Password</label>
           <input
             type="password"
             name="confirmPassword"
@@ -426,8 +347,9 @@ const BasicDetails: React.FC<BasicDetailsProps> = ({ data, update, onNext }) => 
         <button
           type="submit"
           disabled={!allFieldsFilled}
-          className={`px-5 py-1 rounded-md text-white ${allFieldsFilled ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-400 cursor-not-allowed"
-            }`}
+          className={`px-5 py-1 rounded-md text-white ${
+            allFieldsFilled ? "bg-blue-500 hover:bg-blue-600" : "bg-blue-400 cursor-not-allowed"
+          }`}
         >
           Continue
         </button>

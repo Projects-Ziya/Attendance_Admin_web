@@ -1,57 +1,167 @@
-
-import type { ProjectDetails } from "../models/ProjectModel";
-
-
-import arjun from "../assets/avatars/arjun.jpeg";
-import divya from "../assets/avatars/divya.jpeg";
-import karthik from "../assets/avatars/karthik.jpeg";
-import neha from "../assets/avatars/neha.jpeg";
-import vivek from "../assets/avatars/vivek.jpeg";
-import placeholder from "../assets/avatars/placeholder.jpeg"; 
-import dysonImage from "../assets/avatars/dysonImage.png"
+import type { ApiProjectDetails, Member } from "../models/ProjectModel";
+import { BASE_URL } from "../constants/urls";
 
 export class AppViewModel {
-  getProjectData(): ProjectDetails {
+  constructor(private apiResponse: ApiProjectDetails) {}
+
+  /* ---------------- PROJECT CORE ---------------- */
+
+  getProjectId() {
+    return this.apiResponse.data.id;
+  }
+
+  getProjectName() {
+    return this.apiResponse.data.project_name;
+  }
+
+  getClient() {
+    return this.apiResponse.data.client;
+  }
+
+  getProjectValue() {
+    return this.apiResponse.data.project_value;
+  }
+
+  getWorkingHours() {
+    return this.apiResponse.data.total_working_hours;
+  }
+
+  getCreatedOn() {
+    return this.apiResponse.data.created_at;
+  }
+
+  getStartDate() {
+    return this.apiResponse.data.start_date;
+  }
+
+  getDueDate() {
+    return this.apiResponse.data.end_date;
+  }
+
+  getPriority() {
+    return this.apiResponse.data.priority;
+  }
+
+  getStatus() {
+    return this.apiResponse.data.status;
+  }
+
+  getDescription() {
+    return this.apiResponse.data.description;
+  }
+
+  /* ---------------- CREATED BY ---------------- */
+
+  getCreatedBy(): Member {
     return {
-      projectId: "TSH-1001",
-      client: "Smart Vision Enterprises",
-      proValue: "1400",
-      workHours: "150 Hrs",
-      createdOn: "12/05/2025",
-      startOn: "12/05/2025",
-      dueDate: "27/05/2025",
-      priority: "High",
-      status: "In Progress",
-      createdBy: { id: 1, name: "Divya Iyer", avatar: divya },
-      tags: [
-        { id: 2, name: "Divya Iyer", avatar: divya },
-        { id: 3, name: "Neha Verma", avatar: neha },
-      ],
-      teamMembers: [
-        { id: 4, name: "Karthik Reddy", avatar: karthik },
-        { id: 5, name: "Rahul Nair", avatar: placeholder },
-      ],
-      teamLeads: [
-        { id: 6, name: "Vivek Krishnan", avatar: vivek },
-      ],
-      projectManager: {
-        id: 7,
-        name: "Arjun Mohan",
-        avatar: arjun,
-      },
-      description: "Donec non sem sit amet mi hendrerit ultrices quis ac sem. Quisque vitae elit nunc. Maecenas dictum sed eros fermentum convallis. Pellentesque porta mauris eu nisi dignissim, ut convallis massa finibus. Vivamus tempor, quam facilisis molestie euismod, ante augue cursus lacus, sit amet facilisis dui tortor fermentum felis. Mauris quis tortor in enim molestie dictum id nec sem. Integer vehicula eleifend sem, ut molestie ligula pharetra vitae. In hac habitasse platea dictumst. Nullam mollis, mi at luctus eleifend, velit tortor tincidunt urna, id volutpat lorem mi eget orci.",
+      id: 1,
+      name: this.apiResponse.data.assigned_by,
+      avatar: this.apiResponse.data.assigned_by_pic
+        ? `${BASE_URL}${this.apiResponse.data.assigned_by_pic}`
+        : null,
     };
   }
 
-  getAvatarUrl(): string {
-    return dysonImage; 
+  /* ---------------- TAGS (from members.tags[]) ---------------- */
+
+  getTags(): Member[] {
+    const tags: Member[] = [];
+
+    this.apiResponse.data.members.forEach((m) => {
+      m.tags.forEach((tag, index) => {
+        tags.push({
+          id: Number(`${m.id}${index}`),
+          name: tag,
+        });
+      });
+    });
+
+    return tags;
   }
 
-  getTimeSpentData(): { spentHours: number; totalHours: number } {
-    return { spentHours: 25, totalHours: 120 };
+  /* ---------------- TEAM MEMBERS ---------------- */
+  // Your API has no explicit "team members" list,
+  // so tags are treated as members (as per your UI usage)
+
+  getTeamMembers(): Member[] {
+    return this.getTags();
   }
 
-  getTaskData(): { completed: number; total: number } {
-    return { completed: 1, total: 6 };
+  /* ---------------- TEAM LEADS ---------------- */
+
+  getTeamLeads(): Member[] {
+    const map = new Map<number, Member>();
+
+    this.apiResponse.data.members.forEach((m) => {
+      if (m.team_leader) {
+        map.set(m.team_leader.id, {
+          id: m.team_leader.id,
+          name: m.team_leader.name,
+          avatar: m.team_leader.profile_pic
+            ? `${BASE_URL}${m.team_leader.profile_pic}`
+            : null,
+        });
+      }
+    });
+
+    return Array.from(map.values());
+  }
+
+  /* ---------------- PROJECT MANAGER ---------------- */
+
+  getProjectManager(): Member {
+    const pm = this.apiResponse.data.members[0]?.project_manager;
+
+    return {
+      id: pm?.id ?? 0,
+      name: pm?.name ?? "N/A",
+      avatar: pm?.profile_pic
+        ? `${BASE_URL}${pm.profile_pic}`
+        : null,
+    };
+  }
+
+  /* ---------------- TASK & TIME ---------------- */
+
+  getTimeSpentData() {
+    const spent = parseFloat(this.apiResponse.data.time_spent);
+    const total = Number(this.apiResponse.data.total_working_hours);
+
+    return {
+      spentHours: spent,
+      totalHours: total,
+    };
+  }
+
+  getTaskData() {
+    return {
+      completed: this.apiResponse.data.completed_tasks_count,
+      total: this.apiResponse.data.tasks.length,
+    };
+  }
+
+  /* ---------------- PROJECT LOGO ---------------- */
+
+  getAvatarUrl() {
+    return `${BASE_URL}${this.apiResponse.data.project_logo}`;
+  }
+
+  /* ---------------- UI CLASSES ---------------- */
+
+  getPriorityClass(): string {
+    const priority = this.getPriority();
+    switch (priority) {
+      case "High": return "bg-red-200 text-red-600";
+      case "Medium": return "bg-yellow-100 text-yellow-600";
+      default: return "bg-green-100 text-green-600";
+    }
+  }
+
+  getStatusClass(): string {
+    return "bg-sky-100 text-sky-500";
+  }
+
+  getStatusDotClass(): string {
+    return "bg-sky-500";
   }
 }

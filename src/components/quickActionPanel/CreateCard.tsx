@@ -23,7 +23,7 @@ const CreateCard = ({
   description,
   inputs,
   buttonLabel,
-  enableSearch = false,
+  enableSearch = true,
 }: CreateCardProps) => {
   const [values, setValues] = useState<string[]>(inputs.map(() => ""));
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -144,31 +144,54 @@ const CreateCard = ({
   };
 
   // ✅ Updated backend search logic — includes employee ID & full_name
-  const handleSearchQuery = async (q: string) => {
-    setQuery(q);
-    if (q.trim() === "") {
-      setSuggestions([]);
-      return;
-    }
+ // ✅ Updated backend search logic — FIXED
+const handleSearchQuery = async (q: string) => {
+  if (!q.trim()) {
+    setSuggestions([]);
+    return;
+  }
 
-    try {
-      const res = await api.get(`/api/ceo-cmo-search/?letter=${q}`);
-      if (res.data?.success && Array.isArray(res.data.executives)) {
-        const filtered = res.data.executives.map((emp: any) => ({
-          id: emp.id,
-          name: `${emp.full_name} `,
-          originalName: emp.full_name,
+  try {
+    console.log("SEARCH QUERY:", q);
+
+    // ✅ THIS API ACTUALLY EXISTS
+    const res = await api.get("/api/list-departments/");
+    console.log("SEARCH RESPONSE:", res.data);
+
+    if (res.data?.success && Array.isArray(res.data.data)) {
+      const filtered = res.data.data
+        .filter(
+          (item: any) =>
+            item.department_head_name &&
+            item.department_head_name
+              .toLowerCase()
+              .includes(q.toLowerCase())
+        )
+        .map((item: any) => ({
+          id: item.department_head_id,
+          name: item.department_head_name,
+          originalName: item.department_head_name,
         }));
 
-        setSuggestions(filtered);
-      } else {
-        setSuggestions([]);
-      }
-    } catch (err) {
-      console.error("Search API error:", err);
+      setSuggestions(filtered);
+    } else {
       setSuggestions([]);
     }
-  };
+  } catch (err) {
+    console.error("Search API error:", err);
+    setSuggestions([]);
+  }
+};
+
+useEffect(() => {
+  handleSearchQuery(query);
+}, [query]);
+
+
+useEffect(() => {
+  handleSearchQuery(query);
+}, [query]);
+
 
   const handleSelectSuggestion = (emp: any, idx: number) => {
     setQuery(emp.name);
@@ -250,7 +273,7 @@ const CreateCard = ({
                   className="border-[1px] border-[#D9D9D9] rounded-[5px] text-[14px] h-[2.8125rem] w-full max-w-[36.8125rem] px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder={input.placeholder || ""}
                 />
-              ) : title === "Create Departments" && idx === firstSelectIndex ? (
+              ) : title === "Create Departments" &&enableSearch ? (
                 // ✅ Search section ONLY for "Create Departments"
                 <div className="w-[532px] pl-[2px]  ">
                   <div className="relative w-[589px]">
@@ -258,8 +281,9 @@ const CreateCard = ({
                       type="text"
                       placeholder="Search employee..."
                       value={query}
-                      onChange={(e) => handleSearchQuery(e.target.value)}
-                      className="border border-gray-300 rounded-lg w-full h-[46px] pl-10 pr-24"
+
+onChange={(e) => setQuery(e.target.value)}
+                      className="border-2 rounded-lg w-full h-10 pl-10 pr-24"
                     />
 
                     <img
