@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from "react";
-import type { ProjectDetails } from "../../../models/ProjectModel";
-import { ProjectViewModel } from "../../../viewmodels/ProjectViewModel";
-import CircleImage from "../CircleImage";
+import { AppViewModel } from "../../../viewmodels/AppViewModel";
 import DetailRow from "./DetailRow";
 import BadgeWithAvatar from "./BadgeWithAvatar";
 import MemberSection from "./MemberSection";
 import AddNewButton from "./AddNewButton";
 import UserBadge from "../UserBadge"
 import { BASE_URL } from "../../../constants/urls";
-
+import type { ApiProjectDetails } from "../../../models/ProjectModel";
 interface ProjectDetailsCardProps {
-  projectDetails: ProjectDetails;
+  projectDetails: AppViewModel;
+  ApiProject: ApiProjectDetails;
 }
 
-const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails,ApiProject }) => {
-  const viewModel = new ProjectViewModel(projectDetails);
-  
-  
- const [data, setData] = useState(ApiProject);
+const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails, ApiProject }) => {
+  const viewModel = projectDetails; // ✅ use the passed AppViewModel
+  const [data, setData] = useState(ApiProject);
 
-useEffect(() => {
-  setData(ApiProject);
-}, [ApiProject]);
+  useEffect(() => {
+    setData(ApiProject);
+  }, [ApiProject]);
 
   return (
     <div className="w-auto h-auto bg-white pr-[39px]">
       {/* Header */}
       
       <h2 className=" text-2xl font-poppins font-semibold leading-[16px] 
-             tracking-[1.92px] text-[#4D4D4D] pt-[52px]">{data?.data.project_name}</h2>
+             tracking-[1.92px] text-[#4D4D4D] pt-[52px]">{viewModel.getProjectName()}</h2>
 
         
         {/* Row for Project ID */}
