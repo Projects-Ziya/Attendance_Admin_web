@@ -131,6 +131,8 @@ export const usePollFeedbackViewModel = () => {
   return {
     form,
     setFormTitle,
+    setForm,
+   
     setFormDescription,
     handleAddQuestion,
     handleEditQuestionText,

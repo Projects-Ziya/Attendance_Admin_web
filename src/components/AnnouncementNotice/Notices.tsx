@@ -96,6 +96,7 @@ const Notices: React.FC = () => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleEditClick = (notice: Notice) => {
     setSelectedNotice(notice);
@@ -173,7 +174,7 @@ const Notices: React.FC = () => {
 
       <div className="flex gap-[40px] pt-[60px]">
         {/* Create Notice */}
-        <div className="w-[600px] h-[700px] pb-5 border border-gray-200 rounded-lg p-[30px] flex flex-col gap-[30px]">
+        <div className="w-[600px] h-auto pb-5 border border-gray-200 rounded-lg p-[30px] flex flex-col gap-[30px]">
           <h2 className="text-[25px] font-[500]">Create Notice</h2>
 
           <div className="flex flex-col gap-4">
@@ -202,7 +203,25 @@ const Notices: React.FC = () => {
               className="border border-gray-300 rounded-lg px-4 py-3 text-[18px] bg-[#F6F6F6] h-[120px]"
             />
           </div>
+{! showConfirm && (
+  <div className="flex justify-end">
+          <button className="flex justify-center items-center  px-6 py-2 
+  text-[#00A0E3] border border-[#00A0E3] rounded-lg text-[16px] font-[500]
+  transition-all duration-300 ease-in-out
+  hover:bg-[#00A0E3] hover:text-white hover:border-[#00A0E3] hover:scale-105"
+          onClick={()=>{
+if (!title || !description ||!date){
+toast.error("Please fill all the fields");
+return ;
 
+
+          }setShowConfirm(true)}}>
+            Save
+          </button>
+          </div>
+)}
+{ showConfirm && (
+  <>
           <div className="flex  justify-center  mt-[20px]">
             <button className="bg-[#DAF1FB] w-full text-[#00A0E3] border border-[#00A0E3] px-4 py-3 rounded-lg text-[16px] font-[500]">
               Are you sure you want to save this notice ?
@@ -223,12 +242,15 @@ const Notices: React.FC = () => {
                 setTitle("");
                 setDate("");
                 setDescription("");
+                setShowConfirm(false)
               }}
               className="bg-white w-1/2 border text-[#00A0E3] border-[#00A0E3] px-6 py-2 rounded-lg text-[18px] font-[500]  hover:text-gray-800 transition-all duration-200 hover:rounded-xl  hover:scale-105 active:scale-90"
-            >
+               >
               Cancel
             </button>
             </div>
+          </>
+)}
          
         </div>
 

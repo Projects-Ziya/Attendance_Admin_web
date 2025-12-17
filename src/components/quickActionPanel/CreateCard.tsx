@@ -252,14 +252,14 @@ const CreateCard = ({
                 />
               ) : title === "Create Departments" && idx === firstSelectIndex ? (
                 // ✅ Search section ONLY for "Create Departments"
-                <div className="w-[532px] pl-[2px] pb-[10px] pt-[10px]">
+                <div className="w-[532px] pl-[2px]  ">
                   <div className="relative w-[589px]">
                     <input
                       type="text"
                       placeholder="Search employee..."
                       value={query}
                       onChange={(e) => handleSearchQuery(e.target.value)}
-                      className="border-2 rounded-lg w-full h-10 pl-10 pr-24"
+                      className="border border-gray-300 rounded-lg w-full h-[46px] pl-10 pr-24"
                     />
 
                     <img
@@ -311,7 +311,7 @@ const CreateCard = ({
                       fill="none"
                     >
                       <path
-                        d="M6 8L10 12L14 8"
+                        d="M6 8L10 12L14 8 "
                         stroke="#4D4D4D"
                         strokeWidth="1.5"
                         strokeLinecap="round"

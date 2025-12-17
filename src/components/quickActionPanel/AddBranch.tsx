@@ -3,23 +3,25 @@ import addicon from "../../assets/add.svg";
 import api from "../../Api/api";
 import AddBranchModal from "./AddBranchModal";
 import buildingBlue from "../../assets/buildingblue.svg"; // default icon
+import deleteicon from "../../assets/icons/delete.svg"
+import toast from "react-hot-toast";
 
-const BranchCard = (props: any) => {
-  const {
-    name,
-    company_id,
-    phone,
-    email,
-    starting_time,
-    closing_time,
-    address,
-    status,
-    location,
-    id,
-  } = props;
 
+const BranchCard = ({
+  name,
+  company_id,
+  phone,
+  email,
+  starting_time,
+  closing_time,
+  address,
+  status,
+  location,
+  id,
+  onDelete
+}: any) => {
   return (
-    <div className="rounded-[5px]  h-[383px] pb-[50px] bg-white shadow-[0px_0px_2px_0px_#00000040]  pl-[34px] pr-[34px] pt-[30px] flex flex-col">
+    <div className="rounded-[5px] h-[383px] pb-[50px] bg-white shadow-[0px_0px_2px_0px_#00000040] pl-[34px] pr-[34px] pt-[30px] flex flex-col">
       <img src={buildingBlue} alt="Branch Icon" className="w-[55px] h-[55px] mb-[15px]" />
 
       <h3 className="text-[16px] font-[600] tracking-[0.08em] leading-[20px] text-[#00A0E3]">
@@ -64,13 +66,22 @@ const BranchCard = (props: any) => {
         </p>
       </div>
 
- 
       <p className="text-[12px] text-midGray leading-[180%] pt-[34px]">
         {address}
       </p>
+
+      <div className="flex justify-end mt-5">
+        <img
+          src={deleteicon}
+          alt="delete"
+          className="transition-transform duration-200 hover:scale-110 active:scale-90"
+          onClick={onDelete}
+        />
+      </div>
     </div>
   );
 };
+
 
 const AddBranchCard = ({ onAdd }: any) => {
   return (
@@ -93,6 +104,17 @@ const AddBranch = () => {
   const [showModal, setShowModal] = useState(false);
   const [branches, setBranches] = useState<any[]>([]);
 
+  const handleDelete = async (id: number) => {
+  try {
+    await api.delete(`/api/delete-branch/${id}/`);
+    setBranches(prev => prev.filter(branch => branch.id !== id));
+    toast.success("Branch deleted");
+  } catch (err) {
+    toast.error("Failed to delete branch");
+  }
+};
+
+
   useEffect(() => {
     const fetchBranches = async () => {
       try {
@@ -114,7 +136,8 @@ const AddBranch = () => {
       <AddBranchCard onAdd={() => setShowModal(true)} />
 
       {branches.map((branch: any) => (
-        <BranchCard key={branch.id} {...branch} />
+        <BranchCard key={branch.id} {...branch}
+         onDelete={() => handleDelete(branch.id)} />
       ))}
 
       {showModal && (

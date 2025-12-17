@@ -38,6 +38,7 @@ export default function RequestDashboard() {
 
       {/* Leave Requests Table */}
       {activeTab === "leave" && (
+
       
           <LeaveRequestTable
             activeTab={activeTab}
@@ -45,7 +46,7 @@ export default function RequestDashboard() {
             
             requests={leaveRequests}
           />
-      
+
       )}
 
       {/* Project Approvals Table */}

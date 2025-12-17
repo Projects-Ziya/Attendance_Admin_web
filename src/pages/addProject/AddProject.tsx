@@ -76,81 +76,83 @@ const AddProject = () => {
   };
 
   // ✅ Final submit
-const handleSubmit = async (e?: React.FormEvent) => {
-  e?.preventDefault();
-  if (!validateSection("tasks")) return;
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!validateSection("tasks")) return;
 
-  setLoading(true);
-  try {
-    const payload = new FormData();
+    setLoading(true);
+    try {
+      const payload = new FormData();
 
-    // ✅ Append files
-    if (formData.project_logo) payload.append("project_logo", formData.project_logo);
-    if (formData.attachment) payload.append("attachment", formData.attachment);
+      // ✅ Append files
+      if (formData.project_logo) payload.append("project_logo", formData.project_logo);
+      if (formData.attachment) payload.append("attachment", formData.attachment);
 
-    // ✅ Append basic fields
-    const basicFields = [
-      "project_name",
-      "client",
-      "start_date",
-      "end_date",
-      "priority",
-      "project_value",
-      "total_working_hours",
-      "extra_time",
-      "description",
-    ];
-    basicFields.forEach((field) => {
-      if (formData[field]) payload.append(field, formData[field]);
-    });
+      // ✅ Append basic fields
+      const basicFields = [
+        "project_name",
+        "client",
+        "start_date",
+        "end_date",
+        "priority",
+        "project_value",
+        "total_working_hours",
+        "extra_time",
+        "description",
+      ];
 
-    // ✅ Members field
-    const membersPayload = {
-      team_leader: formData.teamLeaders?.[0] || null,
-      project_manager: formData.projectManagers?.[0] || null,
-      tags: formData.tags?.map((t: any) => t.name || t) || [],
-    };
-    payload.append("members", JSON.stringify(membersPayload));
+      // ✅ ✅ FIXED TYPE ERROR HERE
+      basicFields.forEach((field) => {
+        const key = field as keyof typeof formData;
+        if (formData[key]) payload.append(key, formData[key] as any);
+      });
 
-    // ✅ FIXED TASKS SECTION
-    const formattedTasks = formData.tasks.map((task: any) => ({
-      title: task.title,
-      description: task.description,
-      assigned_to: Array.isArray(task.assigned_to)
-        ? task.assigned_to.map((id: any) => Number(id))
-        : [Number(task.assigned_to)], // ensure list of numbers
-      due_date: task.due_date,
-      priority: task.priority,
-      status: task.status || "Pending",
-      total_working_hours: task.total_working_hours,
-    }));
+      // ✅ Members field
+      const membersPayload = {
+        team_leader: formData.teamLeaders?.[0] || null,
+        project_manager: formData.projectManagers?.[0] || null,
+        tags: formData.tags?.map((t: any) => t.name || t) || [],
+      };
+      payload.append("members", JSON.stringify(membersPayload));
 
-    // Django expects tasks to be a single JSON string (not inside another array)
-    payload.append("tasks", JSON.stringify(formattedTasks));
+      // ✅ FIXED TASKS SECTION
+      const formattedTasks = formData.tasks.map((task: any) => ({
+        title: task.title,
+        description: task.description,
+        assigned_to: Array.isArray(task.assigned_to)
+          ? task.assigned_to.map((id: any) => Number(id))
+          : [Number(task.assigned_to)],
+        due_date: task.due_date,
+        priority: task.priority,
+        status: task.status || "Pending",
+        total_working_hours: task.total_working_hours,
+      }));
 
-    // ✅ API call
-    const res = await api.post("/api/add-project/", payload, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+      payload.append("tasks", JSON.stringify(formattedTasks));
 
-    toast.success("✅ Project created successfully!",{id: "unique-toast-id",});
-    console.log("🎯 Final payload:", Object.fromEntries(payload.entries()));
-    console.log("Response:", res.data);
-  } catch (err) {
-    console.error("❌ Error creating project:", err);
-    toast.error("Failed to create project",{id: "unique-toast-id",});
-  } finally {
-    setLoading(false);
-  }
-};
+      // ✅ API call
+      const res = await api.post("/api/add-project/", payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
+      toast.success("✅ Project created successfully!",{id: "unique-toast-id",});
+      console.log("🎯 Final payload:", Object.fromEntries(payload.entries()));
+      console.log("Response:", res.data);
+    } catch (err) {
+      console.error("❌ Error creating project:", err);
+      toast.error("Failed to create project",{id: "unique-toast-id",});
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="mx-auto bg-white shadow rounded-lg p-6 w-[76.51vw] h-[125.37vh] pt-[27px]">
+    <div className="mx-auto bg-white shadow rounded-lg p-6 w-[76.51vw] h-[125.37vh] pt-[40px] mt-[27px]"
+     style={{ boxShadow: "0px 0px 2px 0px #00000040" }}>
       {/* Header */}
-      <div className="mb-6 flex gap-2">
-        <h2 className="text-xl font-semibold">Add Project</h2>
-        <p className="text-gray-500 text-sm pt-1">Project ID : PRO-0004</p>
+      <div className="mb-6 flex gap-2 ">
+        <h2 className="font-[600] pb-[20px] text-[24px] tracking-[0.08em]">Add Project</h2>
+        <p className="text-gray-500 text-sm ">Project ID : PRO-0004</p>
       </div>
 
       {/* Tabs */}
@@ -162,7 +164,7 @@ const handleSubmit = async (e?: React.FormEvent) => {
               type="button"
               className={`pb-2 ${
                 activeTab === tab
-                  ? "text-blue-600 border-b-2 border-blue-600"
+                  ? "text-[#00A0E3] border-b-2 border-[#00A0E3]"
                   : "text-gray-500 hover:text-gray-700"
               }`}
               onClick={() => setActiveTab(tab as any)}
@@ -206,7 +208,7 @@ const handleSubmit = async (e?: React.FormEvent) => {
             formData={formData}
             setFormData={setFormData}
             setActiveTab={setActiveTab}
-            onSubmit={handleSubmit} // ✅ Pass final submit
+            onSubmit={handleSubmit}
           />
         )}
       </form>

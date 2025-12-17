@@ -6,6 +6,7 @@ import SubmitResponseTab from "./SubmitResponse";
 import api from "../../Api/api";
 import submiticon from "../../assets/icons/submiticon.svg"
 import formicon from "../../assets/icons/formicon.svg"
+import toast from "react-hot-toast";
 
 // ✅ Dropdown Component
 function CheckBoxDropdown({
@@ -82,11 +83,11 @@ function CheckBoxDropdown({
 function PollsAndFeedback() {
   const {
     form,
-    setFormFromApi,
     handleAddOption,
     handleEditQuestionText,
     handleEditOption,
     handleSubmitResponse,
+    setForm
   } = usePollFeedbackViewModel();
 
   const [activeTab, setActiveTab] = useState("create"); // ✅ TABS: create | submit
@@ -195,12 +196,15 @@ function PollsAndFeedback() {
         <h1 className="text-[28px] font-[500] pt-[50px]">{form.title}</h1>
         <p className="text-[19px] font-[500] mt-[20px] text-[#686767]">Form Description</p>
 
-        <input
-          type="text"
-          value={form.description}
-          className="w-[1299px] mt-3 outline-none border-b-2 pr-[20px]"
-          readOnly
-        />
+  <input
+  type="text"
+  value={form.description}
+  onChange={(e) =>
+    setForm ((prev) => ({ ...prev, description: e.target.value }))
+  }
+  className="w-[1299px] mt-3 outline-none border-b-2 pr-[20px]"
+/>
+     
       </div>
 
       {/* Questions */}
@@ -228,7 +232,12 @@ function PollsAndFeedback() {
 
           <button
             className="h-[68px] w-[252px] bg-[#00A0E3] text-[22px] font-[500] rounded-[10px] text-white flex items-center justify-center gap-2"
-            onClick={() => setActiveTab("submit")}
+            onClick={() =>{
+              if(!form.title || !form.description ||!form.questions){
+                toast.error("Please Fill all the Fields")
+              }
+              else{
+             setActiveTab("submit")}}}
           >
             <img src={saveicon} alt="" className="w-[22px] h-[22px]" />
             Save
