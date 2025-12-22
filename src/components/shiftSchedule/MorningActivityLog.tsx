@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../../Api/api";
-
 import p_in from "../../assets/icons/shiftschedule/p_in.svg";
 import Break from "../../assets/icons/shiftschedule/break.svg";
 import P_out from "../../assets/icons/shiftschedule/p_out.svg";
 import Lunch from "../../assets/icons/shiftschedule/lunch.svg";
 import deleteicon from "../../assets/icons/delete.svg";
+import toast from "react-hot-toast";
 
 type Props = {
   punchIn: string;
@@ -15,7 +15,6 @@ type Props = {
   lunchEnd: string;
   punch_out_time: string;
   shiftType: string;
-  onDelete: () => void;
 };
 
 const ActivityLog: React.FC<Props> = ({
@@ -26,11 +25,10 @@ const ActivityLog: React.FC<Props> = ({
   lunchEnd,
   punch_out_time,
   shiftType,
-  onDelete,
 }) => {
   const [apiData, setApiData] = useState<any>(null);
 
-  // ✅ Fetch LAST created shift
+  // ✅ Fetch LAST updated shift
   useEffect(() => {
     const fetchShiftData = async () => {
       try {
@@ -39,12 +37,14 @@ const ActivityLog: React.FC<Props> = ({
 
         if (list.length === 0) return;
 
-  const last = [...list].sort(
+        const last = [...list].sort(
           (a, b) =>
             new Date(b.updated_at).getTime() -
             new Date(a.updated_at).getTime()
         )[0];
+
         setApiData({
+          id: last.id, // ✅ STORE ID (CRITICAL FIX)
           punchIn: last.relaxation_start ?? punchIn,
           breakStart: last.break_start ?? breakStart,
           breakEnd: last.break_end ?? breakEnd,
@@ -63,6 +63,18 @@ const ActivityLog: React.FC<Props> = ({
     fetchShiftData();
   }, []);
 
+  // ✅ Delete using stored ID
+  const onDelete = async (id: number) => {
+    try {
+      await api.delete(`/api/shift-delete/${id}/`);
+      toast.success("Shift deleted successfully");
+      setApiData(null); // optional: clears UI after delete
+    } catch (err) {
+      console.log("Delete error:", err);
+      toast.error("Failed to delete shift");
+    }
+  };
+
   // ✅ Prevent blank render
   if (!apiData) {
     return null;
@@ -80,7 +92,7 @@ const ActivityLog: React.FC<Props> = ({
             src={deleteicon}
             alt="delete"
             className="w-[20px] h-[20px] cursor-pointer"
-            onClick={onDelete}
+            onClick={() => onDelete(apiData.id)} // ✅ PASS ID
           />
         </div>
 
