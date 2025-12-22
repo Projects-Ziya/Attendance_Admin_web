@@ -38,9 +38,15 @@ const EmployeeDashboardHome = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
   const [attendanceSummaryData, setAttendanceSummaryData] = useState<any>(null);
-
-  // designation list
   const [designations, setDesignations] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+
+  // ✅ RESET PAGE WHEN FILTERS CHANGE (FIX)
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedDesignation, selectedStatus, selectedYear]);
 
   // Fetch attendance
   useEffect(() => {
@@ -55,7 +61,7 @@ const EmployeeDashboardHome = () => {
     fetchAttendance();
   }, []);
 
-  // Fetch Designations from API
+  // Fetch Designations
   useEffect(() => {
     const fetchDesignations = async () => {
       try {
@@ -68,9 +74,6 @@ const EmployeeDashboardHome = () => {
     fetchDesignations();
   }, []);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   if (loading) return <p>Loading...</p>;
 
   // -----------------------------
@@ -80,15 +83,12 @@ const EmployeeDashboardHome = () => {
     const name = emp.name ? emp.name.toLowerCase() : "";
     const matchesSearch = name.includes(search.toLowerCase());
 
-    // emp.designation is a string in EmployeeCard
     const empDesignationTitle = emp.designation || "";
-
     const empStatus = emp.status;
     const empJoinYear = emp.joiningYear ?? emp.joining_year;
 
     const matchesDesignation =
-      !selectedDesignation ||
-      empDesignationTitle === selectedDesignation;
+      !selectedDesignation || empDesignationTitle === selectedDesignation;
 
     const matchesStatus =
       !selectedStatus || empStatus === selectedStatus;
@@ -110,9 +110,7 @@ const EmployeeDashboardHome = () => {
 
   const groupedByDepartment = paginatedEmployees.reduce((acc, emp: any) => {
     const dept = emp.department || "Unknown";
-    if (!acc[dept]) {
-      acc[dept] = [];
-    }
+    if (!acc[dept]) acc[dept] = [];
     acc[dept].push(emp);
     return acc;
   }, {} as Record<string, Employee[]>);
@@ -134,14 +132,14 @@ const EmployeeDashboardHome = () => {
       <motion.div className="grid grid-cols-4 gap-5 mb-5" variants={itemVariants}>
         {attendanceSummaryData ? (
           <>
-            <StatsCard title="Total Employees" value={attendanceSummaryData.total_employees} color="text-[#FFC107]" icon={<img src={UsersIcon} alt="Users" className="w-9 h-9" />} />
-            <StatsCard title="Active Employees" value={attendanceSummaryData.active} color="text-[#31ED31]" icon={<img src={TrendingUpIcon} alt="Trending Up" className="w-9 h-9" />} />
-            <StatsCard title="Inactive Employees" value={attendanceSummaryData.inactive} color="text-[#F34040]" icon={<img src={TrendingDownIcon} alt="Trending Down" className="w-9 h-9" />} />
-            <StatsCard title="New Employees" value={attendanceSummaryData.new_employees_today} color="text-[#8A38F5]" icon={<img src={NewEmployees} alt="New Employees" className="w-9 h-9" />} />
-            <StatsCard title="Online Employee" value={attendanceSummaryData.onlineemployee_count} color="text-[#00A0E3]" icon={<img src={OnlineEmp} alt="Online Employee" className="w-8 h-8" />} />
-            <StatsCard title="Online Intern" value={attendanceSummaryData.onlineintern_count} color="text-[#B39DDB]" icon={<img src={OnlineInt} alt="Online Intern" className="w-8 h-8" />} />
-            <StatsCard title="Offline Employee" value={attendanceSummaryData.offlineemployee_count} color="text-[#94C21A]" icon={<img src={OfflineEmp} alt="Offline Employee" className="w-8 h-8" />} />
-            <StatsCard title="Offline Intern" value={attendanceSummaryData.offlineintern_count} color="text-[#B39DDB]" icon={<img src={OfflineInt} alt="Offline Intern" className="w-8 h-8" />} />
+            <StatsCard title="Total Employees" value={attendanceSummaryData.total_employees} color="text-[#FFC107]" icon={<img src={UsersIcon} className="w-9 h-9" />} />
+            <StatsCard title="Active Employees" value={attendanceSummaryData.active} color="text-[#31ED31]" icon={<img src={TrendingUpIcon} className="w-9 h-9" />} />
+            <StatsCard title="Inactive Employees" value={attendanceSummaryData.inactive} color="text-[#F34040]" icon={<img src={TrendingDownIcon} className="w-9 h-9" />} />
+            <StatsCard title="New Employees" value={attendanceSummaryData.new_employees_today} color="text-[#8A38F5]" icon={<img src={NewEmployees} className="w-9 h-9" />} />
+            <StatsCard title="Online Employee" value={attendanceSummaryData.onlineemployee_count} color="text-[#00A0E3]" icon={<img src={OnlineEmp} className="w-8 h-8" />} />
+            <StatsCard title="Online Intern" value={attendanceSummaryData.onlineintern_count} color="text-[#B39DDB]" icon={<img src={OnlineInt} className="w-8 h-8" />} />
+            <StatsCard title="Offline Employee" value={attendanceSummaryData.offlineemployee_count} color="text-[#94C21A]" icon={<img src={OfflineEmp} className="w-8 h-8" />} />
+            <StatsCard title="Offline Intern" value={attendanceSummaryData.offlineintern_count} color="text-[#B39DDB]" icon={<img src={OfflineInt} className="w-8 h-8" />} />
           </>
         ) : (
           <p>Loading stats...</p>
@@ -153,7 +151,6 @@ const EmployeeDashboardHome = () => {
         <SearchBar value={search} onSearch={setSearch} />
 
         <div className="flex gap-3 text-ziyablack">
-          {/* Designation dropdown */}
           <select
             className="border border-gray-300 rounded-lg px-3 py-2 w-60 h-10"
             value={selectedDesignation}
@@ -191,30 +188,19 @@ const EmployeeDashboardHome = () => {
         </div>
       </motion.div>
 
-      {/* Table header */}
-      <motion.div className="grid grid-cols-[200px_1.4fr_1.4fr_1.0fr_100px] bg-[#F4F4F4] font-semibold text-ziyablack px-7 py-4" variants={itemVariants}>
-        <div>Employee ID</div>
-        <div>Employee Name</div>
-        <div>Email</div>
-        <div>Phone Number</div>
-        <div>Status</div>
-      </motion.div>
-
       {/* Employee list */}
       <motion.div className="bg-white rounded-b-[10px] shadow mb-3" variants={itemVariants}>
         {Object.entries(groupedByDepartment).map(([department, deptEmployees]) => (
-          <motion.div key={department} className="px-7 pt-4" variants={itemVariants}>
+          <motion.div key={department} className="px-7 pt-4">
             <h2 className="text-ziyablue font-medium">{department}</h2>
             {deptEmployees.map((emp: any) => (
-              <motion.div key={emp.id} variants={itemVariants}>
-                <EmployeeCard employee={emp} />
-              </motion.div>
+              <EmployeeCard key={emp.id} employee={emp} />
             ))}
           </motion.div>
         ))}
 
         {/* Pagination */}
-        <motion.div className="flex justify-end py-9 pr-8" variants={itemVariants}>
+        <motion.div className="flex justify-end py-9 pr-8">
           <div className="flex items-center space-x-5">
             {[...Array(totalPages)].map((_, index) => {
               const pageNum = index + 1;
