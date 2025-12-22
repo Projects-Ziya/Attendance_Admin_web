@@ -1,6 +1,6 @@
 // src/components/HistoryTab.tsx
 import React from "react";
-import clock_icon from "../assets/clock.svg";
+import clock_icon from "../../assets/icons/chatbot/clock.svg";
 
 const HistoryTab: React.FC = () => {
   return (
