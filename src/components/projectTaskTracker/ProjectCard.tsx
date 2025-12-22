@@ -60,14 +60,12 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
       <div className="grid grid-cols-[165px_1.5fr_1.0fr_0.9fr_140px_160px_100px] items-center pl-11 py-4 px-7 text-sm">
 
         {/* ✅ Project Name + Start Date */}
-        <Link to={`/singleProjectTracker/${project.id}`}>
           <div>
-            <p className="font-medium hover:text-blue-700 text-ziyablack">
+            <p className="font-medium  text-ziyablack">
               {project.project_name}
             </p>
             <span className="text-gray-500 text-xs">{project.start_date}</span>
           </div>
-        </Link>
 
         {/* ✅ Coordinator Details */}
         <div className="flex items-center gap-3 min-w-0">
@@ -130,9 +128,12 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
 
         {/* ✅ Edit/Delete Actions */}
         <div className="flex items-center gap-10 text-gray-600 font-semibold">
+                  <Link to={`/singleProjectTracker/${project.id}`}>
+
           <button className="hover:text-ziyablue cursor-pointer">
             <FaRegEdit size={16} />
           </button>
+          </Link>
           <button className="hover:text-red-500 cursor-pointer">
             <RiDeleteBin6Line size={16} />
           </button>
