@@ -1,9 +1,9 @@
 // src/components/ChatBot.tsx
 import React from "react";
-import Chatboticon from "../assets/bot_icon.svg";
-import chat_icon from "../assets/chaticon.svg";
-import team_icon from "../assets/teamicon.svg";
-import clock_icon from "../assets/clock.svg";
+import Chatboticon from "../../assets/icons/chatbot/bot_icon.svg";
+import chat_icon from "../../assets/icons/chatbot/chaticon.svg";
+import team_icon from "../../assets/icons/chatbot/clock.svg";
+import clock_icon from "../../assets/icons/chatbot/teamicon.svg";
 
 import { useChatBotVM } from "../../viewmodels/chatbot/useChatBotVM";
 import ChatTab from "../../components/chatbot/ChatTab";

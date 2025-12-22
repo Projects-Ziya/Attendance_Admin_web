@@ -1,6 +1,6 @@
 // src/components/ChatTab.tsx
 import React, { useEffect, useRef } from "react";
-import type { Conversation } from "../model/ChatBot";
+import type { Conversation } from "../../models/chatbot/Chatbot";
 
 interface ChatTabProps {
   conversation: Conversation | undefined;

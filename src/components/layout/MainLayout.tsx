@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import ChatBotLauncher from "../chatbot/ChatBotLauncher";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     {/* Scrollable content */}
     <main className="flex-1 pl-5 pr-5 overflow-y-auto">
       {children}
+      <ChatBotLauncher/>
     </main>
   </div>
 </div>

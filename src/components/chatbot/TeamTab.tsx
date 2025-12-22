@@ -1,6 +1,6 @@
 // src/components/TeamTab.tsx
 import React from "react";
-import type { Conversation } from "../model/ChatBot";
+import type { Conversation } from "../../models/chatbot/Chatbot";
 
 interface TeamTabProps {
   teams: Conversation[];
