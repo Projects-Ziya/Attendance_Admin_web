@@ -6,6 +6,7 @@ import api from "../../Api/api";
 import DeductionEditModal from "./DeductionEditModal";
 import deleteicon from "../../assets/icons/delete.svg";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const DeductionDetailsCards: React.FC = () => {
   const [deductions, setDeductions] = useState<(DeductionCard & { id: number })[]>([]);
@@ -70,12 +71,12 @@ const DeductionDetailsCards: React.FC = () => {
 
     if (res.data.success) {
       setDeductions(prev => prev.filter(d => d.id !== id));
-      console.log("UI updated");
+      toast.success("Succesfully deleted");
     } else {
-      console.error("Backend returned success = false");
+      toast("⚠️ Failed to delete");
     }
   } catch (error) {
-    console.error("Delete error:", error);
+    toast.error("Delete error:", error);
   }
 };
 
