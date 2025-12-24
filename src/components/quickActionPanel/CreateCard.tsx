@@ -18,7 +18,7 @@ type CreateCardProps = {
   enableSearch?: boolean;
 };
 
-const CreateCard = ({
+const  CreateCard = ({
   title,
   description,
   inputs,
@@ -248,7 +248,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="bg-white shadow-[0px_0px_2px_0px_#00000040] rounded-[10px] w-[46.4375rem] mx-auto">
+    <div className="bg-white shadow-[0px_0px_2px_0px_#00000040] rounded-[10px] w-[45.4375rem] mx-auto">
       <div className="pt-[3.6875rem] px-[4.3125rem] pb-[5.5rem] flex flex-col">
         <h2 className="text-[22px] font-[600] text-midGray leading-[1.15] tracking-[0.08em]">
           {title}

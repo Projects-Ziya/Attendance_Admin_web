@@ -23,7 +23,7 @@ function QuickActionPanel() {
   return (
     <MainLayout>
       <motion.div
-        className="bg-[#F6F5FA] w-[1469px] sm:px-4 lg:px-6"
+        className="bg-[#F6F5FA] min-h-screen w-[1469px]  sm:px-4 lg:px-6   pb-24"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
@@ -86,7 +86,7 @@ function QuickActionPanel() {
         </motion.div>
 
         {/* Add Branch Section */}
-        <motion.section className="mt-[60px] mb-[95px] w-[1469px]" variants={itemVariants}>
+        <motion.section className="mt-[60px]  w-[1469px]" variants={itemVariants}>
           <AddBranch />
         </motion.section>
       </motion.div>

@@ -2,24 +2,68 @@ import React, { useState } from "react";
 import api from "../../Api/api";
 import { X, FileText, ListChecks, Users } from "lucide-react"; // ✅ lucide-react icons
 
+type TaskItem = {
+  title: string;
+  dueDate: string;
+};
+
+type ProjectData = {
+  id: number;
+  name?: string;
+  client?: string;
+  start_date?: string;
+  due_date?: string;
+  priority?: string;
+  project_value?: number | string;
+  working_hours?: number | string;
+  extra_time?: number | string;
+  description?: string;
+  team_lead?: string;
+  project_manager?: string;
+  tags?: string[];
+  tasks?: TaskItem[];
+};
+
 type EditProjectModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  projectData: any;
+  projectData: ProjectData;
   onUpdated: () => void;
 };
 
-const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
-  const [activeTab, setActiveTab] = useState("basic");
-  const [form, setForm] = useState({
+type FormState = {
+  name: string;
+  client: string;
+  startDate: string;
+  endDate: string;
+  priority: string;
+  value: number | string;
+  hours: number | string;
+  extraTime: number | string;
+  description: string;
+  teamLead: string;
+  projectManager: string;
+  tags: string[];
+  tasks: TaskItem[];
+};
+
+const EditProjectModal: React.FC<EditProjectModalProps> = ({
+  isOpen,
+  onClose,
+  projectData,
+  onUpdated,
+}) => {
+  const [activeTab, setActiveTab] = useState<"basic" | "tasks" | "members">("basic");
+
+  const [form, setForm] = useState<FormState>({
     name: projectData?.name || "",
     client: projectData?.client || "",
     startDate: projectData?.start_date || "",
     endDate: projectData?.due_date || "",
     priority: projectData?.priority || "",
-    value: projectData?.project_value || "",
-    hours: projectData?.working_hours || "",
-    extraTime: projectData?.extra_time || "",
+    value: projectData?.project_value ?? "",
+    hours: projectData?.working_hours ?? "",
+    extraTime: projectData?.extra_time ?? "",
     description: projectData?.description || "",
     teamLead: projectData?.team_lead || "",
     projectManager: projectData?.project_manager || "",
@@ -27,7 +71,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
     tasks: projectData?.tasks || [],
   });
 
-  const handleChange = (field, value) => {
+  const handleChange = <K extends keyof FormState>(field: K, value: FormState[K]) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
@@ -45,7 +89,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="bg-white rounded-lg w-[800px] p-6 shadow-lg relative">
+      <div className="bg-white rounded-lg w-[800px] p-8 shadow-lg relative">
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Edit Project</h2>
@@ -62,7 +106,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
           <button
             onClick={() => setActiveTab("basic")}
             className={`flex items-center gap-2 px-4 py-2 rounded ${
-              activeTab === "basic" ? "bg-blue-500 text-white" : "bg-gray-100"
+              activeTab === "basic" ? "bg-[#00A0E3] text-white" : "bg-gray-100"
             }`}
           >
             <FileText className="w-5 h-5" />
@@ -72,7 +116,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
           <button
             onClick={() => setActiveTab("tasks")}
             className={`flex items-center gap-2 px-4 py-2 rounded ${
-              activeTab === "tasks" ? "bg-blue-500 text-white" : "bg-gray-100"
+              activeTab === "tasks" ? "bg-[#00A0E3] text-white" : "bg-gray-100"
             }`}
           >
             <ListChecks className="w-5 h-5" />
@@ -82,7 +126,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
           <button
             onClick={() => setActiveTab("members")}
             className={`flex items-center gap-2 px-4 py-2 rounded ${
-              activeTab === "members" ? "bg-blue-500 text-white" : "bg-gray-100"
+              activeTab === "members" ? "bg-[#00A0E3] text-white" : "bg-gray-100"
             }`}
           >
             <Users className="w-5 h-5" />
@@ -224,7 +268,10 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
               type="text"
               value={form.tags.join(", ")}
               onChange={e =>
-                handleChange("tags", e.target.value.split(",").map(tag => tag.trim()))
+                handleChange(
+                  "tags",
+                  e.target.value.split(",").map(tag => tag.trim())
+                )
               }
               placeholder="Tags (comma separated)"
               className="input col-span-2"
@@ -239,7 +286,7 @@ const EditProjectModal = ({ isOpen, onClose, projectData, onUpdated }) => {
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded"
+            className="px-4 py-2 bg-[#00A0E3] text-white rounded"
           >
             Save Changes
           </button>

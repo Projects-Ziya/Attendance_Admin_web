@@ -92,7 +92,7 @@ const RecentActivities: React.FC = () => {
 
   return (
     
-    <div className="  bg-white p-6 rounded-lg shadow-[0px_0px_2px_0px_#00000040]  scrollable mt-[15px] w-[727px] h-[632px] border border-gray-100">
+    <div className="  bg-white p-6 rounded-lg shadow-[0px_0px_2px_0px_#00000040] mt-[15px] w-[727px] h-[632px] border border-gray-100">
       {/* Header */}
       <div className="mb-5 border-b border-[#43C8FF] pb-4">
         <div className="bg-[#E6F7FF] p-2 rounded-full w-fit mb-2">
@@ -117,7 +117,7 @@ const RecentActivities: React.FC = () => {
       {error && <p className="text-red-500 text-center">{error}</p>}
 
       {/* Grouped Activity List */}
-      <div className="space-y-4 overflow-y-auto max-h-[500px] pr-2">
+      <div className="space-y-4 pb-[20px] overflow-y-auto max-h-[500px] pr-2 ">
         {Object.entries(grouped).map(([label, activities]) => (
           <div key={label}>
             <p className="text-[18px] font-medium text-gray-500 mb-2">{label}</p>

@@ -8,7 +8,7 @@ import UserBadge from "../UserBadge"
 import { BASE_URL } from "../../../constants/urls";
 import type { ApiProjectDetails } from "../../../models/ProjectModel";
 import EditProjectModal from "../../projectTaskTracker/EditProjectModal";
-import api from "../../../Api/api";
+
 
 
 
@@ -21,22 +21,15 @@ interface ProjectDetailsCardProps {
    refetchProject: () => void
 }
 
-const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails, ApiProject }) => {
+const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails, ApiProject, showEditModal,setShowEditModal, refetchProject }) => {
   const viewModel = projectDetails; // ✅ use the passed AppViewModel
   const [data, setData] = useState(ApiProject);
-  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     setData(ApiProject);
   }, [ApiProject]);
 
-const refetchProject = async () => {
-   try { 
-    const response = await api.get(`/api/project-details-by-id/${data?.data.id}`);
-     setData(response.data);
-     } catch (error){
-       console.error("Error fetching project details:", error);
-       } };
+
 
   return (
     <div className="w-auto h-auto bg-white pr-[39px]">
