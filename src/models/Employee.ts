@@ -4,7 +4,7 @@ export interface Employee {
   name: string;
   designation: string;
   department: string;
-  workMode: "WFH" | "WFO" | "INT";
+  workMode: "WFH" | "WFO" | "INT" | string;
   punchIn: string;
   punchOut: string;
   late: string;

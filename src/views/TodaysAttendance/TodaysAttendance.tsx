@@ -119,8 +119,7 @@ const TodaysAttendance = () => {
           value={
             attendanceStats.total_employee_count -
             attendanceStats.present_count -
-            attendanceStats.late_count -
-            attendanceStats.leave_count
+            attendanceStats.late_count 
           }
           icon={<img src={AbsentEmp} />}
         />
@@ -162,7 +161,7 @@ const TodaysAttendance = () => {
       <motion.div className="grid grid-cols-[190px_150px_1.5fr_150px_120px_160px] bg-[#F4F4F4] font-semibold text-ziyablack px-4 py-4" variants={itemVariants}>
         <div>Date</div>
         <div>Punch In</div>
-        <div>Employee Name</div>
+        <div>Name</div>
         <div>Punch Out</div>
         <div>Late</div>
         <div>Production Hours</div>

@@ -46,7 +46,7 @@ const App: React.FC = () => {
       <div className="flex content-center justify-center gap-8">
         <div className="flex flex-col justify-center items-center">
           <CircularProgressIndicator
-            percentage={data.on_going || 0}
+            percentage={data.on_going }
             color="green"
           />
           <div className="flex justify-center items-center mt-1 pt-1">
@@ -57,7 +57,7 @@ const App: React.FC = () => {
 
         <div className="flex flex-col justify-center items-center">
           <CircularProgressIndicator
-            percentage={data.pending || 0}
+            percentage={data.pending }
             color="yellow"
           />
           <div className="flex justify-center items-center mt-1 pt-1">
@@ -68,7 +68,7 @@ const App: React.FC = () => {
 
         <div className="flex flex-col justify-center items-center">
           <CircularProgressIndicator
-            percentage={data.on_hold || 0}
+            percentage={data.on_hold }
             color="blue"
           />
           <div className="flex justify-center items-center mt-1 pt-1">
@@ -79,7 +79,7 @@ const App: React.FC = () => {
 
         <div className="flex flex-col justify-center items-center">
           <CircularProgressIndicator
-            percentage={data.overdue || 0}
+            percentage={data.overdue }
             color="red"
           />
           <div className="flex justify-center items-center mt-1 pt-1">

@@ -35,13 +35,17 @@ const BlackModal = ({ onClose, fileName }) => {
         <div className="flex-1 p-4 flex items-center justify-center overflow-auto">
 
           {/* ✔ PDF Preview */}
-          {isPDF && (
-            <iframe
-              src={fileName}
-              title="PDF Viewer"
-              className="w-full h-full rounded-lg border border-gray-700"
-            ></iframe>
-          )}
+        {isPDF && (
+  <a
+    href={fileName}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-4 py-2 bg-white text-black rounded-md font-semibold"
+  >
+    Open PDF
+  </a>
+)}
+
 
           {/* ✔ Image Preview */}
           {isImage && (

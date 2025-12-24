@@ -7,21 +7,40 @@ import AddNewButton from "./AddNewButton";
 import UserBadge from "../UserBadge"
 import { BASE_URL } from "../../../constants/urls";
 import type { ApiProjectDetails } from "../../../models/ProjectModel";
+import EditProjectModal from "../../projectTaskTracker/EditProjectModal";
+import api from "../../../Api/api";
+
+
+
+
 interface ProjectDetailsCardProps {
   projectDetails: AppViewModel;
   ApiProject: ApiProjectDetails;
+  showEditModal: boolean; // ✅ added
+   setShowEditModal: (open: boolean) => void; // ✅ added ;
+   refetchProject: () => void
 }
 
 const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails, ApiProject }) => {
   const viewModel = projectDetails; // ✅ use the passed AppViewModel
   const [data, setData] = useState(ApiProject);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     setData(ApiProject);
   }, [ApiProject]);
 
+const refetchProject = async () => {
+   try { 
+    const response = await api.get(`/api/project-details-by-id/${data?.data.id}`);
+     setData(response.data);
+     } catch (error){
+       console.error("Error fetching project details:", error);
+       } };
+
   return (
     <div className="w-auto h-auto bg-white pr-[39px]">
+      
       {/* Header */}
       
       <h2 className=" text-2xl font-poppins font-semibold leading-[16px] 
@@ -149,6 +168,12 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails,
 </div>
 </div>
 
+<EditProjectModal
+ isOpen={showEditModal}
+  onClose={() => setShowEditModal(false)}
+  projectData={ApiProject}
+  onUpdated={refetchProject}
+/>
 
       {/* Description */}
       <div className="mt-[43px] w-[1140px]">
@@ -162,6 +187,8 @@ const ProjectDetailsCard: React.FC<ProjectDetailsCardProps> = ({ projectDetails,
 
       </div>
     </div>
+
+
   );
 };
 

@@ -10,7 +10,7 @@ import ChatTab from "../../components/chatbot/ChatTab";
 import TeamTab from "../../components/chatbot/TeamTab";
 import HistoryTab from "../../components/chatbot/HistoryTab";
 
-const ChatBot: React.FC = () => {
+const ChatBot: React.FC<{ closeChatbot: () => void }> = ({ closeChatbot }) => {
   const {
     activeTab,
     activeConversation,
@@ -23,13 +23,14 @@ const ChatBot: React.FC = () => {
     sendMessage,
     handleComposerKeyDown,
     formatMinutesAgo,
+   
   } = useChatBotVM();
 
   return (
     <div className=" flex min-h-screen items-center justify-center">
       <div>
         {/* HEADER */}
-        <div className="bg-[#1B84FF] h-[91px] w-[463px] rounded-tl-[15px] rounded-tr-[15px]">
+        <div className="bg-[#00A0E3] h-[91px] w-[463px] rounded-tl-[15px] rounded-tr-[15px]">
           <div className="flex justify-between">
             <div className="flex pt-[24px] pl-[37px]">
               <img className="h-[40px] w-[40px]" src={Chatboticon} alt="" />
@@ -37,7 +38,7 @@ const ChatBot: React.FC = () => {
                 Chats
               </p>
             </div>
-            <button className="text-[35px] font-[400] pt-[10px] text-white pr-[26px] hover:opacity-80 active:scale-95 transition">
+            <button onClick={ closeChatbot} className="text-[35px] font-[400] pt-[10px] text-white pr-[26px] hover:opacity-80 active:scale-95 transition">
               x
             </button>
           </div>

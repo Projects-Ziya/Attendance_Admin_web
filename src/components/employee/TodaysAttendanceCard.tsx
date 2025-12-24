@@ -12,7 +12,7 @@ interface Employee {
   punchOut: string;
   late: string;
   productionHrs: string;
-  workMode?: "WFO" | "WFH" | "INT" | string;
+  attendance_type?: "WFO" | "WFH" | "INT" | string;
   avatar?: string;
 }
 
@@ -38,7 +38,7 @@ const EmployeeCard: React.FC = () => {
           punchOut: emp.out_time || "--",
           late: emp.late ? emp.late_duration : "--",
           productionHrs: emp.production_hours || "--",
-          workMode: emp.work_mode || "WFO",
+          attendance_type: emp.attendance_type || "",
           avatar: emp.avatar || undefined,
         }));
 
@@ -62,11 +62,11 @@ const EmployeeCard: React.FC = () => {
     <div>
       {employees.map((employee) => {
         const workModeClass =
-          employee.workMode === "WFO"
+          employee.attendance_type === "office"
             ? "text-ziyagreen"
-            : employee.workMode === "WFH"
+            : employee.attendance_type === "WFH"
             ? "text-ziyablue"
-            : employee.workMode === "INT"
+            : employee.attendance_type === "INT"
             ? "text-[#B39DDB]"
             : "text-gray-400";
 
@@ -109,7 +109,7 @@ const EmployeeCard: React.FC = () => {
                   <span className="text-sm text-ziyablack break-words">
                     {employee.designation}{" "}
                     <span className={`font-semibold ${workModeClass}`}>
-                      ·{employee.workMode}
+                      ·{employee.attendance_type}
                     </span>
                   </span>
                 </div>

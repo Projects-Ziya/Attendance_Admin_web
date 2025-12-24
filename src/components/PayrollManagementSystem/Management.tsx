@@ -36,7 +36,7 @@ const Management: React.FC = () => {
 
 
   return (
-    <div className="min-h-screen bg-white px-12 py-8">
+    <div className="min-h-screen w-full bg-white px-12 py-8 ">
       {/* Page Header */}
       <div className="mb-6">
         <h1 className="text-lg font-semibold text-gray-800 leading-4 tracking-[0.08em]">

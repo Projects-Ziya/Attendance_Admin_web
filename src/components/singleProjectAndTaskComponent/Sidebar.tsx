@@ -8,9 +8,10 @@ import type { ApiProjectDetails } from '../../models/ProjectModel';
 
 interface SidebarProps {
   ApiProject: ApiProjectDetails;
+ onEditProject: () => void; // ✅ added
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ApiProject}) => {
+const Sidebar: React.FC<SidebarProps> = ({ ApiProject, onEditProject }) => {
   const [data, setData] = useState(ApiProject);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ApiProject}) => {
       />
 
       {/* Edit Project Button */}
-      <EditProjectButton />
+      <EditProjectButton  onClick={onEditProject} />
 
       {/* Cards Section */}
       <div className="flex flex-col items-center gap-5 w-fit">

@@ -12,15 +12,6 @@ interface ProfileData {
   productionTime: string;
 }
 
-// mock data
-const mockProfileData: ProfileData = {
-  name: "Amal Ahammed",
-  status: "WFO",
-  timestamp: "11:35 AM, 05 AUG 2025",
-  role: "Admin",
-  punchInTime: "9:30 AM",
-  productionTime: "5:55 hrs",
-};
 
 const EmployeeProfileCard: React.FC = () => {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);

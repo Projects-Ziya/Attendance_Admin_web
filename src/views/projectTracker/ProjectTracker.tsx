@@ -81,6 +81,7 @@ const ProjectListView = () => {
           api.get("/api/new-list-projects/"),
           api.get("/api/list-all-tasks/")
         ]);
+        
 
         if (projectsRes.data.success && Array.isArray(projectsRes.data.projects)) {
           setProjects(projectsRes.data.projects);
