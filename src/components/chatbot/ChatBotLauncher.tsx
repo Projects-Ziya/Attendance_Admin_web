@@ -11,7 +11,7 @@ const ChatBotLauncher: React.FC = () => {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-6 right-6 z-[9999] bg-[#1B84FF] rounded-full w-[60px] h-[60px] flex items-center justify-center shadow-lg hover:scale-105 transition"
+          className="fixed bottom-6 right-6 z-[9999] bg-[#00A0E3] rounded-full w-[60px] h-[60px] flex items-center justify-center shadow-lg hover:scale-105 transition"
         >
           <img src={botIcon} alt="ChatBot" className="w-[30px] h-[30px]" />
         </button>
@@ -20,7 +20,7 @@ const ChatBotLauncher: React.FC = () => {
       {/* ✅ ChatBot Panel */}
       {open && (
         <div className="fixed bottom-6 right-6 z-[9999]">
-          <ChatBot />
+          <ChatBot closeChatbot={() => setOpen(false)} />
         </div>
       )}
     </>

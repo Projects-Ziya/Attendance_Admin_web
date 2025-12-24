@@ -53,7 +53,7 @@ export default function TaskCard({ task, onDelete, onEdit }) {
           {/* Status */}
           <div className="leading-relaxed flex flex-col justify-start">
             <p className="font-medium whitespace-nowrap">Status </p>
-            <p className={`font-medium mt-2 ${statusColors[task.status]}`}>
+            <p className={`font-medium mt-2 ${statusColors [task.status]}`}>
               {task.status}
             </p>
           </div>

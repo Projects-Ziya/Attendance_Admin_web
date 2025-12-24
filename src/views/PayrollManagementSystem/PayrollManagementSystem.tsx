@@ -19,13 +19,13 @@ const PayrollManagementSystem = () => {
   return (
     <MainLayout>
       <motion.div
-        className="bg-[#F6F5FA] px-4 sm:px-6 lg:pl-[37px] pr-[37px]"
+        className="bg-[#F6F5FA]  px-4 sm:px-6 lg:pl-[37px] pr-[37px]"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {/* Header */}
-        <motion.div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12" variants={itemVariants}>
+        <motion.div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12 "  variants={itemVariants}>
           <h1 className="flex items-center gap-2 text-midGray text-[16px] leading-[16px] font-[500]">
             <span className="bg-[#DAF1FB] rounded-full w-[40px] h-[40px] flex items-center justify-center">
               <img

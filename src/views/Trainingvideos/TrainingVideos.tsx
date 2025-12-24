@@ -60,13 +60,13 @@ const TrainingVideo: React.FC = () => {
   return (
     <MainLayout>
 <motion.div
-        className="bg-[#F6F5FA] px-4 sm:px-6 lg:pl-[37px] pr-[37px]"
+        className="bg-[#F6F5FA] px-4 sm:px-6 lg:pl-[37px] pr-[37px] "
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       ></motion.div>
 
- <div className="bg-[#F6F5FA] w-[1469px] sm:px-4 lg:px-6">
+ <div className="bg-[#F6F5FA] w-[1469px] sm:px-4 lg:px-6 mb-[40px] ">
         {/* Header */}
         <div className="mb-6 sm:mb-8 lg:mb-10 mt-8 sm:mt-12">
           <h1 className="flex items-center gap-2 text-midGray text-[16px] leading-[16px] font-[500]">

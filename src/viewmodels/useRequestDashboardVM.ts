@@ -6,6 +6,11 @@ export default function useRequestDashboardVM() {
   const [activeTab, setActiveTab] = useState("leave");
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+const [isOpen, setIsOpen] = useState(false); // ✅ chatbot visibility
+
+
+  const openChatbot = () => setIsOpen(true);
+   const closeChatbot = () => setIsOpen(false);
 
   const fetchLeaveRequests = () => {
     setLoading(true);
@@ -33,5 +38,8 @@ export default function useRequestDashboardVM() {
     setActiveTab,
     leaveRequests,
     loading,
+    isOpen,
+    openChatbot,
+    closeChatbot,
   };
 }
