@@ -64,9 +64,12 @@ const ActivityLog: React.FC<Props> = ({
   }, []);
 
   // ✅ Delete using stored ID
+ 
+
   const onDelete = async (id: number) => {
     try {
       await api.delete(`/api/shift-delete/${id}/`);
+      
       toast.success("Shift deleted successfully");
       setApiData(null); // optional: clears UI after delete
     } catch (err) {

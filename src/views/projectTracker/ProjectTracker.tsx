@@ -234,9 +234,9 @@ const ProjectListView = () => {
       </motion.div>
 
       {/* List */}
-      <motion.div className="bg-white rounded-b-[10px] shadow mb-3" variants={itemVariants}>
+      <motion.div  className="bg-white rounded-b-[10px] shadow mb-3" variants={itemVariants}>
         {paginatedData.map((item: any) => (
-          <motion.div key={item.id} className="pt-4" variants={itemVariants}>
+          <motion.div key={item.id} className="pt-" >
             {activeButton === "projects" ? <ProjectCard project={item} /> : <TaskCard project={item} />}
           </motion.div>
         ))}
