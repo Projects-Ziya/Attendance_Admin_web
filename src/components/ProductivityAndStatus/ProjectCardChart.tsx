@@ -1,38 +1,43 @@
 import { PieChart, Pie, Cell } from "recharts";
 
-type ProjectCardChartProps = {
-  color?: string;  // arc color
+type ChartItem = {
+  name: string;
+  value: number;
+  color: string;
 };
 
-const ProjectCardChart = ({ color = "#22c55e" }: ProjectCardChartProps) => {
-  const data = [{ name: "arc", value: 100 }];
+type ProjectCardChartProps = {
+  data: ChartItem[];
+};
 
+const ProjectCardChart = ({ data }: ProjectCardChartProps) => {
   const WIDTH = 260;
   const HEIGHT = 160;
   const INNER = 65;
   const OUTER = 100;
 
+  const filteredData = data.filter(item => item.value > 0);
+
+  if (filteredData.length === 0) return null;
+
   return (
-    <div
-      className="relative"
-      style={{ width: `${WIDTH}px`, height: `${HEIGHT}px` }}
-    >
-      <PieChart width={WIDTH} height={HEIGHT}>
-        <Pie
-          data={data}
-          dataKey="value"
-          cx="50%"
-          cy="70%"
-          startAngle={80}
-          endAngle={180}
-          innerRadius={INNER}
-          outerRadius={OUTER}
-          cornerRadius={10}
-        >
-          <Cell fill={color} />
-        </Pie>
-      </PieChart>
-    </div>
+    <PieChart width={WIDTH} height={HEIGHT}>
+      <Pie
+        data={filteredData}
+        dataKey="value"
+        cx="50%"
+        cy="70%"
+        startAngle={180}
+        endAngle={0}
+        innerRadius={INNER}
+        outerRadius={OUTER}
+        cornerRadius={8}
+      >
+        {filteredData.map((entry, index) => (
+          <Cell key={index} fill={entry.color} />
+        ))}
+      </Pie>
+    </PieChart>
   );
 };
 

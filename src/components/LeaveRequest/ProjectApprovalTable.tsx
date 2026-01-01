@@ -5,6 +5,7 @@ import tickIcon from "../../assets/leaveRequestAssets/tick.png";
 import crossIcon from "../../assets/leaveRequestAssets/cross.png";
 import editIcon from "../../assets/leaveRequestAssets/edit.png";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 interface ProjectApprovalTableProps {
   activeTab: string;
@@ -309,9 +310,12 @@ export default function ProjectApprovalTable({
                       <span className="text-[14px] font-[500] tracking-[1.28px] leading-[16px] text-[#5B5B5B]">
                         {row.tasks} / {row.hours}hrs
                       </span>
+
+<Link to={`/singleProjectTracker/${row.id}`}>
+
                       <button
                         onClick={() => onEdit(row)}
-                        className="p-2 rounded hover:bg-gray-100 transition"
+                        className="p-2 rounded hover:bg-blue-100  transition"
                         aria-label="Edit"
                         title="Edit"
                       >
@@ -321,6 +325,7 @@ export default function ProjectApprovalTable({
                           className="w-5 h-5 object-contain"
                         />
                       </button>
+                      </Link>
                       <div className="flex items-center gap-7">
                         <button
                           onClick={() => handleApprove(row.id)}

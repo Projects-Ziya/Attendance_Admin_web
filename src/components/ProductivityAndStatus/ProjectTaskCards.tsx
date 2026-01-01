@@ -92,7 +92,7 @@ const   ProjectTaskCard = ({ type }: ProjectTaskCardProps) => {
       </h1>
 
       <div className="relative pl-[170px] pt-[40px]">
-        <ProjectCardChart color="#22c55e" />
+      <ProjectCardChart data={breakdown} />
         <div className="absolute top-[90px] left-[260px] flex flex-col items-center">
           <span className="text-[42px] font-[500] text-midGray tracking-[0.08em] leading-[130%]">
             {total}

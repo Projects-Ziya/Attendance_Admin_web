@@ -118,7 +118,7 @@ useEffect(() => {
               </span>
             </div>
 
-            <div className="flex flex-row items-center w-[290px] h-[34px] shadow-[0px_0px_1px_#0000003f] rounded-[5px] bg-global-25 pl-2 pr-[2px] border border-[#b6b5b5]">
+            {/* <div className="flex flex-row items-center w-[290px] h-[34px] shadow-[0px_0px_1px_#0000003f] rounded-[5px] bg-global-25 pl-2 pr-[2px] border border-[#b6b5b5]">
               <div className="flex flex-row gap-2 items-center w-full">
                 <img src={Search} className="w-[18px] h-[18px]" alt="Search Icon" />
                 <input
@@ -134,7 +134,7 @@ useEffect(() => {
               >
                 Search
               </Button>
-            </div>
+            </div> */}
           </div>
 
           {/* Right Section */}
