@@ -1,6 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";   // ✅ MISSING IMPORT
-
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Login from "./views/Login/Login";
 import ForgotPassword from "./views/ForgotPassword/ForgotPassword";
@@ -41,7 +39,6 @@ import DeductionDetails from "./views/Deductiondetails/DeductionDetails";
 
 function App() {
 
-  // 🔐 Make sure AES session key is generated & sent BEFORE any API call
  
 
   return (
