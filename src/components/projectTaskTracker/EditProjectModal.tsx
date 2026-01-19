@@ -113,15 +113,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
             <span>Basic Info</span>
           </button>
 
-          <button
-            onClick={() => setActiveTab("tasks")}
-            className={`flex items-center gap-2 px-4 py-2 rounded ${
-              activeTab === "tasks" ? "bg-[#00A0E3] text-white" : "bg-gray-100"
-            }`}
-          >
-            <ListChecks className="w-5 h-5" />
-            <span>Assign Tasks</span>
-          </button>
+         
 
           <button
             onClick={() => setActiveTab("members")}
@@ -203,50 +195,7 @@ const EditProjectModal: React.FC<EditProjectModalProps> = ({
           </div>
         )}
 
-        {activeTab === "tasks" && (
-          <div className="space-y-4">
-            {form.tasks.map((task, idx) => (
-              <div key={idx} className="grid grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  value={task.title}
-                  onChange={e =>
-                    handleChange("tasks", [
-                      ...form.tasks.slice(0, idx),
-                      { ...task, title: e.target.value },
-                      ...form.tasks.slice(idx + 1),
-                    ])
-                  }
-                  placeholder="Task Title"
-                  className="input"
-                />
-                <input
-                  type="date"
-                  value={task.dueDate}
-                  onChange={e =>
-                    handleChange("tasks", [
-                      ...form.tasks.slice(0, idx),
-                      { ...task, dueDate: e.target.value },
-                      ...form.tasks.slice(idx + 1),
-                    ])
-                  }
-                  className="input"
-                />
-              </div>
-            ))}
-            <button
-              onClick={() =>
-                handleChange("tasks", [
-                  ...form.tasks,
-                  { title: "", dueDate: "" },
-                ])
-              }
-              className="text-blue-500"
-            >
-              + Add New Task
-            </button>
-          </div>
-        )}
+      
 
         {activeTab === "members" && (
           <div className="grid grid-cols-2 gap-4">

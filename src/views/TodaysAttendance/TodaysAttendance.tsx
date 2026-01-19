@@ -109,7 +109,7 @@ const TodaysAttendance = () => {
         </h1>
       </motion.div>
 
-      {/* Stats */}
+      {/* Stats */} 
       <motion.div className="grid grid-cols-4 gap-4 mb-5" variants={itemVariants}>
         <StatsCard title="Total Employees" value={attendanceStats.total_employee_count} icon={<img src={TotalEmp} />} />
         <StatsCard title="Present Employees" value={attendanceStats.present_count} icon={<img src={PresentEmp} />} />
