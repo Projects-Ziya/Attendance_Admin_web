@@ -9,7 +9,7 @@ type DeleteEmployeeProps = {
 };
 
 const STATUS_OPTIONS = [
-  { value: "", label: "Select Status" },
+  { value: "none", label: "None" },
   { value: "Resigned", label: "Resigned" },
   { value: "Terminated", label: "Terminated" },
   { value: "Retired", label: "Retired" },
@@ -181,10 +181,11 @@ const DeleteEmployee = ({ onSearch }: DeleteEmployeeProps) => {
               onKeyDown={onButtonKeyDown}
               className="flex items-center border border-gray-200 rounded-[10px] w-[336px] h-[61px] pl-[15px] pr-[40px] bg-white text-[14px] text-midGray"
             >
-              <span className="flex-1 truncate">
-                {STATUS_OPTIONS.find((o) => o.value === status)?.label ||
-                  STATUS_OPTIONS[0].label}
-              </span>
+             <span className="flex-1 truncate">
+  {status === "" 
+    ? "Select status" 
+    : STATUS_OPTIONS.find((o) => o.value === status)?.label}
+</span>
 
               <img
                 src={dropdownicon}

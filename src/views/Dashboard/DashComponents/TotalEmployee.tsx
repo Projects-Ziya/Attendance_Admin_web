@@ -82,11 +82,12 @@ const EmployeeChart: React.FC = () => {
           <div className="bg-[#E6F7FF] p-2 rounded-full mb-2 w-fit">
             <Users className="text-[#00AEEF] w-7 h-7" />
           </div>
-          <div className="flex items-center text-[#4D4D4D] text-[20px] font-semibold">
+          <div className="flex items-center mb-1 text-[#4D4D4D] text-[20px] font-semibold">
             Total Employees
             <span className="ml-2 font-normal text-[18px]">{totalEmployees}</span>
           </div>
         </div>
+
 
         {/* Bar Graph */}
         <div className="h-[300px]">

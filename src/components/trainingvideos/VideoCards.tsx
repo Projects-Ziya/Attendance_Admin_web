@@ -25,14 +25,14 @@ const VideoCard: React.FC<Props> = ({ videos, onDelete }) => {
     if (videos.video_file) {
       const fullVideoURL = videos.video_file.startsWith("http")
         ? videos.video_file
-        : `http://192.168.1.12:8000${videos.video_file}`;
+        : `https://attendance.ziyaacademy.co.in${videos.video_file}`;
       setVideoUrl(fullVideoURL);
     }
 
     if (videos.thumbnail) {
       const fullThumbURL = videos.thumbnail.startsWith("http")
         ? videos.thumbnail
-        : `http://192.168.1.12:8000${videos.thumbnail}`;
+        : `https://attendance.ziyaacademy.co.in${videos.thumbnail}`;
       setThumbnailUrl(fullThumbURL);
     }
   }, [videos]);
