@@ -7,6 +7,8 @@ import { IoMdArrowDropright } from "react-icons/io";
 import ProjectHeading from "../../assets/images/icons/ProjectTracker.svg";
 import api from "../../Api/api";
 
+
+
 interface Coordinator {
   id: number;
   user_id: number;
@@ -57,11 +59,19 @@ const containerVariants = {
   visible: { transition: { staggerChildren: 0.15 } }
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
-};
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease:
 
+ [0, 0, 0.2, 1], // instead of "easeOut"
+    },
+  },
+};
 const ProjectListView = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);

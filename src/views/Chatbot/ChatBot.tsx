@@ -35,7 +35,8 @@ const ChatBot: React.FC<{ closeChatbot: () => void }> = ({ closeChatbot }) => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
 
           exit={{ opacity: 0, y: -10, scale: 0.95 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: [0, 0, 0.2, 1]
+ }}
         >
           {/* HEADER */}
           <div className="bg-[#00A0E3] h-[91px] rounded-tl-[15px] rounded-tr-[15px]">
