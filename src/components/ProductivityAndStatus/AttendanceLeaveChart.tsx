@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import vector from "../../assets/Vector.svg";
+import vector from "../../assets/vector.svg";
 import vectorr from "../../assets/vectorr.svg";
 import {
   AreaChart,
