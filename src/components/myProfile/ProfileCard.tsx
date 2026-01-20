@@ -26,7 +26,7 @@ const navigate = useNavigate()
         <img
           src={
             profile.avatarUrl ||
-            `https://api.dicebear.com/7.x/avataaars/svg?seed=${profile.employeeId}`
+            `https://attendance.ziyaacademy.co.in${profile.employeeId}`
           }
           alt={profile.name}
           className="w-[70px] h-[70px] lg:w-20 lg:h-20 xl:w-[88px] xl:h-[88px] 2xl:w-[99px] 2xl:h-[99px] 

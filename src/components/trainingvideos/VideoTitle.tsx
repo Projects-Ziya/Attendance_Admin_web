@@ -53,46 +53,55 @@ const UploadForm: React.FC<{ onUpload: (video: Video) => void }> = ({ onUpload }
 
 
   return (
-    <div className="w-full max-w-[1350px] mx-auto space-y-6">
-      <div>
-        <label className="block text-[16px] font-semibold text-gray-700 mb-1">Title</label>
-        <input
-          type="text"
-          placeholder="Enter Video Title"
-          className="w-full h-[55px] px-4 rounded-lg bg-gray-100 text-gray-700 placeholder-gray-400 outline-none"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
+    <div className="w-full max-w-[1350px] mx-auto space-y-6 px-4 sm:px-6">
+  {/* Title */}
+  <div>
+    <label className="block text-[16px] font-semibold text-gray-700 mb-1">
+      Title
+    </label>
+    <input
+      type="text"
+      placeholder="Enter Video Title"
+      className="w-full h-[55px] px-4 rounded-lg bg-gray-100 text-gray-700 
+                 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#00A0E3]"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+    />
+  </div>
 
-      <div className="
-      pb-10">
-        <label className="block text-[16px] font-semibold text-gray-700 mb-1">Description</label>
-        <input
-          type="text"
-          placeholder="Enter Video Description"
-          className="w-full h-[55px] px-4 rounded-lg bg-gray-100 text-gray-700 placeholder-gray-400 outline-none"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-      </div>
+  {/* Description */}
+  <div className="pb-10">
+    <label className="block text-[16px] font-semibold text-gray-700 mb-1">
+      Description
+    </label>
+    <input
+      type="text"
+      placeholder="Enter Video Description"
+      className="w-full h-[55px] px-4 rounded-lg bg-gray-100 text-gray-700 
+                 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#00A0E3]"
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+    />
+  </div>
 
-      <UploadVideo onFileSelect={setSelectedFile} />
+  {/* Upload Video Component */}
+  <UploadVideo onFileSelect={setSelectedFile} />
 
-       
-
-      <button
-        className={`w-full h-[58px] text-white text-[18px] font-medium rounded-lg flex items-center justify-center gap-2 hover:text-gray-800 transition-all duration-200 hover:scale-105 active:scale-90 ${
-          title && description && selectedFile
-            ? "bg-[#00A0E3]"
-            : "bg-gray-400 cursor-not-allowed"
-        }`}
-        onClick={handleUpload}
-        disabled={!title || !description || !selectedFile || isUploading}
-      >
-        {isUploading ? "Uploading..." : "Upload"}
-      </button>
-    </div>
+  {/* Upload Button */}
+  <button
+    className={`w-full h-[58px] text-white text-[18px] font-medium rounded-lg 
+                flex items-center justify-center gap-2 transition-all duration-200 
+                hover:scale-105 active:scale-90 ${
+                  title && description && selectedFile
+                    ? "bg-[#00A0E3] hover:bg-[#008dc7]"
+                    : "bg-gray-400 cursor-not-allowed"
+                }`}
+    onClick={handleUpload}
+    disabled={!title || !description || !selectedFile || isUploading}
+  >
+    {isUploading ? "Uploading..." : "Upload"}
+  </button>
+</div>
   );
 };
 

@@ -262,7 +262,7 @@ useEffect(() => {
             value={data.userType}
             onChange={handleChange}
             className="border text-gray-600 h-[60px] px-2 rounded-md w-full"
-          >
+          > 
             <option value="">Select</option>
             <option value="admin">Admin</option>
             <option value="employee">Employee</option>

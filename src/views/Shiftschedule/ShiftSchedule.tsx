@@ -43,7 +43,7 @@ const ShiftSchedule: React.FC = () => {
     shiftType,
   } = vm;
 
-  // ✅ DATA-DRIVEN VISIBILITY (FIX)
+  // ✅ DATA-DRIVEN VISIBILITY
   const showMorningActivityLog =
     !!morningPunchIn ||
     !!morningBreakStart ||
@@ -52,11 +52,17 @@ const ShiftSchedule: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="h-auto w-[1469px] mb-[50px] bg-[#F6F5FA]">
-
+      {/* Outer container with consistent dashboard spacing */}
+      <motion.div
+        className="min-h-screen w-full mx-auto 
+                sm:max-w-full md:max-w-[90%] xl:max-w-[1469px] mb-[30px] p-6 bg-[#F6F5FA]"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Header */}
-        <div className="flex items-center pt-[46px] pb-[20px]">
-          <div className="h-[40px] w-[40px] flex items-center justify-center bg-[#DAF1FB] ml-[24px] rounded-[30px]">
+        <motion.div className="flex items-center mb-7" variants={sectionVariants}>
+          <div className="h-[40px] w-[40px] flex items-center justify-center bg-[#DAF1FB] rounded-[30px]">
             <span className="bg-[#DAF1FB] rounded-full w-[40px] h-[40px] flex items-center justify-center">
               <img
                 className="h-[26px] w-[26px] filter-blue"
@@ -66,14 +72,10 @@ const ShiftSchedule: React.FC = () => {
             </span>
           </div>
           <p className="ml-[10px] font-[500]">Shift Schedule</p>
-        </div>
+        </motion.div>
 
-        <motion.div
-          className="flex flex-col gap-[30px]"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
+        {/* Content sections */}
+        <motion.div className="flex flex-col gap-7" variants={containerVariants}>
           {/* Punch In / Out */}
           <motion.div variants={sectionVariants}>
             <PunchCard
@@ -115,7 +117,7 @@ const ShiftSchedule: React.FC = () => {
             <TeamShift {...vm} />
           </motion.div>
         </motion.div>
-      </div>
+      </motion.div>
     </MainLayout>
   );
 };

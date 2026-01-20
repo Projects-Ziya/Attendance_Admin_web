@@ -84,32 +84,38 @@ const ActivityLog: React.FC<Props> = ({
   }
 
   return (
-    <div className="flex mt-5 h-[886px] pb-[40px] rounded-[10px] shadow-[0px_0px_2px_0px_#00000040] w-[1462px] bg-white justify-center items-center">
-      <div>
-        {/* Header */}
-        <div className="flex justify-between pt-[44px] pl-[45px] items-center">
-          <h1 className="text-[22px] font-[500]">
-            {apiData.shiftType} Activity Log
-          </h1>
-          <img
-            src={deleteicon}
-            alt="delete"
-            className="w-[20px] h-[20px] cursor-pointer"
-            onClick={() => onDelete(apiData.id)} // ✅ PASS ID
-          />
-        </div>
-
-        {/* Rows */}
-        <ActivityRow icon={p_in} label="Punch In" time={apiData.punchIn} />
-        <ActivityRow icon={Break} label="Break 1 Start" time={apiData.breakStart} />
-        <ActivityRow icon={Break} label="Break 1 End" time={apiData.breakEnd} />
-        <ActivityRow icon={Lunch} label="Food time Start" time={apiData.lunchStart} />
-        <ActivityRow icon={Lunch} label="Food time End" time={apiData.lunchEnd} />
-        <ActivityRow icon={Break} label="Break 2 Start" time={apiData.eveningBreakStart} />
-        <ActivityRow icon={Break} label="Break 2 End" time={apiData.eveningBreakEnd} />
-        <ActivityRow icon={P_out} label="Punch Out" time={apiData.punch_out_time} />
-      </div>
+    <div
+  className="flex mt-5 h-auto pb-[40px] rounded-[10px] 
+             shadow-[0px_0px_2px_0px_#00000040] w-full 
+             bg-white justify-center items-start"
+>
+  <div className="w-full px-6 md:px-[45px]">
+    {/* Header */}
+    <div className="flex justify-between pt-[44px] items-center">
+      <h1 className="text-[22px] font-[500]">
+        {apiData.shiftType} Activity Log
+      </h1>
+      <img
+        src={deleteicon}
+        alt="delete"
+        className="w-[20px] h-[20px] cursor-pointer"
+        onClick={() => onDelete(apiData.id)} // ✅ PASS ID
+      />
     </div>
+
+    {/* Rows */}
+    <div className="flex flex-col gap-6 mt-[30px]">
+      <ActivityRow icon={p_in} label="Punch In" time={apiData.punchIn} />
+      <ActivityRow icon={Break} label="Break 1 Start" time={apiData.breakStart} />
+      <ActivityRow icon={Break} label="Break 1 End" time={apiData.breakEnd} />
+      <ActivityRow icon={Lunch} label="Food time Start" time={apiData.lunchStart} />
+      <ActivityRow icon={Lunch} label="Food time End" time={apiData.lunchEnd} />
+      <ActivityRow icon={Break} label="Break 2 Start" time={apiData.eveningBreakStart} />
+      <ActivityRow icon={Break} label="Break 2 End" time={apiData.eveningBreakEnd} />
+      <ActivityRow icon={P_out} label="Punch Out" time={apiData.punch_out_time} />
+    </div>
+  </div>
+</div>
   );
 };
 
@@ -120,12 +126,16 @@ type ActivityRowProps = {
 };
 
 const ActivityRow: React.FC<ActivityRowProps> = ({ icon, label, time }) => (
-  <div className="flex justify-between items-center rounded-[10px] h-[65px] w-[1364px] mt-[30px] ml-[39px] border-[1px] border-[#CFCDCD]">
+  <div
+    className="flex justify-between items-center rounded-[10px] h-[65px] 
+               w-full mx-auto sm:max-w-full md:max-w-[90%] xl:max-w-[1364px] 
+               border-[1px] border-[#CFCDCD] px-4 md:px-6"
+  >
     <div className="flex items-center">
-      <img className="pl-[13px]" src={icon} alt="" />
+      <img className="w-[24px] h-[24px]" src={icon} alt="" />
       <p className="pl-[17px] text-[20px] font-[500]">{label}</p>
     </div>
-    <h1 className="pr-[28px] text-[#636262]">{time}</h1>
+    <h1 className="text-[#636262] pr-[28px]">{time}</h1>
   </div>
 );
 

@@ -83,95 +83,101 @@ const ConfigureBreakTimes: React.FC<Props> = ({
   const shiftOptions = ["Morning", "Afternoon", "Evening", "Night"];
 
   return (
-    <div className="h-auto shadow-[0px_0px_2px_0px_#00000040] rounded-[10px] w-[1469px] pt-[73px] bg-white mt-[20px] pb-[66px]">
-      <h1 className="text-[22px] ml-[66px] font-[500]">Configure Break Times</h1>
+   <div
+  className="h-auto shadow-[0px_0px_2px_0px_#00000040] rounded-[10px] 
+             w-full mx-auto sm:max-w-full md:max-w-[90%] xl:max-w-[1469px] 
+             pt-[73px] bg-white mt-[20px] pb-[66px] px-6 md:px-[66px]"
+>
+  <h1 className="text-[22px] font-[500]">Configure Break Times</h1>
 
-      {/* Shift Type Selector */}
-      <div className="ml-[66px] mr-[44px] mt-[20px] mb-[10px]">
-        <label className="block mb-2 text-[18px] font-[500] text-[#4D4D4D]">
-          Shift Type
-        </label>
-        <select
-          value={shiftType}
-          onChange={(e) => setShiftType(e.target.value)}
-          className="w-full h-[45px] px-4 py-2 border border-gray-300 rounded-lg bg-white text-[16px] font-medium text-[#4D4D4D] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00A0E3]"
-        >
-          {shiftOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
+  {/* Shift Type Selector */}
+  <div className="mt-[20px] mb-[10px]">
+    <label className="block mb-2 text-[18px] font-[500] text-[#4D4D4D]">
+      Shift Type
+    </label>
+    <select
+      value={shiftType}
+      onChange={(e) => setShiftType(e.target.value)}
+      className="w-full h-[45px] px-4 py-2 border border-gray-300 rounded-lg bg-white 
+                 text-[16px] font-medium text-[#4D4D4D] shadow-sm 
+                 focus:outline-none focus:ring-2 focus:ring-[#00A0E3]"
+    >
+      {shiftOptions.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
 
-      {/* Cards */}
-      <BreakCard
-        icon={clock_icon}
-        title="Relaxation Time (Punch in time)"
-        start={relaxationStart}
-        end={relaxationEnd}
-        onStartChange={setRelaxationStart}
-        onEndChange={setRelaxationEnd}
-      />
+  {/* Cards */}
+  <BreakCard
+    icon={clock_icon}
+    title="Relaxation Time (Punch in time)"
+    start={relaxationStart}
+    end={relaxationEnd}
+    onStartChange={setRelaxationStart}
+    onEndChange={setRelaxationEnd}
+  />
 
-      <BreakCard
-        icon={break_icon}
-        title="Break 1"
-        start={breakStart}
-        end={breakEnd}
-        onStartChange={setBreakStart}
-        onEndChange={setBreakEnd}
-      />
+  <BreakCard
+    icon={break_icon}
+    title="Break 1"
+    start={breakStart}
+    end={breakEnd}
+    onStartChange={setBreakStart}
+    onEndChange={setBreakEnd}
+  />
 
-      <BreakCard
-        icon={lunch_icon}
-        title="Food Time"
-        start={lunchStart}
-        end={lunchEnd}
-        onStartChange={setLunchStart}
-        onEndChange={setLunchEnd}
-      />
+  <BreakCard
+    icon={lunch_icon}
+    title="Food Time"
+    start={lunchStart}
+    end={lunchEnd}
+    onStartChange={setLunchStart}
+    onEndChange={setLunchEnd}
+  />
 
-      <BreakCard
-        icon={break_icon}
-        title="Break 2"
-        start={eveningBreakStart}
-        end={eveningBreakEnd}
-        onStartChange={setEveningBreakStart}
-        onEndChange={setEveningBreakEnd}
-      />
+  <BreakCard
+    icon={break_icon}
+    title="Break 2"
+    start={eveningBreakStart}
+    end={eveningBreakEnd}
+    onStartChange={setEveningBreakStart}
+    onEndChange={setEveningBreakEnd}
+  />
 
-      {/* Punch Out Time */}
-      <div className="h-[160px] w-[1364px] ml-[64px] mt-[25px] border-[1px] rounded-[25px]">
-        <div className="flex gap-[20px]">
-          <img
-            className="h-[24px] ml-[30px] mt-[24px] w-[24px]"
-            src={clock_icon}
-            alt=""
-          />
-          <h1 className="mt-[20px] text-[20px] font-[500]">
-            Punch out time
-          </h1>
-        </div>
-
-        <div>
-          <input
-            type="time"
-            value={punch_out_time}
-            onChange={(e) => setpunch_out_time(e.target.value)}
-            className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] w-[1280px] ml-[28px] mt-[9px] rounded-[10px] bg-[#F6F5F5] outline-none"
-          />
-        </div>
-      </div>
-
-      {/* Save Button */}
-      <button
-        onClick={saveToAPI}
-        className="hover:bg-[#008dc7] transition duration-200 cursor-pointer h-[53px] w-[1364px] bg-[#00A0E3] text-white text-[22px] font-[500] rounded-[10px] ml-[66px] mt-[40px]"
-      >
-        Save Schedule
-      </button>
+  {/* Punch Out Time */}
+  <div
+    className="h-auto w-full mx-auto sm:max-w-full md:max-w-[90%] xl:max-w-[1364px] 
+               mt-[25px] border-[1px] rounded-[25px] px-6 py-4"
+  >
+    <div className="flex gap-[20px] items-center">
+      <img className="h-[24px] w-[24px]" src={clock_icon} alt="" />
+      <h1 className="text-[20px] font-[500]">Punch out time</h1>
     </div>
+
+    <div className="mt-[12px]">
+      <input
+        type="time"
+        value={punch_out_time || "00:00"}
+        onChange={(e) => setpunch_out_time(e.target.value)}
+        className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] 
+                   w-full rounded-[10px] bg-[#F6F5F5] outline-none"
+      />
+    </div>
+  </div>
+
+  {/* Save Button */}
+  <button
+    onClick={saveToAPI}
+    className="hover:bg-[#008dc7] transition duration-200 cursor-pointer 
+               h-[53px] w-full mx-auto sm:max-w-full md:max-w-[90%] xl:max-w-[1364px] 
+               bg-[#00A0E3] text-white text-[22px] font-[500] rounded-[10px] mt-[40px]"
+  >
+    Save Schedule
+  </button>
+</div>
   );
 };
 
@@ -192,30 +198,35 @@ const BreakCard: React.FC<BreakCardProps> = ({
   onStartChange,
   onEndChange,
 }) => (
-  <div className="h-[160px] w-[1364px] ml-[64px] mt-[25px] border-[1px] rounded-[25px]">
-    <div className="flex gap-[20px]">
-      <img className="h-[24px] ml-[30px] mt-[24px] w-[24px]" src={icon} alt="" />
-      <h1 className="mt-[20px] text-[20px] font-[500]">{title}</h1>
+  <div
+    className="h-auto w-full mx-auto sm:max-w-full md:max-w-[90%] xl:max-w-[1364px] 
+               mt-[25px] border-[1px] rounded-[25px] px-6 py-4"
+  >
+    <div className="flex gap-[20px] items-center">
+      <img className="h-[24px] w-[24px]" src={icon} alt="" />
+      <h1 className="text-[20px] font-[500]">{title}</h1>
     </div>
 
-    <div className="flex justify-between mt-[10px] text-[15px] font-[500] ml-[28px]">
+    <div className="flex justify-between mt-[10px] text-[15px] font-[500]">
       <span>Start</span>
-      <span className="pr-[599px]">End</span>
+      <span>End</span>
     </div>
 
-    <div>
+    <div className="flex flex-col md:flex-row gap-6 mt-[9px]">
       <input
         type="time"
-        value={start}
+        value={start || "00:00"}
         onChange={(e) => onStartChange(e.target.value)}
-        className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] w-[591px] ml-[28px] mt-[9px] rounded-[10px] bg-[#F6F5F5] outline-none"
+        className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] 
+                   w-full md:max-w-[591px] rounded-[10px] bg-[#F6F5F5] outline-none"
       />
 
       <input
         type="time"
-        value={end}
+        value={end || "00:00"}
         onChange={(e) => onEndChange(e.target.value)}
-        className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] w-[591px] ml-[99px] mt-[9px] rounded-[10px] bg-[#F6F5F5] outline-none"
+        className="h-[53px] pl-[17px] text-[#636262] text-[18px] font-[500] 
+                   w-full md:max-w-[591px] rounded-[10px] bg-[#F6F5F5] outline-none"
       />
     </div>
   </div>
