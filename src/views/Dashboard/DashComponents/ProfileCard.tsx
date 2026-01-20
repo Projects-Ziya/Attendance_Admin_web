@@ -34,7 +34,7 @@ const DashboardHeader: React.FC = () => {
         />
         <div>
           <h2 className="text-[32px] font-bold text-[#4D4D4D] font-poppins">
-            Welcome Backkkk,{" "}
+            Welcome Back,{" "}
             <span className="text-[#4D4D4D]">
               {profileLoading ? "Loading..." : userName}
             </span>
