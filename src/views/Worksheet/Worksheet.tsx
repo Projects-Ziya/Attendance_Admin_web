@@ -153,7 +153,10 @@ function Worksheet() {
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
+
+                transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1]
+ }}
+
               >
                 {/* LEFT: icon + text */}
                 <div className="flex items-center gap-[16px]">
@@ -191,7 +194,10 @@ function Worksheet() {
                       transition={{
                         repeat: Infinity,
                         duration: 1.5,
-                        ease: "easeInOut",
+
+                        ease:
+
+ "easeInOut",
                       }}
                     />
                     <span>Download</span>
@@ -223,7 +229,11 @@ function Worksheet() {
                       transition={{
                         rotate: {
                           duration: 0.4,
-                          ease: "easeInOut",
+
+                          ease:
+
+ "easeInOut",
+
                         },
                       }}
                       className="w-[24px] h-[24px]"
@@ -275,5 +285,6 @@ function Worksheet() {
   );
 }
 
+
 export default Worksheet;
- 
+

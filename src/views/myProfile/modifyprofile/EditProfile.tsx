@@ -54,7 +54,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ employeeIdFromProps }) => {
 
         // Use that id to fetch editable details
         const res = await api.get(`/api/employeedetailedit/${idToUse}/`);
-        setEmployeeData(res.data);
+        setEmployeeData(res.data.data);
       } catch (error) {
         console.error("Failed to fetch employee details", error);
         toast.error("Failed to load employee details.");
@@ -175,7 +175,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ employeeIdFromProps }) => {
           <EditBasicDetails
             data={employeeData}
             setEmployeeData={setEmployeeData}
-          />
+          /> 
         )}
         {activeTab === "personal" && (
           <EditPersonalDetails

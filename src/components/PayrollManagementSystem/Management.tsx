@@ -1,6 +1,6 @@
 import React, {  useState } from "react";
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
-
+import Lottie from "lottie-react"; // default export
+import callendar from "../../assets/calendar.json"
 import MyPayrollSlip from "./MyPayrollSlip";
 import UploadSalaryReport from "./UploadSalaryReport";
 import UploadBundleReport from "./UploadBundleReport";
@@ -71,8 +71,8 @@ const Management: React.FC = () => {
       {activeTab === "My Payroll Slip" && !showSlip && (
         <div className="flex flex-col items-center justify-center mt-[200px] text-center text-gray-600">
           <div>
-            <DotLottieReact
-              src="https://lottie.host/35807265-daaf-4811-af21-feff7c9dcd41/fWBisws4Js.lottie"
+            <Lottie
+  animationData={callendar}
               loop
               autoplay
             />
